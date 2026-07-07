@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import apiClient from "@/lib/api-client";
+import { apiClient } from "@/lib/api-client";
 import { signOut as authSignOut } from "@/lib/auth-helper";
 import { toast } from "sonner";
 
@@ -46,10 +46,11 @@ export function TopBar({ userEmail, userName }: { userEmail: string; userName: s
     queryKey: ["notifications", "unread-count"],
     queryFn: async () => {
       try {
-        const { data } = await apiClient.get<{ notifications: any[]; total: number }>(
+        const response = await apiClient.get<{ notifications: any[]; total: number }>(
           "/notifications/?is_read=false"
         );
-        return data?.total ?? 0;
+        if (response.error) throw new Error(response.error);
+        return response.data?.total ?? 0;
       } catch {
         return 0;
       }

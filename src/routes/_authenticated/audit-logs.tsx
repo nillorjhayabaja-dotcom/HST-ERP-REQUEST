@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 
-import { supabase } from "@/integrations/supabase/client";
+import { apiClient } from "@/lib/api-client";
 import { PageHeader } from "@/components/page-header";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -14,21 +14,28 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 
+interface AuditLog {
+  id: string;
+  module: string;
+  action: string;
+  entity_type?: string;
+  user_id?: string;
+  ip_address?: string;
+  created_at: string;
+}
+
 export const Route = createFileRoute("/_authenticated/audit-logs")({
   head: () => ({ meta: [{ title: "Audit Logs — HST" }] }),
   component: AuditLogsPage,
 });
 
 function AuditLogsPage() {
-  const { data = [] } = useQuery({
+  const { data = [] } = useQuery<AuditLog[]>({
     queryKey: ["audit-logs"],
     queryFn: async () => {
-      const { data } = await supabase
-        .from("audit_logs")
-        .select("*")
-        .order("created_at", { ascending: false })
-        .limit(200);
-      return data ?? [];
+      const response = await apiClient.get<{ logs: AuditLog[] }>("/audit-logs?limit=200");
+      if (response.error) throw new Error(response.error);
+      return response.data?.logs ?? [];
     },
   });
 
@@ -60,7 +67,7 @@ function AuditLogsPage() {
                     </TableCell>
                   </TableRow>
                 )}
-                {data.map((log) => (
+                {data.map((log: AuditLog) => (
                   <TableRow key={log.id}>
                     <TableCell className="font-mono text-xs">
                       {new Date(log.created_at).toLocaleString()}

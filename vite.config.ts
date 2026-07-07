@@ -11,9 +11,7 @@ export default defineConfig({
     react(),
     tailwindcss(),
     tsconfigPaths(),
-    nitro({
-      preset: 'cloudflare-module',
-    }),
+
   ],
   server: {
     port: 5173,

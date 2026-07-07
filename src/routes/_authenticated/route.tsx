@@ -1,8 +1,8 @@
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 
-import apiClient from "@/lib/api-client";
-import { isAuthenticated } from "@/lib/auth-helper";
+import { apiClient } from "@/lib/api-client";
+import { isAuthenticated, signOut } from "@/lib/auth-helper";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import { TopBar } from "@/components/top-bar";
@@ -16,10 +16,10 @@ export const Route = createFileRoute("/_authenticated")({
 });
 
 function AuthenticatedLayout() {
-  const { data: profile } = useQuery({
+  const { data: profile, error } = useQuery({
     queryKey: ["profile"],
     queryFn: async () => {
-      const { data } = await apiClient.get<{
+      const response = await apiClient.get<{
         id: string;
         email: string;
         first_name?: string;
@@ -27,9 +27,19 @@ function AuthenticatedLayout() {
         full_name?: string;
         roles: string[];
       }>("/auth/profile");
-      return data;
+      if (response.error) {
+        throw new Error(response.error);
+      }
+      return response.data;
     },
+    retry: false,
+    enabled: isAuthenticated(),
   });
+
+  if (error) {
+    signOut();
+    throw redirect({ to: "/auth" });
+  }
 
   const displayName =
     profile?.full_name?.trim() ||

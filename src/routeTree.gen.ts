@@ -20,6 +20,7 @@ import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticate
 import { Route as AuthenticatedNotificationsRouteImport } from './routes/_authenticated/notifications'
 import { Route as AuthenticatedMrfRouteImport } from './routes/_authenticated/mrf'
 import { Route as AuthenticatedLeaveRouteImport } from './routes/_authenticated/leave'
+import { Route as AuthenticatedGatePassesRouteImport } from './routes/_authenticated/gate-passes'
 import { Route as AuthenticatedGatePassRouteImport } from './routes/_authenticated/gate-pass'
 import { Route as AuthenticatedEmployeesRouteImport } from './routes/_authenticated/employees'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
@@ -86,6 +87,11 @@ const AuthenticatedMrfRoute = AuthenticatedMrfRouteImport.update({
 const AuthenticatedLeaveRoute = AuthenticatedLeaveRouteImport.update({
   id: '/leave',
   path: '/leave',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedGatePassesRoute = AuthenticatedGatePassesRouteImport.update({
+  id: '/gate-passes',
+  path: '/gate-passes',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedGatePassRoute = AuthenticatedGatePassRouteImport.update({
@@ -157,6 +163,7 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/employees': typeof AuthenticatedEmployeesRoute
   '/gate-pass': typeof AuthenticatedGatePassRoute
+  '/gate-passes': typeof AuthenticatedGatePassesRoute
   '/leave': typeof AuthenticatedLeaveRoute
   '/mrf': typeof AuthenticatedMrfRoute
   '/notifications': typeof AuthenticatedNotificationsRoute
@@ -180,6 +187,7 @@ export interface FileRoutesByTo {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/employees': typeof AuthenticatedEmployeesRoute
   '/gate-pass': typeof AuthenticatedGatePassRoute
+  '/gate-passes': typeof AuthenticatedGatePassesRoute
   '/leave': typeof AuthenticatedLeaveRoute
   '/mrf': typeof AuthenticatedMrfRoute
   '/notifications': typeof AuthenticatedNotificationsRoute
@@ -205,6 +213,7 @@ export interface FileRoutesById {
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/employees': typeof AuthenticatedEmployeesRoute
   '/_authenticated/gate-pass': typeof AuthenticatedGatePassRoute
+  '/_authenticated/gate-passes': typeof AuthenticatedGatePassesRoute
   '/_authenticated/leave': typeof AuthenticatedLeaveRoute
   '/_authenticated/mrf': typeof AuthenticatedMrfRoute
   '/_authenticated/notifications': typeof AuthenticatedNotificationsRoute
@@ -230,6 +239,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/employees'
     | '/gate-pass'
+    | '/gate-passes'
     | '/leave'
     | '/mrf'
     | '/notifications'
@@ -253,6 +263,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/employees'
     | '/gate-pass'
+    | '/gate-passes'
     | '/leave'
     | '/mrf'
     | '/notifications'
@@ -277,6 +288,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard'
     | '/_authenticated/employees'
     | '/_authenticated/gate-pass'
+    | '/_authenticated/gate-passes'
     | '/_authenticated/leave'
     | '/_authenticated/mrf'
     | '/_authenticated/notifications'
@@ -377,6 +389,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedLeaveRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/gate-passes': {
+      id: '/_authenticated/gate-passes'
+      path: '/gate-passes'
+      fullPath: '/gate-passes'
+      preLoaderRoute: typeof AuthenticatedGatePassesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/gate-pass': {
       id: '/_authenticated/gate-pass'
       path: '/gate-pass'
@@ -464,6 +483,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedEmployeesRoute: typeof AuthenticatedEmployeesRoute
   AuthenticatedGatePassRoute: typeof AuthenticatedGatePassRoute
+  AuthenticatedGatePassesRoute: typeof AuthenticatedGatePassesRoute
   AuthenticatedLeaveRoute: typeof AuthenticatedLeaveRoute
   AuthenticatedMrfRoute: typeof AuthenticatedMrfRoute
   AuthenticatedNotificationsRoute: typeof AuthenticatedNotificationsRoute
@@ -486,6 +506,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedEmployeesRoute: AuthenticatedEmployeesRoute,
   AuthenticatedGatePassRoute: AuthenticatedGatePassRoute,
+  AuthenticatedGatePassesRoute: AuthenticatedGatePassesRoute,
   AuthenticatedLeaveRoute: AuthenticatedLeaveRoute,
   AuthenticatedMrfRoute: AuthenticatedMrfRoute,
   AuthenticatedNotificationsRoute: AuthenticatedNotificationsRoute,

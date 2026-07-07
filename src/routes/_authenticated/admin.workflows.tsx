@@ -1,11 +1,28 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 
-import { supabase } from "@/integrations/supabase/client";
+import { apiClient } from "@/lib/api-client";
 import { PageHeader } from "@/components/page-header";
 import { Card, CardContent } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
+
+interface WorkflowStep {
+  id: string;
+  step_order: number;
+  name: string;
+  approver_role: string;
+  is_optional: boolean;
+}
+
+interface Workflow {
+  id: string;
+  name: string;
+  description?: string;
+  module: string;
+  is_active: boolean;
+  steps: WorkflowStep[];
+}
 
 export const Route = createFileRoute("/_authenticated/admin/workflows")({
   head: () => ({ meta: [{ title: "Approval Workflows — HST Admin" }] }),
@@ -13,15 +30,12 @@ export const Route = createFileRoute("/_authenticated/admin/workflows")({
 });
 
 function WorkflowsAdmin() {
-  const { data = [] } = useQuery({
+  const { data = [] } = useQuery<Workflow[]>({
     queryKey: ["admin-workflows"],
     queryFn: async () => {
-      const { data } = await supabase
-        .from("approval_workflows")
-        .select("*, steps:approval_workflow_steps(id, step_order, name, approver_role, is_optional)")
-        .is("deleted_at", null)
-        .order("module");
-      return data ?? [];
+      const response = await apiClient.get<{ workflows: Workflow[] }>("/approval-workflows");
+      if (response.error) throw new Error(response.error);
+      return response.data?.workflows ?? [];
     },
   });
 
@@ -37,7 +51,7 @@ function WorkflowsAdmin() {
             No workflows configured yet. Every module can share a single, versioned approval chain.
           </CardContent></Card>
         )}
-        {data.map((wf) => (
+        {data.map((wf: Workflow) => (
           <Card key={wf.id}>
             <CardContent className="p-6">
               <div className="flex items-start justify-between gap-4 mb-4">

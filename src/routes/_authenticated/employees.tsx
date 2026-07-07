@@ -3,12 +3,24 @@ import { useQuery } from "@tanstack/react-query";
 import { Search } from "lucide-react";
 import { useState } from "react";
 
-import { supabase } from "@/integrations/supabase/client";
+import { apiClient } from "@/lib/api-client";
 import { PageHeader } from "@/components/page-header";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+
+interface Employee {
+  id: string;
+  employee_no?: string;
+  full_name: string | null;
+  email: string;
+  phone?: string;
+  employment_status: string;
+  is_active: boolean;
+  department?: { name: string; code: string };
+  position?: { title: string };
+}
 
 export const Route = createFileRoute("/_authenticated/employees")({
   head: () => ({ meta: [{ title: "Employees — HST" }] }),
@@ -18,15 +30,12 @@ export const Route = createFileRoute("/_authenticated/employees")({
 function EmployeesPage() {
   const [q, setQ] = useState("");
 
-  const { data = [] } = useQuery({
+  const { data = [] } = useQuery<Employee[]>({
     queryKey: ["employees"],
     queryFn: async () => {
-      const { data } = await supabase
-        .from("profiles")
-        .select("id, employee_no, full_name, email, phone, employment_status, is_active, department:departments(name, code), position:positions(title)")
-        .is("deleted_at", null)
-        .order("full_name");
-      return data ?? [];
+      const response = await apiClient.get<{ employees: Employee[] }>("/profiles?type=employees");
+      if (response.error) throw new Error(response.error);
+      return response.data?.employees ?? [];
     },
   });
 
@@ -53,7 +62,7 @@ function EmployeesPage() {
         </div>
 
         <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
-          {filtered.map((emp) => {
+          {filtered.map((emp: Employee) => {
             const initials = (emp.full_name ?? emp.email ?? "?")
               .split(/\s+/)
               .slice(0, 2)

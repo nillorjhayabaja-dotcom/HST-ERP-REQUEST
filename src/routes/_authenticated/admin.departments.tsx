@@ -4,7 +4,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { Plus } from "lucide-react";
 
-import { supabase } from "@/integrations/supabase/client";
+import { apiClient } from "@/lib/api-client";
 import { PageHeader } from "@/components/page-header";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -12,6 +12,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "@/components/ui/dialog";
+
+interface Department {
+  id: string;
+  code: string;
+  name: string;
+  description?: string;
+  is_active: boolean;
+}
 
 export const Route = createFileRoute("/_authenticated/admin/departments")({
   head: () => ({ meta: [{ title: "Departments — HST Admin" }] }),
@@ -22,22 +30,19 @@ function DepartmentsAdmin() {
   const qc = useQueryClient();
   const [open, setOpen] = useState(false);
 
-  const { data = [] } = useQuery({
+  const { data = [] } = useQuery<Department[]>({
     queryKey: ["admin-departments"],
     queryFn: async () => {
-      const { data } = await supabase
-        .from("departments")
-        .select("*")
-        .is("deleted_at", null)
-        .order("code");
-      return data ?? [];
+      const response = await apiClient.get<{ departments: Department[] }>("/departments");
+      if (response.error) throw new Error(response.error);
+      return response.data?.departments ?? [];
     },
   });
 
   const create = useMutation({
     mutationFn: async (values: { code: string; name: string; description?: string }) => {
-      const { error } = await supabase.from("departments").insert(values);
-      if (error) throw error;
+      const response = await apiClient.post("/departments", values);
+      if (response.error) throw new Error(response.error);
     },
     onSuccess: () => {
       toast.success("Department created");
@@ -94,7 +99,7 @@ function DepartmentsAdmin() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {data.map((d) => (
+                {data.map((d: Department) => (
                   <TableRow key={d.id}>
                     <TableCell className="font-mono text-xs">{d.code}</TableCell>
                     <TableCell className="font-medium">{d.name}</TableCell>

@@ -13,6 +13,7 @@ import controlNumbersRoutes from './control-numbers.routes.js';
 import uploadRoutes from './upload.routes.js';
 import dashboardRoutes from './dashboard.routes.js';
 import systemRoutes from './system.routes.js';
+import gatePassesRoutes from './gate-passes.routes.js';
 
 const router = Router();
 
@@ -30,5 +31,6 @@ router.use('/control-numbers', controlNumbersRoutes);
 router.use('/upload', uploadRoutes);
 router.use('/dashboard', dashboardRoutes);
 router.use('/system', systemRoutes);
+router.use('/gate-passes', gatePassesRoutes);
 
 export default router;

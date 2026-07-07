@@ -1,11 +1,20 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 
-import { supabase } from "@/integrations/supabase/client";
+import { apiClient } from "@/lib/api-client";
 import { PageHeader } from "@/components/page-header";
 import { Card, CardContent } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
+
+interface ApprovalRequest {
+  id: string;
+  module: string;
+  entity_type: string;
+  current_step: number;
+  status: string;
+  requested_at: string;
+}
 
 export const Route = createFileRoute("/_authenticated/approvals")({
   head: () => ({ meta: [{ title: "Approvals — HST" }] }),
@@ -13,16 +22,12 @@ export const Route = createFileRoute("/_authenticated/approvals")({
 });
 
 function ApprovalsPage() {
-  const { data = [] } = useQuery({
+  const { data = [] } = useQuery<ApprovalRequest[]>({
     queryKey: ["approvals-pending"],
     queryFn: async () => {
-      const { data } = await supabase
-        .from("approval_requests")
-        .select("*")
-        .in("status", ["pending", "in_progress"])
-        .is("deleted_at", null)
-        .order("requested_at", { ascending: false });
-      return data ?? [];
+      const response = await apiClient.get<{ approvals: ApprovalRequest[] }>("/approval-requests?status=pending,in_progress");
+      if (response.error) throw new Error(response.error);
+      return response.data?.approvals ?? [];
     },
   });
 
@@ -53,7 +58,7 @@ function ApprovalsPage() {
                     </TableCell>
                   </TableRow>
                 )}
-                {data.map((r) => (
+                {data.map((r: ApprovalRequest) => (
                   <TableRow key={r.id}>
                     <TableCell className="text-xs font-mono">{new Date(r.requested_at).toLocaleString()}</TableCell>
                     <TableCell><Badge variant="outline">{r.module}</Badge></TableCell>

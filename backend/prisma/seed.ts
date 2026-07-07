@@ -1,3 +1,5 @@
+/// <reference types="node" />
+
 import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
@@ -39,6 +41,10 @@ async function main() {
     { module: 'control_numbers', action: 'read', description: 'View control numbers' },
     { module: 'control_numbers', action: 'create', description: 'Create control numbers' },
     { module: 'control_numbers', action: 'update', description: 'Update control numbers' },
+    { module: 'gate_passes', action: 'read', description: 'View gate passes' },
+    { module: 'gate_passes', action: 'create', description: 'Create gate passes' },
+    { module: 'gate_passes', action: 'update', description: 'Update gate passes' },
+    { module: 'gate_passes', action: 'delete', description: 'Delete gate passes' },
   ];
 
   for (const p of permissions) {

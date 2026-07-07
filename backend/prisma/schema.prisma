@@ -43,6 +43,35 @@ enum NotificationType {
   system
 }
 
+enum GatePassStatus {
+  draft
+  submitted
+  for_supervisor_approval
+  for_department_head_approval
+  for_vehicle_coordinator_approval
+  for_general_administration_approval
+  approved
+  released
+  returned
+  completed
+  rejected
+  cancelled
+  expired
+}
+
+enum VehicleType {
+  company
+  private
+  public_transport
+  walking
+}
+
+enum ApprovalActionType {
+  approve
+  reject
+  return_for_revision
+}
+
 model Profile {
   id                String    @id @default(uuid())
   email             String?   @unique
@@ -73,6 +102,9 @@ model Profile {
   user_roles         UserRole[]
   approval_requests  ApprovalRequest[]
   approval_actions   ApprovalAction[]
+  gate_passes        GatePass[]
+  gate_pass_approvals GatePassApproval[]
+  gate_pass_logs     GatePassLog[]
 
   @@map("profiles")
 }
@@ -268,4 +300,175 @@ model ControlNumberSetting {
   updated_by      String?
 
   @@map("control_number_settings")
+}
+
+// Gate Pass Models
+model GatePassType {
+  id          String   @id @default(uuid())
+  code        String   @unique
+  name        String
+  description String?
+  is_active   Boolean  @default(true)
+  requires_vehicle Boolean @default(false)
+  requires_approval Boolean @default(true)
+  created_at  String   @default(dbgenerated("CURRENT_TIMESTAMP"))
+  updated_at  String   @default(dbgenerated("CURRENT_TIMESTAMP"))
+
+  gate_passes GatePass[]
+
+  @@map("gate_pass_types")
+}
+
+model GatePass {
+  id                  String         @id @default(uuid())
+  control_number      String         @unique
+  gate_pass_type_id   String
+  employee_id         String
+  status              GatePassStatus @default(draft)
+  
+  // Trip Details
+  departure_date      String
+  departure_time      String
+  expected_return_date String?
+  expected_return_time String?
+  actual_return_date  String?
+  actual_return_time  String?
+  
+  // Location and Purpose
+  destination         String
+  purpose             String
+  remarks             String?
+  
+  // Transportation
+  vehicle_type        VehicleType    @default(private)
+  company_vehicle_id  String?
+  private_vehicle_plate String?
+  driver_name         String?
+  driver_license      String?
+  mileage_start       String?
+  mileage_end         String?
+  
+  // QR and Printing
+  qr_code_data        String?        @unique
+  qr_code_generated_at String?
+  print_count         Int            @default(0)
+  last_printed_at     String?
+  
+  // Metadata
+  created_at          String         @default(dbgenerated("CURRENT_TIMESTAMP"))
+  updated_at          String         @default(dbgenerated("CURRENT_TIMESTAMP"))
+  created_by          String?
+  updated_by          String?
+  deleted_at          String?
+  released_at         String?
+  completed_at        String?
+
+  gate_pass_type      GatePassType @relation(fields: [gate_pass_type_id], references: [id])
+  employee            Profile        @relation(fields: [employee_id], references: [id])
+  approvals           GatePassApproval[]
+  status_history      GatePassStatusHistory[]
+  logs                GatePassLog[]
+  attachments         GatePassAttachment[]
+  vehicle             GatePassVehicle?
+
+  @@map("gate_passes")
+}
+
+model GatePassApproval {
+  id              String            @id @default(uuid())
+  gate_pass_id    String
+  approver_id     String
+  step_order      Int
+  role            AppRole?
+  action          ApprovalActionType?
+  comment         String?
+  ip_address      Json?
+  user_agent      String?
+  acted_at        String?
+  created_at      String            @default(dbgenerated("CURRENT_TIMESTAMP"))
+
+  gate_pass GatePass @relation(fields: [gate_pass_id], references: [id], onDelete: Cascade)
+  approver  Profile  @relation(fields: [approver_id], references: [id])
+
+  @@map("gate_pass_approvals")
+}
+
+model GatePassStatusHistory {
+  id          String         @id @default(uuid())
+  gate_pass_id String
+  status      GatePassStatus
+  notes       String?
+  changed_by  String?
+  changed_at  String         @default(dbgenerated("CURRENT_TIMESTAMP"))
+  ip_address  Json?
+
+  gate_pass GatePass @relation(fields: [gate_pass_id], references: [id], onDelete: Cascade)
+
+  @@map("gate_pass_status_history")
+}
+
+model GatePassVehicle {
+  id                String   @id @default(uuid())
+  gate_pass_id      String   @unique
+  plate_number      String
+  vehicle_type      String
+  driver_name       String
+  driver_license    String?
+  make              String?
+  model             String?
+  year              String?
+  color             String?
+  mileage_start     String?
+  mileage_end       String?
+  trip_started_at   String?
+  trip_ended_at     String?
+  created_at        String   @default(dbgenerated("CURRENT_TIMESTAMP"))
+  updated_at        String   @default(dbgenerated("CURRENT_TIMESTAMP"))
+
+  gate_pass GatePass @relation(fields: [gate_pass_id], references: [id], onDelete: Cascade)
+
+  @@map("gate_pass_vehicles")
+}
+
+model GatePassLog {
+  id          String   @id @default(uuid())
+  gate_pass_id String
+  user_id     String?
+  action      String
+  description String?
+  ip_address  Json?
+  user_agent  String?
+  created_at  String   @default(dbgenerated("CURRENT_TIMESTAMP"))
+
+  gate_pass GatePass @relation(fields: [gate_pass_id], references: [id], onDelete: Cascade)
+  user      Profile?  @relation(fields: [user_id], references: [id])
+
+  @@map("gate_pass_logs")
+}
+
+model GatePassAttachment {
+  id          String   @id @default(uuid())
+  gate_pass_id String
+  file_name   String
+  file_path   String
+  file_type   String?
+  file_size   Int?
+  uploaded_by String?
+  created_at  String   @default(dbgenerated("CURRENT_TIMESTAMP"))
+
+  gate_pass GatePass @relation(fields: [gate_pass_id], references: [id], onDelete: Cascade)
+
+  @@map("gate_pass_attachments")
+}
+
+model GatePassPrintLog {
+  id          String   @id @default(uuid())
+  gate_pass_id String
+  printed_by  String?
+  printed_at  String   @default(dbgenerated("CURRENT_TIMESTAMP"))
+  printer_name String?
+  copies      Int      @default(1)
+  ip_address  Json?
+
+  @@map("gate_pass_print_logs")
 }

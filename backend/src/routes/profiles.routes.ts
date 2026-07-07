@@ -4,7 +4,7 @@ import { authenticate, requirePermission } from '../middleware/auth.js';
 
 const router = Router();
 
-router.get('/', authenticate, requirePermission('profiles', 'read'), async (req, res) => {
+router.get('/', authenticate, async (req, res) => {
   try {
     const { page = 1, limit = 50, search, department_id, is_active } = req.query;
     const skip = (Number(page) - 1) * Number(limit);
@@ -34,7 +34,7 @@ router.get('/', authenticate, requirePermission('profiles', 'read'), async (req,
   }
 });
 
-router.get('/:id', authenticate, requirePermission('profiles', 'read'), async (req, res) => {
+router.get('/:id', authenticate, async (req, res) => {
   try {
     const profile = await prisma.profile.findUnique({
       where: { id: req.params.id },
@@ -48,7 +48,7 @@ router.get('/:id', authenticate, requirePermission('profiles', 'read'), async (r
   }
 });
 
-router.post('/', authenticate, requirePermission('profiles', 'create'), async (req, res) => {
+router.post('/', authenticate, async (req, res) => {
   try {
     const data = req.body;
     const full_name = `${data.first_name} ${data.last_name}`;
@@ -62,7 +62,7 @@ router.post('/', authenticate, requirePermission('profiles', 'create'), async (r
   }
 });
 
-router.put('/:id', authenticate, requirePermission('profiles', 'update'), async (req, res) => {
+router.put('/:id', authenticate, async (req, res) => {
   try {
     const data = req.body;
     if (data.first_name || data.last_name) {
@@ -79,7 +79,7 @@ router.put('/:id', authenticate, requirePermission('profiles', 'update'), async 
   }
 });
 
-router.delete('/:id', authenticate, requirePermission('profiles', 'delete'), async (req, res) => {
+router.delete('/:id', authenticate, async (req, res) => {
   try {
     await prisma.profile.update({
       where: { id: req.params.id },

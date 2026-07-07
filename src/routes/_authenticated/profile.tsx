@@ -4,12 +4,24 @@ import { useState } from "react";
 import { z } from "zod";
 import { toast } from "sonner";
 
-import { supabase } from "@/integrations/supabase/client";
+import { apiClient } from "@/lib/api-client";
+import { getProfile } from "@/lib/auth-helper";
 import { PageHeader } from "@/components/page-header";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+
+interface Profile {
+  id: string;
+  email: string;
+  first_name: string;
+  last_name: string;
+  full_name: string;
+  phone?: string;
+  employee_no?: string;
+  roles: string[];
+}
 
 export const Route = createFileRoute("/_authenticated/profile")({
   head: () => ({ meta: [{ title: "My Profile — HST" }] }),
@@ -24,43 +36,50 @@ const schema = z.object({
 });
 
 function ProfilePage() {
-  const { user } = Route.useRouteContext();
   const qc = useQueryClient();
   const [saving, setSaving] = useState(false);
 
-  const { data: profile } = useQuery({
-    queryKey: ["profile", user.id],
+  const { data: user } = useQuery({
+    queryKey: ["current-user"],
     queryFn: async () => {
-      const { data } = await supabase.from("profiles").select("*").eq("id", user.id).maybeSingle();
-      return data;
+      return await getProfile();
     },
   });
 
-  const { data: roles = [] } = useQuery({
-    queryKey: ["my-roles", user.id],
+  const { data: profile } = useQuery<Profile>({
+    queryKey: ["profile", user?.id],
     queryFn: async () => {
-      const { data } = await supabase.from("user_roles").select("role").eq("user_id", user.id);
-      return data?.map((r) => r.role) ?? [];
+      const response = await apiClient.get<Profile>("/auth/profile");
+      if (response.error) throw new Error(response.error);
+      return response.data as Profile;
     },
+    enabled: !!user?.id,
+  });
+
+  const { data: roles = [] } = useQuery<string[]>({
+    queryKey: ["my-roles", user?.id],
+    queryFn: async () => {
+      const response = await apiClient.get<{ roles: string[] }>("/auth/profile");
+      if (response.error) throw new Error(response.error);
+      return response.data?.roles ?? [];
+    },
+    enabled: !!user?.id,
   });
 
   const save = useMutation({
     mutationFn: async (values: z.infer<typeof schema>) => {
-      const { error } = await supabase
-        .from("profiles")
-        .update({
-          first_name: values.first_name,
-          last_name: values.last_name,
-          phone: values.phone || null,
-          employee_no: values.employee_no || null,
-          updated_by: user.id,
-        })
-        .eq("id", user.id);
-      if (error) throw error;
+      const response = await apiClient.put("/auth/profile", {
+        first_name: values.first_name,
+        last_name: values.last_name,
+        phone: values.phone || null,
+        employee_no: values.employee_no || null,
+      });
+      if (response.error) throw new Error(response.error);
     },
     onSuccess: () => {
       toast.success("Profile updated");
       qc.invalidateQueries({ queryKey: ["profile"] });
+      qc.invalidateQueries({ queryKey: ["current-user"] });
     },
     onError: (e: Error) => toast.error(e.message),
   });
@@ -93,7 +112,7 @@ function ProfilePage() {
               </div>
               <div className="space-y-2">
                 <Label>Email</Label>
-                <Input value={user.email ?? ""} readOnly disabled />
+                <Input value={user?.email ?? ""} readOnly disabled />
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">

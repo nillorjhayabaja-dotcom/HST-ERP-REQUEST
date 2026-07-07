@@ -1,10 +1,20 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 
-import { supabase } from "@/integrations/supabase/client";
+import { apiClient } from "@/lib/api-client";
 import { PageHeader } from "@/components/page-header";
 import { Card, CardContent } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+
+interface ControlNumberSetting {
+  id: string;
+  module: string;
+  prefix: string;
+  year: number;
+  padding: number;
+  next_sequence: number;
+  format_template: string;
+}
 
 export const Route = createFileRoute("/_authenticated/admin/control-numbers")({
   head: () => ({ meta: [{ title: "Control Numbers — HST Admin" }] }),
@@ -12,14 +22,12 @@ export const Route = createFileRoute("/_authenticated/admin/control-numbers")({
 });
 
 function ControlNumbersAdmin() {
-  const { data = [] } = useQuery({
+  const { data = [] } = useQuery<ControlNumberSetting[]>({
     queryKey: ["admin-control-numbers"],
     queryFn: async () => {
-      const { data } = await supabase
-        .from("control_number_settings")
-        .select("*")
-        .order("module");
-      return data ?? [];
+      const response = await apiClient.get<{ settings: ControlNumberSetting[] }>("/control-numbers");
+      if (response.error) throw new Error(response.error);
+      return response.data?.settings ?? [];
     },
   });
 
@@ -45,7 +53,7 @@ function ControlNumbersAdmin() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {data.map((s) => {
+                {data.map((s: ControlNumberSetting) => {
                   const sample = s.format_template
                     .replace("{PREFIX}", s.prefix)
                     .replace("{YEAR}", String(s.year))

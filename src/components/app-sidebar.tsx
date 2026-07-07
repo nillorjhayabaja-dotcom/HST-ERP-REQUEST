@@ -46,7 +46,7 @@ const workspace: NavItem[] = [
 
 const modules: NavItem[] = [
   { title: "Employees", url: "/employees", icon: Users },
-  { title: "Gate Pass", url: "/gate-pass", icon: DoorOpen },
+  { title: "Gate Pass", url: "/gate-passes", icon: DoorOpen },
   { title: "MRF", url: "/mrf", icon: ClipboardList },
   { title: "Leave", url: "/leave", icon: CalendarDays },
   { title: "Visitors", url: "/visitors", icon: BadgeCheck },

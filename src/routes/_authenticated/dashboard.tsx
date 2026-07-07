@@ -11,7 +11,7 @@ import {
   TrendingUp,
 } from "lucide-react";
 
-import apiClient from "@/lib/api-client";
+import { apiClient } from "@/lib/api-client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -23,8 +23,6 @@ export const Route = createFileRoute("/_authenticated/dashboard")({
 });
 
 function DashboardPage() {
-  const { user } = Route.useRouteContext();
-
   const { data: stats } = useQuery({
     queryKey: ["dashboard-stats"],
     queryFn: async () => {
@@ -32,25 +30,26 @@ function DashboardPage() {
       today.setHours(0, 0, 0, 0);
       const iso = today.toISOString();
 
-      const { data } = await apiClient.get<{
+      const response = await apiClient.get<{
         pending: number;
         approvedToday: number;
         rejectedToday: number;
         employees: number;
         unread: number;
       }>("/dashboard/stats");
-
-      return data;
+      if (response.error) throw new Error(response.error);
+      return response.data;
     },
   });
 
   const { data: recentActivity = [] } = useQuery({
     queryKey: ["dashboard-activity"],
     queryFn: async () => {
-      const { data } = await apiClient.get<Array<{ id: string; module: string; action: string; entity_type?: string | null; created_at: string }>>(
+      const response = await apiClient.get<Array<{ id: string; module: string; action: string; entity_type?: string | null; created_at: string }>>(
         "/dashboard/activity"
       );
-      return data ?? [];
+      if (response.error) throw new Error(response.error);
+      return response.data ?? [];
     },
   });
 

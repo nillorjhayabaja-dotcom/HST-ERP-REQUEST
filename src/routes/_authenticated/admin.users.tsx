@@ -1,11 +1,21 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 
-import { supabase } from "@/integrations/supabase/client";
+import { apiClient } from "@/lib/api-client";
 import { PageHeader } from "@/components/page-header";
 import { Card, CardContent } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
+
+interface UserWithRoles {
+  id: string;
+  full_name: string | null;
+  email: string;
+  employment_status: string;
+  is_active: boolean;
+  department?: { name: string };
+  roles: string[];
+}
 
 export const Route = createFileRoute("/_authenticated/admin/users")({
   head: () => ({ meta: [{ title: "Users & Roles — HST Admin" }] }),
@@ -13,22 +23,12 @@ export const Route = createFileRoute("/_authenticated/admin/users")({
 });
 
 function UsersAdmin() {
-  const { data = [] } = useQuery({
+  const { data = [] } = useQuery<UserWithRoles[]>({
     queryKey: ["admin-users"],
     queryFn: async () => {
-      const { data: profiles } = await supabase
-        .from("profiles")
-        .select("id, full_name, email, employment_status, is_active, department:departments(name)")
-        .is("deleted_at", null)
-        .order("full_name");
-      const { data: roles } = await supabase.from("user_roles").select("user_id, role");
-      const map = new Map<string, string[]>();
-      (roles ?? []).forEach((r) => {
-        const arr = map.get(r.user_id) ?? [];
-        arr.push(r.role);
-        map.set(r.user_id, arr);
-      });
-      return (profiles ?? []).map((p) => ({ ...p, roles: map.get(p.id) ?? [] }));
+      const response = await apiClient.get<{ users: UserWithRoles[] }>("/profiles");
+      if (response.error) throw new Error(response.error);
+      return response.data?.users ?? [];
     },
   });
 
@@ -52,7 +52,7 @@ function UsersAdmin() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {data.map((u) => (
+                {data.map((u: UserWithRoles) => (
                   <TableRow key={u.id}>
                     <TableCell className="font-medium">{u.full_name || "—"}</TableCell>
                     <TableCell className="text-muted-foreground">{u.email}</TableCell>
