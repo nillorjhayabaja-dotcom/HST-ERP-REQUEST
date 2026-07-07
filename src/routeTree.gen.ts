@@ -14,6 +14,7 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedVisitorsRouteImport } from './routes/_authenticated/visitors'
 import { Route as AuthenticatedVehiclesRouteImport } from './routes/_authenticated/vehicles'
+import { Route as AuthenticatedPurchaseRequestsRouteImport } from './routes/_authenticated/purchase-requests'
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
 import { Route as AuthenticatedNotificationsRouteImport } from './routes/_authenticated/notifications'
 import { Route as AuthenticatedMrfRouteImport } from './routes/_authenticated/mrf'
@@ -53,6 +54,12 @@ const AuthenticatedVehiclesRoute = AuthenticatedVehiclesRouteImport.update({
   path: '/vehicles',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedPurchaseRequestsRoute =
+  AuthenticatedPurchaseRequestsRouteImport.update({
+    id: '/purchase-requests',
+    path: '/purchase-requests',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedProfileRoute = AuthenticatedProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
@@ -141,6 +148,7 @@ export interface FileRoutesByFullPath {
   '/mrf': typeof AuthenticatedMrfRoute
   '/notifications': typeof AuthenticatedNotificationsRoute
   '/profile': typeof AuthenticatedProfileRoute
+  '/purchase-requests': typeof AuthenticatedPurchaseRequestsRoute
   '/vehicles': typeof AuthenticatedVehiclesRoute
   '/visitors': typeof AuthenticatedVisitorsRoute
   '/admin/control-numbers': typeof AuthenticatedAdminControlNumbersRoute
@@ -161,6 +169,7 @@ export interface FileRoutesByTo {
   '/mrf': typeof AuthenticatedMrfRoute
   '/notifications': typeof AuthenticatedNotificationsRoute
   '/profile': typeof AuthenticatedProfileRoute
+  '/purchase-requests': typeof AuthenticatedPurchaseRequestsRoute
   '/vehicles': typeof AuthenticatedVehiclesRoute
   '/visitors': typeof AuthenticatedVisitorsRoute
   '/admin/control-numbers': typeof AuthenticatedAdminControlNumbersRoute
@@ -183,6 +192,7 @@ export interface FileRoutesById {
   '/_authenticated/mrf': typeof AuthenticatedMrfRoute
   '/_authenticated/notifications': typeof AuthenticatedNotificationsRoute
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
+  '/_authenticated/purchase-requests': typeof AuthenticatedPurchaseRequestsRoute
   '/_authenticated/vehicles': typeof AuthenticatedVehiclesRoute
   '/_authenticated/visitors': typeof AuthenticatedVisitorsRoute
   '/_authenticated/admin/control-numbers': typeof AuthenticatedAdminControlNumbersRoute
@@ -205,6 +215,7 @@ export interface FileRouteTypes {
     | '/mrf'
     | '/notifications'
     | '/profile'
+    | '/purchase-requests'
     | '/vehicles'
     | '/visitors'
     | '/admin/control-numbers'
@@ -225,6 +236,7 @@ export interface FileRouteTypes {
     | '/mrf'
     | '/notifications'
     | '/profile'
+    | '/purchase-requests'
     | '/vehicles'
     | '/visitors'
     | '/admin/control-numbers'
@@ -246,6 +258,7 @@ export interface FileRouteTypes {
     | '/_authenticated/mrf'
     | '/_authenticated/notifications'
     | '/_authenticated/profile'
+    | '/_authenticated/purchase-requests'
     | '/_authenticated/vehicles'
     | '/_authenticated/visitors'
     | '/_authenticated/admin/control-numbers'
@@ -296,6 +309,13 @@ declare module '@tanstack/react-router' {
       path: '/vehicles'
       fullPath: '/vehicles'
       preLoaderRoute: typeof AuthenticatedVehiclesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/purchase-requests': {
+      id: '/_authenticated/purchase-requests'
+      path: '/purchase-requests'
+      fullPath: '/purchase-requests'
+      preLoaderRoute: typeof AuthenticatedPurchaseRequestsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/profile': {
@@ -409,6 +429,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedMrfRoute: typeof AuthenticatedMrfRoute
   AuthenticatedNotificationsRoute: typeof AuthenticatedNotificationsRoute
   AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
+  AuthenticatedPurchaseRequestsRoute: typeof AuthenticatedPurchaseRequestsRoute
   AuthenticatedVehiclesRoute: typeof AuthenticatedVehiclesRoute
   AuthenticatedVisitorsRoute: typeof AuthenticatedVisitorsRoute
   AuthenticatedAdminControlNumbersRoute: typeof AuthenticatedAdminControlNumbersRoute
@@ -428,6 +449,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedMrfRoute: AuthenticatedMrfRoute,
   AuthenticatedNotificationsRoute: AuthenticatedNotificationsRoute,
   AuthenticatedProfileRoute: AuthenticatedProfileRoute,
+  AuthenticatedPurchaseRequestsRoute: AuthenticatedPurchaseRequestsRoute,
   AuthenticatedVehiclesRoute: AuthenticatedVehiclesRoute,
   AuthenticatedVisitorsRoute: AuthenticatedVisitorsRoute,
   AuthenticatedAdminControlNumbersRoute: AuthenticatedAdminControlNumbersRoute,
