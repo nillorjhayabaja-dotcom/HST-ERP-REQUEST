@@ -14,6 +14,7 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
 import { Route as AuthenticatedNotificationsRouteImport } from './routes/_authenticated/notifications'
+import { Route as AuthenticatedGatePassRouteImport } from './routes/_authenticated/gate-pass'
 import { Route as AuthenticatedEmployeesRouteImport } from './routes/_authenticated/employees'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedAuditLogsRouteImport } from './routes/_authenticated/audit-logs'
@@ -48,6 +49,11 @@ const AuthenticatedNotificationsRoute =
     path: '/notifications',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedGatePassRoute = AuthenticatedGatePassRouteImport.update({
+  id: '/gate-pass',
+  path: '/gate-pass',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedEmployeesRoute = AuthenticatedEmployeesRouteImport.update({
   id: '/employees',
   path: '/employees',
@@ -99,6 +105,7 @@ export interface FileRoutesByFullPath {
   '/audit-logs': typeof AuthenticatedAuditLogsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/employees': typeof AuthenticatedEmployeesRoute
+  '/gate-pass': typeof AuthenticatedGatePassRoute
   '/notifications': typeof AuthenticatedNotificationsRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/admin/control-numbers': typeof AuthenticatedAdminControlNumbersRoute
@@ -113,6 +120,7 @@ export interface FileRoutesByTo {
   '/audit-logs': typeof AuthenticatedAuditLogsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/employees': typeof AuthenticatedEmployeesRoute
+  '/gate-pass': typeof AuthenticatedGatePassRoute
   '/notifications': typeof AuthenticatedNotificationsRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/admin/control-numbers': typeof AuthenticatedAdminControlNumbersRoute
@@ -129,6 +137,7 @@ export interface FileRoutesById {
   '/_authenticated/audit-logs': typeof AuthenticatedAuditLogsRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/employees': typeof AuthenticatedEmployeesRoute
+  '/_authenticated/gate-pass': typeof AuthenticatedGatePassRoute
   '/_authenticated/notifications': typeof AuthenticatedNotificationsRoute
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
   '/_authenticated/admin/control-numbers': typeof AuthenticatedAdminControlNumbersRoute
@@ -145,6 +154,7 @@ export interface FileRouteTypes {
     | '/audit-logs'
     | '/dashboard'
     | '/employees'
+    | '/gate-pass'
     | '/notifications'
     | '/profile'
     | '/admin/control-numbers'
@@ -159,6 +169,7 @@ export interface FileRouteTypes {
     | '/audit-logs'
     | '/dashboard'
     | '/employees'
+    | '/gate-pass'
     | '/notifications'
     | '/profile'
     | '/admin/control-numbers'
@@ -174,6 +185,7 @@ export interface FileRouteTypes {
     | '/_authenticated/audit-logs'
     | '/_authenticated/dashboard'
     | '/_authenticated/employees'
+    | '/_authenticated/gate-pass'
     | '/_authenticated/notifications'
     | '/_authenticated/profile'
     | '/_authenticated/admin/control-numbers'
@@ -224,6 +236,13 @@ declare module '@tanstack/react-router' {
       path: '/notifications'
       fullPath: '/notifications'
       preLoaderRoute: typeof AuthenticatedNotificationsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/gate-pass': {
+      id: '/_authenticated/gate-pass'
+      path: '/gate-pass'
+      fullPath: '/gate-pass'
+      preLoaderRoute: typeof AuthenticatedGatePassRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/employees': {
@@ -289,6 +308,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedAuditLogsRoute: typeof AuthenticatedAuditLogsRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedEmployeesRoute: typeof AuthenticatedEmployeesRoute
+  AuthenticatedGatePassRoute: typeof AuthenticatedGatePassRoute
   AuthenticatedNotificationsRoute: typeof AuthenticatedNotificationsRoute
   AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
   AuthenticatedAdminControlNumbersRoute: typeof AuthenticatedAdminControlNumbersRoute
@@ -302,6 +322,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAuditLogsRoute: AuthenticatedAuditLogsRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedEmployeesRoute: AuthenticatedEmployeesRoute,
+  AuthenticatedGatePassRoute: AuthenticatedGatePassRoute,
   AuthenticatedNotificationsRoute: AuthenticatedNotificationsRoute,
   AuthenticatedProfileRoute: AuthenticatedProfileRoute,
   AuthenticatedAdminControlNumbersRoute: AuthenticatedAdminControlNumbersRoute,
