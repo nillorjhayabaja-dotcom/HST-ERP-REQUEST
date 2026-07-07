@@ -1,10 +1,12 @@
+"use client";
+
 import { createFileRoute, useNavigate, redirect } from "@tanstack/react-router";
 import { useState } from "react";
 import { z } from "zod";
 import { toast } from "sonner";
 import { Building2, Loader2 } from "lucide-react";
 
-import { supabase } from "@/integrations/supabase/client";
+import { signIn, signUp, isAuthenticated } from "@/lib/auth-helper";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -13,8 +15,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 export const Route = createFileRoute("/auth")({
   ssr: false,
   beforeLoad: async () => {
-    const { data } = await supabase.auth.getUser();
-    if (data.user) throw redirect({ to: "/dashboard" });
+    if (isAuthenticated()) throw redirect({ to: "/dashboard" });
   },
   head: () => ({
     meta: [
@@ -49,11 +50,15 @@ function AuthPage() {
       return;
     }
     setBusy(true);
-    const { error } = await supabase.auth.signInWithPassword(parsed.data);
-    setBusy(false);
-    if (error) return toast.error(error.message);
-    toast.success("Welcome back");
-    navigate({ to: "/dashboard" });
+    try {
+      await signIn(parsed.data.email, parsed.data.password);
+      toast.success("Welcome back");
+      navigate({ to: "/dashboard" });
+    } catch (err: any) {
+      toast.error(err?.response?.data?.error || err?.message || "Sign in failed");
+    } finally {
+      setBusy(false);
+    }
   };
 
   const handleSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -65,21 +70,15 @@ function AuthPage() {
       return;
     }
     setBusy(true);
-    const { error } = await supabase.auth.signUp({
-      email: parsed.data.email,
-      password: parsed.data.password,
-      options: {
-        emailRedirectTo: `${window.location.origin}/dashboard`,
-        data: {
-          first_name: parsed.data.first_name,
-          last_name: parsed.data.last_name,
-        },
-      },
-    });
-    setBusy(false);
-    if (error) return toast.error(error.message);
-    toast.success("Account created — signing you in…");
-    navigate({ to: "/dashboard" });
+    try {
+      await signUp(parsed.data);
+      toast.success("Account created — signing you in…");
+      navigate({ to: "/dashboard" });
+    } catch (err: any) {
+      toast.error(err?.response?.data?.error || err?.message || "Sign up failed");
+    } finally {
+      setBusy(false);
+    }
   };
 
   return (
@@ -116,7 +115,7 @@ function AuthPage() {
         </div>
 
         <div className="text-xs text-sidebar-foreground/50">
-          © {new Date().getFullYear()} HS Technologies (Phils.), Inc.
+          © 2026 HS Technologies (Phils.), Inc.
         </div>
       </div>
 

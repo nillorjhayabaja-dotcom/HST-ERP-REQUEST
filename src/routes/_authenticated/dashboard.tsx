@@ -11,7 +11,8 @@ import {
   TrendingUp,
 } from "lucide-react";
 
-import { supabase } from "@/integrations/supabase/client";
+import apiClient from "@/lib/api-client";
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { PageHeader } from "@/components/page-header";
@@ -31,32 +32,24 @@ function DashboardPage() {
       today.setHours(0, 0, 0, 0);
       const iso = today.toISOString();
 
-      const [pending, approvedToday, rejectedToday, employees, unread] = await Promise.all([
-        supabase.from("approval_requests").select("id", { count: "exact", head: true }).eq("status", "pending"),
-        supabase.from("approval_requests").select("id", { count: "exact", head: true }).eq("status", "approved").gte("updated_at", iso),
-        supabase.from("approval_requests").select("id", { count: "exact", head: true }).eq("status", "rejected").gte("updated_at", iso),
-        supabase.from("profiles").select("id", { count: "exact", head: true }).eq("is_active", true),
-        supabase.from("notifications").select("id", { count: "exact", head: true }).eq("is_read", false).eq("user_id", user.id),
-      ]);
+      const { data } = await apiClient.get<{
+        pending: number;
+        approvedToday: number;
+        rejectedToday: number;
+        employees: number;
+        unread: number;
+      }>("/dashboard/stats");
 
-      return {
-        pending: pending.count ?? 0,
-        approvedToday: approvedToday.count ?? 0,
-        rejectedToday: rejectedToday.count ?? 0,
-        employees: employees.count ?? 0,
-        unread: unread.count ?? 0,
-      };
+      return data;
     },
   });
 
   const { data: recentActivity = [] } = useQuery({
     queryKey: ["dashboard-activity"],
     queryFn: async () => {
-      const { data } = await supabase
-        .from("audit_logs")
-        .select("id, module, action, entity_type, created_at")
-        .order("created_at", { ascending: false })
-        .limit(8);
+      const { data } = await apiClient.get<Array<{ id: string; module: string; action: string; entity_type?: string | null; created_at: string }>>(
+        "/dashboard/activity"
+      );
       return data ?? [];
     },
   });

@@ -1,0 +1,271 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum AppRole {
+  administrator
+  hr
+  security
+  engineering
+  qa
+  production
+  warehouse
+  purchasing
+  accounting
+  maintenance
+  department_head
+  employee
+  executive
+  it_administrator
+}
+
+enum ApprovalStatus {
+  draft
+  pending
+  in_progress
+  approved
+  rejected
+  cancelled
+  completed
+}
+
+enum NotificationType {
+  info
+  success
+  warning
+  error
+  approval
+  system
+}
+
+model Profile {
+  id                String    @id @default(uuid())
+  email             String?   @unique
+  password          String?
+  employee_no       String?
+  first_name        String?
+  last_name         String?
+  full_name         String?
+  phone             String?
+  avatar_url        String?
+  date_hired        String?
+  employment_status String    @default("active")
+  is_active         Boolean   @default(true)
+  department_id     String?
+  position_id       String?
+  supervisor_id     String?
+  created_at        String    @default(dbgenerated("CURRENT_TIMESTAMP"))
+  updated_at        String    @default(dbgenerated("CURRENT_TIMESTAMP"))
+  created_by        String?
+  updated_by        String?
+  deleted_at        String?
+
+  department  Department?  @relation("ProfileDepartment", fields: [department_id], references: [id])
+  position    Position?    @relation("ProfilePosition", fields: [position_id], references: [id])
+  supervisor  Profile?     @relation("ProfileSupervisor", fields: [supervisor_id], references: [id])
+  subordinates Profile[]  @relation("ProfileSupervisor")
+
+  user_roles         UserRole[]
+  approval_requests  ApprovalRequest[]
+  approval_actions   ApprovalAction[]
+
+  @@map("profiles")
+}
+
+model Department {
+  id          String   @id @default(uuid())
+  code        String   @unique
+  name        String
+  description String?
+  parent_id   String?
+  is_active   Boolean  @default(true)
+  created_at  String   @default(dbgenerated("CURRENT_TIMESTAMP"))
+  updated_at  String   @default(dbgenerated("CURRENT_TIMESTAMP"))
+  created_by  String?
+  updated_by  String?
+  deleted_at  String?
+
+  parent    Department?  @relation("DepartmentHierarchy", fields: [parent_id], references: [id])
+  children  Department[] @relation("DepartmentHierarchy")
+
+  profiles  Profile[]    @relation("ProfileDepartment")
+  positions Position[]   @relation("PositionDepartment")
+
+  @@map("departments")
+}
+
+model Position {
+  id          String   @id @default(uuid())
+  code        String   @unique
+  title       String
+  department_id String?
+  is_active   Boolean  @default(true)
+  created_at  String   @default(dbgenerated("CURRENT_TIMESTAMP"))
+  updated_at  String   @default(dbgenerated("CURRENT_TIMESTAMP"))
+  created_by  String?
+  updated_by  String?
+  deleted_at  String?
+
+  department Department? @relation("PositionDepartment", fields: [department_id], references: [id])
+  profiles   Profile[]   @relation("ProfilePosition")
+
+  @@map("positions")
+}
+
+model Permission {
+  id          String   @id @default(uuid())
+  module      String
+  action      String
+  description String?
+  created_at  String   @default(dbgenerated("CURRENT_TIMESTAMP"))
+
+  role_permissions RolePermission[]
+
+  @@unique([module, action])
+  @@map("permissions")
+}
+
+model RolePermission {
+  id           String    @id @default(uuid())
+  role         AppRole
+  permission_id String
+
+  permission Permission @relation(fields: [permission_id], references: [id], onDelete: Cascade)
+
+  @@unique([role, permission_id])
+  @@map("role_permissions")
+}
+
+model UserRole {
+  id          String   @id @default(uuid())
+  user_id     String
+  role        AppRole
+  assigned_at String   @default(dbgenerated("CURRENT_TIMESTAMP"))
+  assigned_by String?
+
+  profile Profile @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@unique([user_id, role])
+  @@map("user_roles")
+}
+
+model ApprovalWorkflow {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  module      String
+  is_active   Boolean  @default(true)
+  created_at  String   @default(dbgenerated("CURRENT_TIMESTAMP"))
+  updated_at  String   @default(dbgenerated("CURRENT_TIMESTAMP"))
+  created_by  String?
+  updated_by  String?
+  deleted_at  String?
+
+  steps    ApprovalWorkflowStep[]
+  requests ApprovalRequest[]
+
+  @@map("approval_workflows")
+}
+
+model ApprovalWorkflowStep {
+  id               String   @id @default(uuid())
+  workflow_id      String
+  name             String
+  step_order       Int
+  approver_role    AppRole?
+  approver_user_id String?
+  is_optional      Boolean  @default(false)
+
+  workflow ApprovalWorkflow @relation(fields: [workflow_id], references: [id], onDelete: Cascade)
+
+  @@map("approval_workflow_steps")
+}
+
+model ApprovalRequest {
+  id            String         @id @default(uuid())
+  module        String
+  entity_type   String
+  entity_id     String
+  workflow_id   String?
+  status        ApprovalStatus @default(pending)
+  current_step  Int            @default(0)
+  notes         String?
+  requested_by  String
+  requested_at  String         @default(dbgenerated("CURRENT_TIMESTAMP"))
+  completed_at  String?
+  created_at    String         @default(dbgenerated("CURRENT_TIMESTAMP"))
+  updated_at    String         @default(dbgenerated("CURRENT_TIMESTAMP"))
+  deleted_at    String?
+
+  workflow  ApprovalWorkflow? @relation(fields: [workflow_id], references: [id])
+  requester Profile            @relation(fields: [requested_by], references: [id])
+  actions   ApprovalAction[]
+
+  @@map("approval_requests")
+}
+
+model ApprovalAction {
+  id          String   @id @default(uuid())
+  request_id  String
+  step_order  Int
+  action      String
+  actor_id    String
+  comment     String?
+  created_at  String   @default(dbgenerated("CURRENT_TIMESTAMP"))
+
+  request ApprovalRequest @relation(fields: [request_id], references: [id], onDelete: Cascade)
+  actor   Profile         @relation(fields: [actor_id], references: [id])
+
+  @@map("approval_actions")
+}
+
+model Notification {
+  id          String          @id @default(uuid())
+  user_id     String
+  title       String
+  body        String?
+  type        NotificationType @default(info)
+  module      String?
+  reference_id String?
+  is_read     Boolean         @default(false)
+  read_at     String?
+  link        String?
+  created_at  String          @default(dbgenerated("CURRENT_TIMESTAMP"))
+
+  @@map("notifications")
+}
+
+model AuditLog {
+  id          String   @id @default(uuid())
+  user_id     String?
+  module      String
+  action      String
+  entity_type String?
+  entity_id   String?
+  old_value   Json?
+  new_value   Json?
+  ip_address  Json?
+  user_agent  String?
+  created_at  String   @default(dbgenerated("CURRENT_TIMESTAMP"))
+
+  @@map("audit_logs")
+}
+
+model ControlNumberSetting {
+  id              String   @id @default(uuid())
+  module          String   @unique
+  prefix          String
+  padding         Int      @default(6)
+  next_sequence   Int      @default(1)
+  format_template String
+  year            Int
+  updated_at      String   @default(dbgenerated("CURRENT_TIMESTAMP"))
+  updated_by      String?
+
+  @@map("control_number_settings")
+}

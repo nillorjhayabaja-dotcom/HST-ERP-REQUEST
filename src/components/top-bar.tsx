@@ -1,3 +1,5 @@
+"use client";
+
 import { Link, useNavigate } from "@tanstack/react-router";
 import { LogOut, Search, Bell, Sun, Moon } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -16,7 +18,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { supabase } from "@/integrations/supabase/client";
+import apiClient from "@/lib/api-client";
+import { signOut as authSignOut } from "@/lib/auth-helper";
 import { toast } from "sonner";
 
 export function TopBar({ userEmail, userName }: { userEmail: string; userName: string }) {
@@ -42,19 +45,22 @@ export function TopBar({ userEmail, userName }: { userEmail: string; userName: s
   const { data: unread = 0 } = useQuery({
     queryKey: ["notifications", "unread-count"],
     queryFn: async () => {
-      const { count } = await supabase
-        .from("notifications")
-        .select("id", { count: "exact", head: true })
-        .eq("is_read", false);
-      return count ?? 0;
+      try {
+        const { data } = await apiClient.get<{ notifications: any[]; total: number }>(
+          "/notifications/?is_read=false"
+        );
+        return data?.total ?? 0;
+      } catch {
+        return 0;
+      }
     },
     refetchInterval: 30000,
   });
 
-  const signOut = async () => {
+  const handleSignOut = async () => {
     await queryClient.cancelQueries();
     queryClient.clear();
-    await supabase.auth.signOut();
+    await authSignOut();
     toast.success("Signed out");
     navigate({ to: "/auth", replace: true });
   };
@@ -119,7 +125,7 @@ export function TopBar({ userEmail, userName }: { userEmail: string; userName: s
                 <Link to="/notifications">Notifications</Link>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={signOut} className="text-destructive focus:text-destructive">
+              <DropdownMenuItem onClick={handleSignOut} className="text-destructive focus:text-destructive">
                 <LogOut className="h-4 w-4" /> Sign out
               </DropdownMenuItem>
             </DropdownMenuContent>

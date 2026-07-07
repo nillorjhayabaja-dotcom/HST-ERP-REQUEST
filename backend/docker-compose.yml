@@ -1,0 +1,64 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: hst-erp-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: hst_erp
+      POSTGRES_USER: hst_erp_user
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-changeme}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - hst-erp-network
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: hst-erp-backend
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      PORT: 3001
+      DATABASE_URL: postgresql://hst_erp_user:${DB_PASSWORD:-changeme}@postgres:5432/hst_erp?schema=public
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET}
+      CORS_ORIGIN: ${CORS_ORIGIN:-http://localhost:5173}
+    ports:
+      - "3001:3001"
+    volumes:
+      - backend_uploads:/app/uploads
+      - backend_logs:/app/logs
+    depends_on:
+      - postgres
+    networks:
+      - hst-erp-network
+
+  frontend:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+      args:
+        VITE_API_URL: /api
+    container_name: hst-erp-frontend
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - hst-erp-network
+
+volumes:
+  postgres_data:
+  backend_uploads:
+  backend_logs:
+
+networks:
+  hst-erp-network:
+    driver: bridge

@@ -1,0 +1,23 @@
+export const config = {
+  port: parseInt(process.env.PORT || '3001'),
+  nodeEnv: process.env.NODE_ENV || 'development',
+  corsOrigin: process.env.CORS_ORIGIN || 'http://localhost:5173',
+  jwtSecret: process.env.JWT_SECRET || 'dev-secret-change-me',
+  jwtRefreshSecret: process.env.JWT_REFRESH_SECRET || 'dev-refresh-secret-change-me',
+  jwtExpiresIn: process.env.JWT_EXPIRES_IN || '15m',
+  jwtRefreshExpiresIn: process.env.JWT_REFRESH_EXPIRES_IN || '7d',
+  databaseUrl: process.env.DATABASE_URL || '',
+  uploadDir: process.env.UPLOAD_DIR || './uploads',
+  maxFileSize: parseInt(process.env.MAX_FILE_SIZE || '10485760'),
+  rateLimitWindowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS || '900000'),
+  rateLimitMaxRequests: parseInt(process.env.RATE_LIMIT_MAX_REQUESTS || '100'),
+  smtp: {
+    host: process.env.SMTP_HOST,
+    port: parseInt(process.env.SMTP_PORT || '587'),
+    secure: process.env.SMTP_SECURE === 'true',
+    user: process.env.SMTP_USER,
+    pass: process.env.SMTP_PASS,
+    from: process.env.SMTP_FROM || 'noreply@hst-erp.local',
+  },
+  frontendUrl: process.env.FRONTEND_URL || 'http://localhost:5173',
+};
