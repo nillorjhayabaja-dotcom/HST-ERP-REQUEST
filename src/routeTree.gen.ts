@@ -20,6 +20,7 @@ import { Route as AuthenticatedAuditLogsRouteImport } from './routes/_authentica
 import { Route as AuthenticatedAdminWorkflowsRouteImport } from './routes/_authenticated/admin.workflows'
 import { Route as AuthenticatedAdminUsersRouteImport } from './routes/_authenticated/admin.users'
 import { Route as AuthenticatedAdminDepartmentsRouteImport } from './routes/_authenticated/admin.departments'
+import { Route as AuthenticatedAdminControlNumbersRouteImport } from './routes/_authenticated/admin.control-numbers'
 
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
@@ -78,6 +79,12 @@ const AuthenticatedAdminDepartmentsRoute =
     path: '/admin/departments',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedAdminControlNumbersRoute =
+  AuthenticatedAdminControlNumbersRouteImport.update({
+    id: '/admin/control-numbers',
+    path: '/admin/control-numbers',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -87,6 +94,7 @@ export interface FileRoutesByFullPath {
   '/employees': typeof AuthenticatedEmployeesRoute
   '/notifications': typeof AuthenticatedNotificationsRoute
   '/profile': typeof AuthenticatedProfileRoute
+  '/admin/control-numbers': typeof AuthenticatedAdminControlNumbersRoute
   '/admin/departments': typeof AuthenticatedAdminDepartmentsRoute
   '/admin/users': typeof AuthenticatedAdminUsersRoute
   '/admin/workflows': typeof AuthenticatedAdminWorkflowsRoute
@@ -99,6 +107,7 @@ export interface FileRoutesByTo {
   '/employees': typeof AuthenticatedEmployeesRoute
   '/notifications': typeof AuthenticatedNotificationsRoute
   '/profile': typeof AuthenticatedProfileRoute
+  '/admin/control-numbers': typeof AuthenticatedAdminControlNumbersRoute
   '/admin/departments': typeof AuthenticatedAdminDepartmentsRoute
   '/admin/users': typeof AuthenticatedAdminUsersRoute
   '/admin/workflows': typeof AuthenticatedAdminWorkflowsRoute
@@ -113,6 +122,7 @@ export interface FileRoutesById {
   '/_authenticated/employees': typeof AuthenticatedEmployeesRoute
   '/_authenticated/notifications': typeof AuthenticatedNotificationsRoute
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
+  '/_authenticated/admin/control-numbers': typeof AuthenticatedAdminControlNumbersRoute
   '/_authenticated/admin/departments': typeof AuthenticatedAdminDepartmentsRoute
   '/_authenticated/admin/users': typeof AuthenticatedAdminUsersRoute
   '/_authenticated/admin/workflows': typeof AuthenticatedAdminWorkflowsRoute
@@ -127,6 +137,7 @@ export interface FileRouteTypes {
     | '/employees'
     | '/notifications'
     | '/profile'
+    | '/admin/control-numbers'
     | '/admin/departments'
     | '/admin/users'
     | '/admin/workflows'
@@ -139,6 +150,7 @@ export interface FileRouteTypes {
     | '/employees'
     | '/notifications'
     | '/profile'
+    | '/admin/control-numbers'
     | '/admin/departments'
     | '/admin/users'
     | '/admin/workflows'
@@ -152,6 +164,7 @@ export interface FileRouteTypes {
     | '/_authenticated/employees'
     | '/_authenticated/notifications'
     | '/_authenticated/profile'
+    | '/_authenticated/admin/control-numbers'
     | '/_authenticated/admin/departments'
     | '/_authenticated/admin/users'
     | '/_authenticated/admin/workflows'
@@ -242,6 +255,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminDepartmentsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/admin/control-numbers': {
+      id: '/_authenticated/admin/control-numbers'
+      path: '/admin/control-numbers'
+      fullPath: '/admin/control-numbers'
+      preLoaderRoute: typeof AuthenticatedAdminControlNumbersRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
@@ -251,6 +271,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedEmployeesRoute: typeof AuthenticatedEmployeesRoute
   AuthenticatedNotificationsRoute: typeof AuthenticatedNotificationsRoute
   AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
+  AuthenticatedAdminControlNumbersRoute: typeof AuthenticatedAdminControlNumbersRoute
   AuthenticatedAdminDepartmentsRoute: typeof AuthenticatedAdminDepartmentsRoute
   AuthenticatedAdminUsersRoute: typeof AuthenticatedAdminUsersRoute
   AuthenticatedAdminWorkflowsRoute: typeof AuthenticatedAdminWorkflowsRoute
@@ -262,6 +283,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedEmployeesRoute: AuthenticatedEmployeesRoute,
   AuthenticatedNotificationsRoute: AuthenticatedNotificationsRoute,
   AuthenticatedProfileRoute: AuthenticatedProfileRoute,
+  AuthenticatedAdminControlNumbersRoute: AuthenticatedAdminControlNumbersRoute,
   AuthenticatedAdminDepartmentsRoute: AuthenticatedAdminDepartmentsRoute,
   AuthenticatedAdminUsersRoute: AuthenticatedAdminUsersRoute,
   AuthenticatedAdminWorkflowsRoute: AuthenticatedAdminWorkflowsRoute,
