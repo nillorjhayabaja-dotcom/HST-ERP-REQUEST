@@ -78,7 +78,7 @@ function AuditLogsPage() {
                       {log.user_id?.slice(0, 8) ?? "system"}
                     </TableCell>
                     <TableCell className="text-muted-foreground text-xs">
-                      {log.ip_address ?? "—"}
+                      {(log.ip_address as string | null) ?? "—"}
                     </TableCell>
                   </TableRow>
                 ))}
