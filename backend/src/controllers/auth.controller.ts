@@ -5,43 +5,8 @@ import prisma from '../config/database.js';
 import { AuthRequest } from '../middleware/auth.js';
 import { sendPasswordResetEmail } from '../services/email.service.js';
 
-export const signup = async (req: Request, res: Response) => {
-  try {
-    const { email, password, first_name, last_name } = req.body;
-    console.log('Signup attempt:', { email, first_name, last_name, passwordProvided: !!password });
-    
-    if (!email || !password || !first_name || !last_name) {
-      console.log('Missing fields:', { email: !!email, password: !!password, first_name: !!first_name, last_name: !!last_name });
-      return res.status(400).json({ error: 'Missing required fields' });
-    }
-    
-    const existing = await prisma.profile.findFirst({ where: { email } });
-    if (existing) {
-      console.log('Email already exists:', email);
-      return res.status(400).json({ error: 'Email already registered' });
-    }
-
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    const profile = await prisma.profile.create({
-      data: { email, password: hashedPassword, first_name, last_name, full_name: `${first_name} ${last_name}` },
-    });
-
-    const count = await prisma.profile.count();
-    await prisma.userRole.create({
-      data: { user_id: profile.id, role: count === 1 ? 'administrator' : 'employee' },
-    });
-
-    const tokens = generateTokens(profile.id, profile.email!);
-    res.status(201).json({
-      message: 'Account created successfully',
-      user: { id: profile.id, email: profile.email, first_name, last_name, full_name: profile.full_name },
-      ...tokens,
-    });
-  } catch (error) {
-    console.error('Signup error:', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
+export const signup = async (_req: Request, res: Response) => {
+  res.status(403).json({ error: 'Public signup is disabled. Contact your administrator to create an account.' });
 };
 
 export const signin = async (req: Request, res: Response) => {
@@ -61,11 +26,18 @@ export const signin = async (req: Request, res: Response) => {
       return res.status(401).json({ error: 'Invalid email or password' });
     }
 
+    if (!profile.is_active) {
+      return res.status(401).json({ error: 'Account is deactivated. Contact your administrator.' });
+    }
+
     const tokens = generateTokens(profile.id, profile.email!);
     res.json({
       user: {
-        id: profile.id, email: profile.email, first_name: profile.first_name,
-        last_name: profile.last_name, full_name: profile.full_name,
+        id: profile.id,
+        email: profile.email,
+        first_name: profile.first_name,
+        last_name: profile.last_name,
+        full_name: profile.full_name,
         roles: profile.user_roles.map((r: { role: string }) => r.role),
       },
       ...tokens,
@@ -86,7 +58,10 @@ export const refreshToken = async (req: Request, res: Response) => {
     if (!refreshSecret || !jwtSecret) throw new Error('JWT secrets not defined');
 
     const decoded = jwt.verify(rt, refreshSecret) as { userId: string };
-    const profile = await prisma.profile.findUnique({ where: { id: decoded.userId }, include: { user_roles: true } });
+    const profile = await prisma.profile.findUnique({
+      where: { id: decoded.userId },
+      include: { user_roles: true },
+    });
     if (!profile) return res.status(401).json({ error: 'Invalid refresh token' });
 
     const tokens = generateTokens(profile.id, profile.email!);
@@ -133,19 +108,46 @@ export const getProfile = async (req: AuthRequest, res: Response) => {
   try {
     const profile = await prisma.profile.findUnique({
       where: { id: req.user?.id },
-      include: { department: true, position: true, user_roles: true },
+      include: {
+        department: true,
+        position: true,
+        user_roles: true,
+      },
     });
     if (!profile) return res.status(404).json({ error: 'Profile not found' });
+
+    // Get permissions from user's roles
+    const roles = profile.user_roles.map((r: { role: string }) => r.role);
+    const permissions = await prisma.rolePermission.findMany({
+      where: { role: { in: roles as any } },
+      include: { permission: true },
+    });
+    const uniquePermissions = [...new Set(permissions.map((p: any) => `${p.permission.module}:${p.permission.action}`))];
+
     res.json({
-      id: profile.id, email: profile.email, first_name: profile.first_name, last_name: profile.last_name,
-      full_name: profile.full_name, phone: profile.phone, avatar_url: profile.avatar_url,
-      date_hired: profile.date_hired, employment_status: profile.employment_status, is_active: profile.is_active,
-      department: profile.department, position: profile.position, roles: profile.user_roles.map((r: { role: string }) => r.role),
+      id: profile.id,
+      email: profile.email,
+      first_name: profile.first_name,
+      last_name: profile.last_name,
+      full_name: profile.full_name,
+      phone: profile.phone,
+      avatar_url: profile.avatar_url,
+      date_hired: profile.date_hired,
+      employment_status: profile.employment_status,
+      is_active: profile.is_active,
+      department: profile.department,
+      position: profile.position,
+      roles,
+      permissions: uniquePermissions,
     });
   } catch (error) {
     console.error('Get profile error:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
+};
+
+export const signout = async (_req: Request, res: Response) => {
+  res.json({ message: 'Signed out successfully' });
 };
 
 export const updateProfile = async (req: AuthRequest, res: Response) => {

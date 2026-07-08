@@ -1,8 +1,11 @@
-import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
+import { createFileRoute, Outlet, redirect, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
+import { useEffect, useCallback } from "react";
 
 import { apiClient } from "@/lib/api-client";
 import { isAuthenticated, signOut } from "@/lib/auth-helper";
+import { onAuthLogout } from "@/lib/auth-events";
+import { useIdleTimeout } from "@/hooks/useIdleTimeout";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import { TopBar } from "@/components/top-bar";
@@ -16,6 +19,25 @@ export const Route = createFileRoute("/_authenticated")({
 });
 
 function AuthenticatedLayout() {
+  const navigate = useNavigate();
+
+  const forceLogout = useCallback(() => {
+    signOut().then(() => {
+      navigate({ to: "/auth", replace: true });
+    });
+  }, [navigate]);
+
+  // Listen for forced logout events (e.g., from api-client on 401)
+  useEffect(() => {
+    const unsub = onAuthLogout(() => {
+      navigate({ to: "/auth", replace: true });
+    });
+    return unsub;
+  }, [navigate]);
+
+  // Idle timeout: auto-logout after 30 minutes of inactivity
+  useIdleTimeout(forceLogout, 30 * 60 * 1000);
+
   const { data: profile, error } = useQuery({
     queryKey: ["profile"],
     queryFn: async () => {
@@ -36,9 +58,15 @@ function AuthenticatedLayout() {
     enabled: isAuthenticated(),
   });
 
+  useEffect(() => {
+    if (error) {
+      void signOut();
+      navigate({ to: "/auth", replace: true });
+    }
+  }, [error, navigate]);
+
   if (error) {
-    signOut();
-    throw redirect({ to: "/auth" });
+    return null;
   }
 
   const displayName =

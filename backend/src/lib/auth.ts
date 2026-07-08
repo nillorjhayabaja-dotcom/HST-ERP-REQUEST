@@ -27,18 +27,6 @@ export async function signIn(email: string, password: string): Promise<AuthResul
   return response.data!;
 }
 
-export async function signUp(data: { email: string; password: string; first_name: string; last_name: string }): Promise<AuthResult> {
-  const response = await apiClient.post<AuthResult>('/auth/signup', data);
-  if (response.error) {
-    throw new Error(response.error);
-  }
-  if (response.data) {
-    apiClient.setToken(response.data.token);
-    localStorage.setItem('refresh_token', response.data.refreshToken);
-  }
-  return response.data!;
-}
-
 export async function signOut(): Promise<void> {
   apiClient.setToken(null);
   localStorage.removeItem('refresh_token');

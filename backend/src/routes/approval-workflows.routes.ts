@@ -25,7 +25,7 @@ router.get('/', authenticate, requirePermission('approval_workflows', 'read'), a
 router.get('/:id', authenticate, requirePermission('approval_workflows', 'read'), async (req, res) => {
   try {
     const workflow = await prisma.approvalWorkflow.findUnique({
-      where: { id: req.params.id },
+      where: { id: String(req.params.id) },
       include: { steps: { orderBy: { step_order: 'asc' } }, requests: true },
     });
     if (!workflow) return res.status(404).json({ error: 'Workflow not found' });
@@ -58,7 +58,7 @@ router.put('/:id', authenticate, requirePermission('approval_workflows', 'update
   try {
     const { name, description, module, is_active, steps } = req.body;
     const workflow = await prisma.approvalWorkflow.update({
-      where: { id: req.params.id },
+      where: { id: String(req.params.id) },
       data: {
         name, description, module, is_active,
         updated_by: (req as any).user?.id,
@@ -76,7 +76,7 @@ router.put('/:id', authenticate, requirePermission('approval_workflows', 'update
 router.delete('/:id', authenticate, requirePermission('approval_workflows', 'delete'), async (req, res) => {
   try {
     await prisma.approvalWorkflow.update({
-      where: { id: req.params.id },
+      where: { id: String(req.params.id) },
       data: { deleted_at: new Date().toISOString(), updated_by: (req as any).user?.id },
     });
     res.json({ message: 'Workflow deleted successfully' });

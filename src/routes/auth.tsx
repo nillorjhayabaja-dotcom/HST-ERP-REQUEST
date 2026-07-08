@@ -6,7 +6,7 @@ import { z } from "zod";
 import { toast } from "sonner";
 import { Building2, Loader2 } from "lucide-react";
 
-import { signIn, signUp, isAuthenticated } from "@/lib/auth-helper";
+import { signIn, isAuthenticated } from "@/lib/auth-helper";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -15,7 +15,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 export const Route = createFileRoute("/auth")({
   ssr: false,
   beforeLoad: async () => {
-    if (isAuthenticated()) throw redirect({ to: "/dashboard" });
+    if (isAuthenticated()) throw redirect({ to: "/shared/dashboard" });
   },
   head: () => ({
     meta: [
@@ -31,14 +31,9 @@ const signInSchema = z.object({
   password: z.string().min(6, "At least 6 characters").max(128),
 });
 
-const signUpSchema = signInSchema.extend({
-  first_name: z.string().trim().min(1, "Required").max(80),
-  last_name: z.string().trim().min(1, "Required").max(80),
-});
 
 function AuthPage() {
   const navigate = useNavigate();
-  const [tab, setTab] = useState<"signin" | "signup">("signin");
   const [busy, setBusy] = useState(false);
 
   const handleSignIn = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -53,7 +48,7 @@ function AuthPage() {
     try {
       await signIn(parsed.data.email, parsed.data.password);
       toast.success("Welcome back");
-      navigate({ to: "/dashboard" });
+      navigate({ to: "/shared/dashboard" });
     } catch (err: any) {
       toast.error(err?.response?.data?.error || err?.message || "Sign in failed");
     } finally {
@@ -61,25 +56,6 @@ function AuthPage() {
     }
   };
 
-  const handleSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const form = new FormData(e.currentTarget);
-    const parsed = signUpSchema.safeParse(Object.fromEntries(form));
-    if (!parsed.success) {
-      toast.error(parsed.error.issues[0].message);
-      return;
-    }
-    setBusy(true);
-    try {
-      await signUp(parsed.data);
-      toast.success("Account created — signing you in…");
-      navigate({ to: "/dashboard" });
-    } catch (err: any) {
-      toast.error(err?.response?.data?.error || err?.message || "Sign up failed");
-    } finally {
-      setBusy(false);
-    }
-  };
 
   return (
     <div className="min-h-screen w-full grid lg:grid-cols-2">
@@ -129,64 +105,26 @@ function AuthPage() {
             <div className="font-semibold">HST Enterprise Portal</div>
           </div>
 
-          <Tabs value={tab} onValueChange={(v) => setTab(v as "signin" | "signup")}>
-            <TabsList className="grid grid-cols-2 w-full">
-              <TabsTrigger value="signin">Sign in</TabsTrigger>
-              <TabsTrigger value="signup">Create account</TabsTrigger>
-            </TabsList>
-
-            <TabsContent value="signin" className="mt-6">
-              <h2 className="text-2xl font-semibold tracking-tight">Sign in</h2>
-              <p className="text-sm text-muted-foreground mb-6">
-                Access your enterprise workspace.
-              </p>
-              <form onSubmit={handleSignIn} className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="email">Company email</Label>
-                  <Input id="email" name="email" type="email" autoComplete="email" required />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="password">Password</Label>
-                  <Input id="password" name="password" type="password" autoComplete="current-password" required />
-                </div>
-                <Button type="submit" className="w-full" disabled={busy}>
-                  {busy && <Loader2 className="h-4 w-4 animate-spin" />}
-                  Sign in
-                </Button>
-              </form>
-            </TabsContent>
-
-            <TabsContent value="signup" className="mt-6">
-              <h2 className="text-2xl font-semibold tracking-tight">Create account</h2>
-              <p className="text-sm text-muted-foreground mb-6">
-                The first registered account becomes the system Administrator.
-              </p>
-              <form onSubmit={handleSignUp} className="space-y-4">
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="space-y-2">
-                    <Label htmlFor="first_name">First name</Label>
-                    <Input id="first_name" name="first_name" required />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="last_name">Last name</Label>
-                    <Input id="last_name" name="last_name" required />
-                  </div>
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="email_up">Email</Label>
-                  <Input id="email_up" name="email" type="email" autoComplete="email" required />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="password_up">Password</Label>
-                  <Input id="password_up" name="password" type="password" autoComplete="new-password" required />
-                </div>
-                <Button type="submit" className="w-full" disabled={busy}>
-                  {busy && <Loader2 className="h-4 w-4 animate-spin" />}
-                  Create account
-                </Button>
-              </form>
-            </TabsContent>
-          </Tabs>
+          <div className="mt-6">
+            <h2 className="text-2xl font-semibold tracking-tight">Sign in</h2>
+            <p className="text-sm text-muted-foreground mb-6">
+              Access your enterprise workspace.
+            </p>
+            <form onSubmit={handleSignIn} className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="email">Company email</Label>
+                <Input id="email" name="email" type="email" autoComplete="email" required />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="password">Password</Label>
+                <Input id="password" name="password" type="password" autoComplete="current-password" required />
+              </div>
+              <Button type="submit" className="w-full" disabled={busy}>
+                {busy && <Loader2 className="h-4 w-4 animate-spin" />}
+                Sign in
+              </Button>
+            </form>
+          </div>
         </div>
       </div>
     </div>

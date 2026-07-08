@@ -1,41 +1,75 @@
 import { Router } from 'express';
 import prisma from '../config/database.js';
-import { authenticate } from '../middleware/auth.js';
+import { authenticate, AuthRequest, requireRoleLevel } from '../middleware/auth.js';
 
 const router = Router();
 
-router.get('/stats', authenticate, async (req, res) => {
+// Employee dashboard stats
+router.get('/employee', authenticate, async (req: AuthRequest, res) => {
   try {
-    const userId = (req as any).user?.id;
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    const iso = today.toISOString();
-
-    const [pending, approvedToday, rejectedToday, employees, unread] = await Promise.all([
-      prisma.approvalRequest.count({ where: { status: 'pending', deleted_at: null } }),
-      prisma.approvalRequest.count({ where: { status: 'approved', updated_at: { gte: iso }, deleted_at: null } }),
-      prisma.approvalRequest.count({ where: { status: 'rejected', updated_at: { gte: iso }, deleted_at: null } }),
-      prisma.profile.count({ where: { is_active: true, deleted_at: null } }),
+    const userId = req.user?.id;
+    
+    const [gatePasses, leaveRequests, mrfRequests, purchaseRequests, notifications] = await Promise.all([
+      prisma.gatePass.count({ where: { employee_id: userId } }),
+      prisma.approvalRequest.count({ where: { requested_by: userId, module: 'leave' } }),
+      prisma.approvalRequest.count({ where: { requested_by: userId, module: 'mrf' } }),
+      prisma.approvalRequest.count({ where: { requested_by: userId, module: 'purchase_request' } }),
       prisma.notification.count({ where: { user_id: userId, is_read: false } }),
     ]);
 
-    res.json({ pending, approvedToday, rejectedToday, employees, unread });
+    res.json({
+      gatePasses,
+      leaveRequests,
+      mrfRequests,
+      purchaseRequests,
+      notifications,
+    });
   } catch (error) {
-    console.error('Dashboard stats error:', error);
+    console.error('Employee dashboard error:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 });
 
-router.get('/activity', authenticate, async (req, res) => {
+// Admin dashboard stats
+router.get('/admin', authenticate, requireRoleLevel(3), async (req, res) => {
   try {
-    const activity = await prisma.auditLog.findMany({
-      take: 8,
-      orderBy: { created_at: 'desc' },
-      select: { id: true, module: true, action: true, entity_type: true, created_at: true },
+    const [totalUsers, totalDepartments, activeRoles, pendingApprovals] = await Promise.all([
+      prisma.profile.count({ where: { is_active: true } }),
+      prisma.department.count({ where: { is_active: true } }),
+      prisma.userRole.groupBy({ by: ['role'], _count: true }),
+      prisma.approvalRequest.count({ where: { status: 'pending' } }),
+    ]);
+
+    res.json({
+      totalUsers,
+      totalDepartments,
+      activeRoles: activeRoles.length,
+      pendingApprovals,
     });
-    res.json(activity);
   } catch (error) {
-    console.error('Dashboard activity error:', error);
+    console.error('Admin dashboard error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Security dashboard stats
+router.get('/security', authenticate, requireRoleLevel(14), async (req, res) => {
+  try {
+    const today = new Date().toISOString().split('T')[0];
+    
+    const [pendingRelease, releasedToday, activeVisitors] = await Promise.all([
+      prisma.gatePass.count({ where: { status: 'pending_security' } }),
+      prisma.gatePass.count({ where: { status: 'released', released_at: { contains: today } } }),
+      prisma.gatePass.count({ where: { status: 'released', completed_at: null } }),
+    ]);
+
+    res.json({
+      pendingRelease,
+      releasedToday,
+      activeVisitors,
+    });
+  } catch (error) {
+    console.error('Security dashboard error:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 });

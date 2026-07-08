@@ -16,7 +16,7 @@ router.get('/', authenticate, requirePermission('control_numbers', 'read'), asyn
 
 router.get('/:module', authenticate, requirePermission('control_numbers', 'read'), async (req, res) => {
   try {
-    const setting = await prisma.controlNumberSetting.findUnique({ where: { module: req.params.module } });
+    const setting = await prisma.controlNumberSetting.findUnique({ where: { module: String(req.params.module) } });
     if (!setting) return res.status(404).json({ error: 'Control number setting not found' });
     res.json(setting);
   } catch (error) {
@@ -46,7 +46,7 @@ router.put('/:id', authenticate, requirePermission('control_numbers', 'update'),
   try {
     const { prefix, padding, next_sequence, format_template, year } = req.body;
     const setting = await prisma.controlNumberSetting.update({
-      where: { id: req.params.id },
+      where: { id: String(req.params.id) },
       data: { prefix, padding, next_sequence, format_template, year, updated_by: (req as any).user?.id },
     });
     res.json(setting);

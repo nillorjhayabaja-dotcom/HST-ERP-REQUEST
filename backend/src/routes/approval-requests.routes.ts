@@ -32,7 +32,7 @@ router.get('/', authenticate, requirePermission('approval_requests', 'read'), as
 router.get('/:id', authenticate, requirePermission('approval_requests', 'read'), async (req, res) => {
   try {
     const request = await prisma.approvalRequest.findUnique({
-      where: { id: req.params.id },
+      where: { id: String(req.params.id) },
       include: { workflow: { include: { steps: { orderBy: { step_order: 'asc' } } } }, requester: true, actions: { include: { actor: { select: { id: true, full_name: true } } } } },
     });
     if (!request) return res.status(404).json({ error: 'Request not found' });
@@ -61,7 +61,7 @@ router.post('/:id/approve', authenticate, requirePermission('approval_requests',
   try {
     const { comment } = req.body;
     await processApprovalAction(req.params.id as string, 'approved', (req as any).user?.id, comment);
-    const updated = await prisma.approvalRequest.findUnique({ where: { id: req.params.id } });
+    const updated = await prisma.approvalRequest.findUnique({ where: { id: String(req.params.id) } });
     res.json(updated);
   } catch (error) {
     console.error('Error approving request:', error);
@@ -73,7 +73,7 @@ router.post('/:id/reject', authenticate, requirePermission('approval_requests', 
   try {
     const { comment } = req.body;
     await processApprovalAction(req.params.id as string, 'rejected', (req as any).user?.id, comment);
-    const updated = await prisma.approvalRequest.findUnique({ where: { id: req.params.id } });
+    const updated = await prisma.approvalRequest.findUnique({ where: { id: String(req.params.id) } });
     res.json(updated);
   } catch (error) {
     console.error('Error rejecting request:', error);

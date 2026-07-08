@@ -1,0 +1,27 @@
+{
+  "count": [
+    {
+      "cnt": 0
+    }
+  ],
+  "statuses": [],
+  "enum": [
+    {
+      "vals": [
+        "draft",
+        "submitted",
+        "for_supervisor_approval",
+        "for_department_head_approval",
+        "for_vehicle_coordinator_approval",
+        "for_general_administration_approval",
+        "approved",
+        "released",
+        "returned",
+        "completed",
+        "rejected",
+        "cancelled",
+        "expired"
+      ]
+    }
+  ]
+}

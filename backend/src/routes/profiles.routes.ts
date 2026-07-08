@@ -6,7 +6,7 @@ const router = Router();
 
 router.get('/', authenticate, async (req, res) => {
   try {
-    const { page = 1, limit = 50, search, department_id, is_active } = req.query;
+    const { page = 1, limit = 50, search, department_id, is_active, include_roles } = req.query;
     const skip = (Number(page) - 1) * Number(limit);
     const where: any = { deleted_at: null };
     if (search) {
@@ -19,6 +19,7 @@ router.get('/', authenticate, async (req, res) => {
     }
     if (department_id) where.department_id = department_id;
     if (is_active !== undefined) where.is_active = is_active === 'true';
+    
     const [profiles, total] = await Promise.all([
       prisma.profile.findMany({
         where, skip, take: Number(limit),
@@ -27,6 +28,12 @@ router.get('/', authenticate, async (req, res) => {
       }),
       prisma.profile.count({ where }),
     ]);
+
+    // If include_roles is true, return flat array for admin management
+    if (include_roles === 'true') {
+      return res.json(profiles);
+    }
+
     res.json({ profiles, total, page: Number(page), limit: Number(limit) });
   } catch (error) {
     console.error('Error fetching profiles:', error);
@@ -37,7 +44,7 @@ router.get('/', authenticate, async (req, res) => {
 router.get('/:id', authenticate, async (req, res) => {
   try {
     const profile = await prisma.profile.findUnique({
-      where: { id: req.params.id },
+      where: { id: String(req.params.id) },
       include: { department: true, position: true, supervisor: { select: { id: true, full_name: true } }, subordinates: { select: { id: true, full_name: true } }, user_roles: true },
     });
     if (!profile) return res.status(404).json({ error: 'Profile not found' });
@@ -69,7 +76,7 @@ router.put('/:id', authenticate, async (req, res) => {
       data.full_name = `${data.first_name || ''} ${data.last_name || ''}`.trim();
     }
     const profile = await prisma.profile.update({
-      where: { id: req.params.id },
+      where: { id: String(req.params.id) },
       data: { ...data, updated_by: (req as any).user?.id },
     });
     res.json(profile);
@@ -82,7 +89,7 @@ router.put('/:id', authenticate, async (req, res) => {
 router.delete('/:id', authenticate, async (req, res) => {
   try {
     await prisma.profile.update({
-      where: { id: req.params.id },
+      where: { id: String(req.params.id) },
       data: { deleted_at: new Date().toISOString(), updated_by: (req as any).user?.id },
     });
     res.json({ message: 'Profile deleted successfully' });

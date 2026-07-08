@@ -92,7 +92,7 @@ export function TopBar({ userEmail, userName }: { userEmail: string; userName: s
           </Button>
 
           <Button variant="ghost" size="icon" asChild aria-label="Notifications">
-            <Link to="/notifications" className="relative">
+            <Link to="/shared/notifications" className="relative">
               <Bell className="h-4 w-4" />
               {unread > 0 && (
                 <Badge className="absolute -top-1 -right-1 h-4 min-w-4 rounded-full px-1 text-[10px] bg-gold text-gold-foreground">
@@ -120,10 +120,10 @@ export function TopBar({ userEmail, userName }: { userEmail: string; userName: s
               <DropdownMenuLabel>My Account</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem asChild>
-                <Link to="/profile">Profile</Link>
+                <Link to="/shared/profile">Profile</Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
-                <Link to="/notifications">Notifications</Link>
+                <Link to="/shared/notifications">Notifications</Link>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={handleSignOut} className="text-destructive focus:text-destructive">

@@ -45,7 +45,7 @@ router.post('/assign', authenticate, requirePermission('permissions', 'create'),
 
 router.delete('/assign/:id', authenticate, requirePermission('permissions', 'delete'), async (req, res) => {
   try {
-    await prisma.rolePermission.delete({ where: { id: req.params.id } });
+    await prisma.rolePermission.delete({ where: { id: String(req.params.id) } });
     res.json({ message: 'Permission unassigned successfully' });
   } catch (error) {
     console.error('Error unassigning permission:', error);

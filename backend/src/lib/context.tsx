@@ -1,12 +1,11 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
-import { signIn, signUp, signOut, getProfile, type AuthUser } from './auth.js';
+import { signIn, signOut, getProfile, type AuthUser } from './auth.js';
 import { queryClient } from './query-client.js';
 
 interface AuthContextType {
   user: AuthUser | null;
   loading: boolean;
   signIn: (email: string, password: string) => Promise<void>;
-  signUp: (data: { email: string; password: string; first_name: string; last_name: string }) => Promise<void>;
   signOut: () => void;
   refreshProfile: () => Promise<void>;
 }
@@ -41,11 +40,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(result.user);
   };
 
-  const handleSignUp = async (data: { email: string; password: string; first_name: string; last_name: string }) => {
-    const result = await signUp(data);
-    setUser(result.user);
-  };
-
   const handleSignOut = () => {
     signOut();
     setUser(null);
@@ -62,7 +56,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, signIn: handleSignIn, signUp: handleSignUp, signOut: handleSignOut, refreshProfile }}>
+    <AuthContext.Provider value={{ user, loading, signIn: handleSignIn, signOut: handleSignOut, refreshProfile }}>
       {children}
     </AuthContext.Provider>
   );

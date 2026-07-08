@@ -39,26 +39,26 @@ import {
 type NavItem = { title: string; url: string; icon: ComponentType<{ className?: string }> };
 
 const workspace: NavItem[] = [
-  { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
-  { title: "Notifications", url: "/notifications", icon: Bell },
-  { title: "My Profile", url: "/profile", icon: UserCircle2 },
+  { title: "Dashboard", url: "/shared/dashboard", icon: LayoutDashboard },
+  { title: "Notifications", url: "/shared/notifications", icon: Bell },
+  { title: "My Profile", url: "/shared/profile", icon: UserCircle2 },
 ];
 
 const modules: NavItem[] = [
-  { title: "Employees", url: "/employees", icon: Users },
-  { title: "Gate Pass", url: "/gate-passes", icon: DoorOpen },
-  { title: "MRF", url: "/mrf", icon: ClipboardList },
-  { title: "Leave", url: "/leave", icon: CalendarDays },
-  { title: "Visitors", url: "/visitors", icon: BadgeCheck },
-  { title: "Vehicles", url: "/vehicles", icon: Car },
-  { title: "Assets", url: "/assets", icon: Package },
-  { title: "Purchase Req.", url: "/purchase-requests", icon: ShoppingCart },
+  { title: "Employees", url: "/employee/employees", icon: Users },
+  { title: "Gate Pass", url: "/employee/gate-passes", icon: DoorOpen },
+  { title: "MRF", url: "/employee/mrf", icon: ClipboardList },
+  { title: "Leave", url: "/employee/leave", icon: CalendarDays },
+  { title: "Visitors", url: "/employee/visitors", icon: BadgeCheck },
+  { title: "Vehicles", url: "/employee/vehicles", icon: Car },
+  { title: "Assets", url: "/employee/assets", icon: Package },
+  { title: "Purchase Req.", url: "/employee/purchase-requests", icon: ShoppingCart },
 ];
 
 const oversight: NavItem[] = [
-  { title: "Approvals", url: "/approvals", icon: Workflow },
-  { title: "Reports", url: "/reports", icon: FileBarChart },
-  { title: "Audit Logs", url: "/audit-logs", icon: ShieldCheck },
+  { title: "Approvals", url: "/shared/approvals", icon: Workflow },
+  { title: "Reports", url: "/shared/reports", icon: FileBarChart },
+  { title: "Audit Logs", url: "/shared/audit-logs", icon: ShieldCheck },
 ];
 
 const administration: NavItem[] = [

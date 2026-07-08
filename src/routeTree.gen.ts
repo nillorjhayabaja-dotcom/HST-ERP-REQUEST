@@ -12,26 +12,50 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as AuthenticatedVisitorsRouteImport } from './routes/_authenticated/visitors'
-import { Route as AuthenticatedVehiclesRouteImport } from './routes/_authenticated/vehicles'
-import { Route as AuthenticatedReportsRouteImport } from './routes/_authenticated/reports'
-import { Route as AuthenticatedPurchaseRequestsRouteImport } from './routes/_authenticated/purchase-requests'
-import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
-import { Route as AuthenticatedNotificationsRouteImport } from './routes/_authenticated/notifications'
-import { Route as AuthenticatedMrfRouteImport } from './routes/_authenticated/mrf'
-import { Route as AuthenticatedLeaveRouteImport } from './routes/_authenticated/leave'
-import { Route as AuthenticatedGatePassesRouteImport } from './routes/_authenticated/gate-passes'
-import { Route as AuthenticatedGatePassRouteImport } from './routes/_authenticated/gate-pass'
-import { Route as AuthenticatedEmployeesRouteImport } from './routes/_authenticated/employees'
-import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
-import { Route as AuthenticatedAuditLogsRouteImport } from './routes/_authenticated/audit-logs'
-import { Route as AuthenticatedAssetsRouteImport } from './routes/_authenticated/assets'
-import { Route as AuthenticatedApprovalsRouteImport } from './routes/_authenticated/approvals'
-import { Route as AuthenticatedAdminWorkflowsRouteImport } from './routes/_authenticated/admin.workflows'
-import { Route as AuthenticatedAdminUsersRouteImport } from './routes/_authenticated/admin.users'
-import { Route as AuthenticatedAdminSettingsRouteImport } from './routes/_authenticated/admin.settings'
-import { Route as AuthenticatedAdminDepartmentsRouteImport } from './routes/_authenticated/admin.departments'
-import { Route as AuthenticatedAdminControlNumbersRouteImport } from './routes/_authenticated/admin.control-numbers'
+import { Route as AuthenticatedSecurityRouteRouteImport } from './routes/_authenticated/security/route'
+import { Route as AuthenticatedEmployeePortalRouteRouteImport } from './routes/_authenticated/employee-portal/route'
+import { Route as AuthenticatedAdminRouteRouteImport } from './routes/_authenticated/admin/route'
+import { Route as AuthenticatedSharedReportsRouteImport } from './routes/_authenticated/shared/reports'
+import { Route as AuthenticatedSharedProfileRouteImport } from './routes/_authenticated/shared/profile'
+import { Route as AuthenticatedSharedNotificationsRouteImport } from './routes/_authenticated/shared/notifications'
+import { Route as AuthenticatedSharedDashboardRouteImport } from './routes/_authenticated/shared/dashboard'
+import { Route as AuthenticatedSharedAuditLogsRouteImport } from './routes/_authenticated/shared/audit-logs'
+import { Route as AuthenticatedSharedApprovalsRouteImport } from './routes/_authenticated/shared/approvals'
+import { Route as AuthenticatedSecurityDashboardRouteImport } from './routes/_authenticated/security/dashboard'
+import { Route as AuthenticatedEmployeeVisitorsRouteImport } from './routes/_authenticated/employee/visitors'
+import { Route as AuthenticatedEmployeeVehiclesRouteImport } from './routes/_authenticated/employee/vehicles'
+import { Route as AuthenticatedEmployeePurchaseRequestsRouteImport } from './routes/_authenticated/employee/purchase-requests'
+import { Route as AuthenticatedEmployeeMrfRouteImport } from './routes/_authenticated/employee/mrf'
+import { Route as AuthenticatedEmployeeLeaveRouteImport } from './routes/_authenticated/employee/leave'
+import { Route as AuthenticatedEmployeeGatePassesRouteImport } from './routes/_authenticated/employee/gate-passes'
+import { Route as AuthenticatedEmployeeGatePassRouteImport } from './routes/_authenticated/employee/gate-pass'
+import { Route as AuthenticatedEmployeeEmployeesRouteImport } from './routes/_authenticated/employee/employees'
+import { Route as AuthenticatedEmployeeAssetsRouteImport } from './routes/_authenticated/employee/assets'
+import { Route as AuthenticatedEmployeePortalVisitorsRouteImport } from './routes/_authenticated/employee-portal/visitors'
+import { Route as AuthenticatedEmployeePortalVehiclesRouteImport } from './routes/_authenticated/employee-portal/vehicles'
+import { Route as AuthenticatedEmployeePortalPurchaseRequestsRouteImport } from './routes/_authenticated/employee-portal/purchase-requests'
+import { Route as AuthenticatedEmployeePortalProfileRouteImport } from './routes/_authenticated/employee-portal/profile'
+import { Route as AuthenticatedEmployeePortalNotificationsRouteImport } from './routes/_authenticated/employee-portal/notifications'
+import { Route as AuthenticatedEmployeePortalMyRequestsRouteImport } from './routes/_authenticated/employee-portal/my-requests'
+import { Route as AuthenticatedEmployeePortalMyActivitiesRouteImport } from './routes/_authenticated/employee-portal/my-activities'
+import { Route as AuthenticatedEmployeePortalMrfRouteImport } from './routes/_authenticated/employee-portal/mrf'
+import { Route as AuthenticatedEmployeePortalLeaveRouteImport } from './routes/_authenticated/employee-portal/leave'
+import { Route as AuthenticatedEmployeePortalHelpRouteImport } from './routes/_authenticated/employee-portal/help'
+import { Route as AuthenticatedEmployeePortalGatePassesRouteImport } from './routes/_authenticated/employee-portal/gate-passes'
+import { Route as AuthenticatedEmployeePortalDashboardRouteImport } from './routes/_authenticated/employee-portal/dashboard'
+import { Route as AuthenticatedEmployeePortalAssetsRouteImport } from './routes/_authenticated/employee-portal/assets'
+import { Route as AuthenticatedAdminWorkflowsRouteImport } from './routes/_authenticated/admin/workflows'
+import { Route as AuthenticatedAdminUsersRouteImport } from './routes/_authenticated/admin/users'
+import { Route as AuthenticatedAdminSettingsRouteImport } from './routes/_authenticated/admin/settings'
+import { Route as AuthenticatedAdminRolesRouteImport } from './routes/_authenticated/admin/roles'
+import { Route as AuthenticatedAdminDepartmentsRouteImport } from './routes/_authenticated/admin/departments'
+import { Route as AuthenticatedAdminDashboardRouteImport } from './routes/_authenticated/admin/dashboard'
+import { Route as AuthenticatedAdminControlNumbersRouteImport } from './routes/_authenticated/admin/control-numbers'
+import { Route as AuthenticatedSecurityVisitorsCheckOutRouteImport } from './routes/_authenticated/security/visitors/check-out'
+import { Route as AuthenticatedSecurityVisitorsCheckInRouteImport } from './routes/_authenticated/security/visitors/check-in'
+import { Route as AuthenticatedSecurityGatePassesTodayRouteImport } from './routes/_authenticated/security/gate-passes/today'
+import { Route as AuthenticatedSecurityGatePassesScannerRouteImport } from './routes/_authenticated/security/gate-passes/scanner'
+import { Route as AuthenticatedSecurityGatePassesReleaseRouteImport } from './routes/_authenticated/security/gate-passes/release'
 
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
@@ -47,261 +71,560 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthenticatedVisitorsRoute = AuthenticatedVisitorsRouteImport.update({
-  id: '/visitors',
-  path: '/visitors',
+const AuthenticatedSecurityRouteRoute =
+  AuthenticatedSecurityRouteRouteImport.update({
+    id: '/security',
+    path: '/security',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedEmployeePortalRouteRoute =
+  AuthenticatedEmployeePortalRouteRouteImport.update({
+    id: '/employee-portal',
+    path: '/employee-portal',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedAdminRouteRoute = AuthenticatedAdminRouteRouteImport.update({
+  id: '/admin',
+  path: '/admin',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
-const AuthenticatedVehiclesRoute = AuthenticatedVehiclesRouteImport.update({
-  id: '/vehicles',
-  path: '/vehicles',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-const AuthenticatedReportsRoute = AuthenticatedReportsRouteImport.update({
-  id: '/reports',
-  path: '/reports',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-const AuthenticatedPurchaseRequestsRoute =
-  AuthenticatedPurchaseRequestsRouteImport.update({
+const AuthenticatedSharedReportsRoute =
+  AuthenticatedSharedReportsRouteImport.update({
+    id: '/shared/reports',
+    path: '/shared/reports',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedSharedProfileRoute =
+  AuthenticatedSharedProfileRouteImport.update({
+    id: '/shared/profile',
+    path: '/shared/profile',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedSharedNotificationsRoute =
+  AuthenticatedSharedNotificationsRouteImport.update({
+    id: '/shared/notifications',
+    path: '/shared/notifications',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedSharedDashboardRoute =
+  AuthenticatedSharedDashboardRouteImport.update({
+    id: '/shared/dashboard',
+    path: '/shared/dashboard',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedSharedAuditLogsRoute =
+  AuthenticatedSharedAuditLogsRouteImport.update({
+    id: '/shared/audit-logs',
+    path: '/shared/audit-logs',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedSharedApprovalsRoute =
+  AuthenticatedSharedApprovalsRouteImport.update({
+    id: '/shared/approvals',
+    path: '/shared/approvals',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedSecurityDashboardRoute =
+  AuthenticatedSecurityDashboardRouteImport.update({
+    id: '/dashboard',
+    path: '/dashboard',
+    getParentRoute: () => AuthenticatedSecurityRouteRoute,
+  } as any)
+const AuthenticatedEmployeeVisitorsRoute =
+  AuthenticatedEmployeeVisitorsRouteImport.update({
+    id: '/employee/visitors',
+    path: '/employee/visitors',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedEmployeeVehiclesRoute =
+  AuthenticatedEmployeeVehiclesRouteImport.update({
+    id: '/employee/vehicles',
+    path: '/employee/vehicles',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedEmployeePurchaseRequestsRoute =
+  AuthenticatedEmployeePurchaseRequestsRouteImport.update({
+    id: '/employee/purchase-requests',
+    path: '/employee/purchase-requests',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedEmployeeMrfRoute =
+  AuthenticatedEmployeeMrfRouteImport.update({
+    id: '/employee/mrf',
+    path: '/employee/mrf',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedEmployeeLeaveRoute =
+  AuthenticatedEmployeeLeaveRouteImport.update({
+    id: '/employee/leave',
+    path: '/employee/leave',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedEmployeeGatePassesRoute =
+  AuthenticatedEmployeeGatePassesRouteImport.update({
+    id: '/employee/gate-passes',
+    path: '/employee/gate-passes',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedEmployeeGatePassRoute =
+  AuthenticatedEmployeeGatePassRouteImport.update({
+    id: '/employee/gate-pass',
+    path: '/employee/gate-pass',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedEmployeeEmployeesRoute =
+  AuthenticatedEmployeeEmployeesRouteImport.update({
+    id: '/employee/employees',
+    path: '/employee/employees',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedEmployeeAssetsRoute =
+  AuthenticatedEmployeeAssetsRouteImport.update({
+    id: '/employee/assets',
+    path: '/employee/assets',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedEmployeePortalVisitorsRoute =
+  AuthenticatedEmployeePortalVisitorsRouteImport.update({
+    id: '/visitors',
+    path: '/visitors',
+    getParentRoute: () => AuthenticatedEmployeePortalRouteRoute,
+  } as any)
+const AuthenticatedEmployeePortalVehiclesRoute =
+  AuthenticatedEmployeePortalVehiclesRouteImport.update({
+    id: '/vehicles',
+    path: '/vehicles',
+    getParentRoute: () => AuthenticatedEmployeePortalRouteRoute,
+  } as any)
+const AuthenticatedEmployeePortalPurchaseRequestsRoute =
+  AuthenticatedEmployeePortalPurchaseRequestsRouteImport.update({
     id: '/purchase-requests',
     path: '/purchase-requests',
-    getParentRoute: () => AuthenticatedRouteRoute,
+    getParentRoute: () => AuthenticatedEmployeePortalRouteRoute,
   } as any)
-const AuthenticatedProfileRoute = AuthenticatedProfileRouteImport.update({
-  id: '/profile',
-  path: '/profile',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-const AuthenticatedNotificationsRoute =
-  AuthenticatedNotificationsRouteImport.update({
+const AuthenticatedEmployeePortalProfileRoute =
+  AuthenticatedEmployeePortalProfileRouteImport.update({
+    id: '/profile',
+    path: '/profile',
+    getParentRoute: () => AuthenticatedEmployeePortalRouteRoute,
+  } as any)
+const AuthenticatedEmployeePortalNotificationsRoute =
+  AuthenticatedEmployeePortalNotificationsRouteImport.update({
     id: '/notifications',
     path: '/notifications',
-    getParentRoute: () => AuthenticatedRouteRoute,
+    getParentRoute: () => AuthenticatedEmployeePortalRouteRoute,
   } as any)
-const AuthenticatedMrfRoute = AuthenticatedMrfRouteImport.update({
-  id: '/mrf',
-  path: '/mrf',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-const AuthenticatedLeaveRoute = AuthenticatedLeaveRouteImport.update({
-  id: '/leave',
-  path: '/leave',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-const AuthenticatedGatePassesRoute = AuthenticatedGatePassesRouteImport.update({
-  id: '/gate-passes',
-  path: '/gate-passes',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-const AuthenticatedGatePassRoute = AuthenticatedGatePassRouteImport.update({
-  id: '/gate-pass',
-  path: '/gate-pass',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-const AuthenticatedEmployeesRoute = AuthenticatedEmployeesRouteImport.update({
-  id: '/employees',
-  path: '/employees',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
-  id: '/dashboard',
-  path: '/dashboard',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-const AuthenticatedAuditLogsRoute = AuthenticatedAuditLogsRouteImport.update({
-  id: '/audit-logs',
-  path: '/audit-logs',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-const AuthenticatedAssetsRoute = AuthenticatedAssetsRouteImport.update({
-  id: '/assets',
-  path: '/assets',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-const AuthenticatedApprovalsRoute = AuthenticatedApprovalsRouteImport.update({
-  id: '/approvals',
-  path: '/approvals',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
+const AuthenticatedEmployeePortalMyRequestsRoute =
+  AuthenticatedEmployeePortalMyRequestsRouteImport.update({
+    id: '/my-requests',
+    path: '/my-requests',
+    getParentRoute: () => AuthenticatedEmployeePortalRouteRoute,
+  } as any)
+const AuthenticatedEmployeePortalMyActivitiesRoute =
+  AuthenticatedEmployeePortalMyActivitiesRouteImport.update({
+    id: '/my-activities',
+    path: '/my-activities',
+    getParentRoute: () => AuthenticatedEmployeePortalRouteRoute,
+  } as any)
+const AuthenticatedEmployeePortalMrfRoute =
+  AuthenticatedEmployeePortalMrfRouteImport.update({
+    id: '/mrf',
+    path: '/mrf',
+    getParentRoute: () => AuthenticatedEmployeePortalRouteRoute,
+  } as any)
+const AuthenticatedEmployeePortalLeaveRoute =
+  AuthenticatedEmployeePortalLeaveRouteImport.update({
+    id: '/leave',
+    path: '/leave',
+    getParentRoute: () => AuthenticatedEmployeePortalRouteRoute,
+  } as any)
+const AuthenticatedEmployeePortalHelpRoute =
+  AuthenticatedEmployeePortalHelpRouteImport.update({
+    id: '/help',
+    path: '/help',
+    getParentRoute: () => AuthenticatedEmployeePortalRouteRoute,
+  } as any)
+const AuthenticatedEmployeePortalGatePassesRoute =
+  AuthenticatedEmployeePortalGatePassesRouteImport.update({
+    id: '/gate-passes',
+    path: '/gate-passes',
+    getParentRoute: () => AuthenticatedEmployeePortalRouteRoute,
+  } as any)
+const AuthenticatedEmployeePortalDashboardRoute =
+  AuthenticatedEmployeePortalDashboardRouteImport.update({
+    id: '/dashboard',
+    path: '/dashboard',
+    getParentRoute: () => AuthenticatedEmployeePortalRouteRoute,
+  } as any)
+const AuthenticatedEmployeePortalAssetsRoute =
+  AuthenticatedEmployeePortalAssetsRouteImport.update({
+    id: '/assets',
+    path: '/assets',
+    getParentRoute: () => AuthenticatedEmployeePortalRouteRoute,
+  } as any)
 const AuthenticatedAdminWorkflowsRoute =
   AuthenticatedAdminWorkflowsRouteImport.update({
-    id: '/admin/workflows',
-    path: '/admin/workflows',
-    getParentRoute: () => AuthenticatedRouteRoute,
+    id: '/workflows',
+    path: '/workflows',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
   } as any)
 const AuthenticatedAdminUsersRoute = AuthenticatedAdminUsersRouteImport.update({
-  id: '/admin/users',
-  path: '/admin/users',
-  getParentRoute: () => AuthenticatedRouteRoute,
+  id: '/users',
+  path: '/users',
+  getParentRoute: () => AuthenticatedAdminRouteRoute,
 } as any)
 const AuthenticatedAdminSettingsRoute =
   AuthenticatedAdminSettingsRouteImport.update({
-    id: '/admin/settings',
-    path: '/admin/settings',
-    getParentRoute: () => AuthenticatedRouteRoute,
+    id: '/settings',
+    path: '/settings',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
   } as any)
+const AuthenticatedAdminRolesRoute = AuthenticatedAdminRolesRouteImport.update({
+  id: '/roles',
+  path: '/roles',
+  getParentRoute: () => AuthenticatedAdminRouteRoute,
+} as any)
 const AuthenticatedAdminDepartmentsRoute =
   AuthenticatedAdminDepartmentsRouteImport.update({
-    id: '/admin/departments',
-    path: '/admin/departments',
-    getParentRoute: () => AuthenticatedRouteRoute,
+    id: '/departments',
+    path: '/departments',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
+  } as any)
+const AuthenticatedAdminDashboardRoute =
+  AuthenticatedAdminDashboardRouteImport.update({
+    id: '/dashboard',
+    path: '/dashboard',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
   } as any)
 const AuthenticatedAdminControlNumbersRoute =
   AuthenticatedAdminControlNumbersRouteImport.update({
-    id: '/admin/control-numbers',
-    path: '/admin/control-numbers',
-    getParentRoute: () => AuthenticatedRouteRoute,
+    id: '/control-numbers',
+    path: '/control-numbers',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
+  } as any)
+const AuthenticatedSecurityVisitorsCheckOutRoute =
+  AuthenticatedSecurityVisitorsCheckOutRouteImport.update({
+    id: '/visitors/check-out',
+    path: '/visitors/check-out',
+    getParentRoute: () => AuthenticatedSecurityRouteRoute,
+  } as any)
+const AuthenticatedSecurityVisitorsCheckInRoute =
+  AuthenticatedSecurityVisitorsCheckInRouteImport.update({
+    id: '/visitors/check-in',
+    path: '/visitors/check-in',
+    getParentRoute: () => AuthenticatedSecurityRouteRoute,
+  } as any)
+const AuthenticatedSecurityGatePassesTodayRoute =
+  AuthenticatedSecurityGatePassesTodayRouteImport.update({
+    id: '/gate-passes/today',
+    path: '/gate-passes/today',
+    getParentRoute: () => AuthenticatedSecurityRouteRoute,
+  } as any)
+const AuthenticatedSecurityGatePassesScannerRoute =
+  AuthenticatedSecurityGatePassesScannerRouteImport.update({
+    id: '/gate-passes/scanner',
+    path: '/gate-passes/scanner',
+    getParentRoute: () => AuthenticatedSecurityRouteRoute,
+  } as any)
+const AuthenticatedSecurityGatePassesReleaseRoute =
+  AuthenticatedSecurityGatePassesReleaseRouteImport.update({
+    id: '/gate-passes/release',
+    path: '/gate-passes/release',
+    getParentRoute: () => AuthenticatedSecurityRouteRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
-  '/approvals': typeof AuthenticatedApprovalsRoute
-  '/assets': typeof AuthenticatedAssetsRoute
-  '/audit-logs': typeof AuthenticatedAuditLogsRoute
-  '/dashboard': typeof AuthenticatedDashboardRoute
-  '/employees': typeof AuthenticatedEmployeesRoute
-  '/gate-pass': typeof AuthenticatedGatePassRoute
-  '/gate-passes': typeof AuthenticatedGatePassesRoute
-  '/leave': typeof AuthenticatedLeaveRoute
-  '/mrf': typeof AuthenticatedMrfRoute
-  '/notifications': typeof AuthenticatedNotificationsRoute
-  '/profile': typeof AuthenticatedProfileRoute
-  '/purchase-requests': typeof AuthenticatedPurchaseRequestsRoute
-  '/reports': typeof AuthenticatedReportsRoute
-  '/vehicles': typeof AuthenticatedVehiclesRoute
-  '/visitors': typeof AuthenticatedVisitorsRoute
+  '/admin': typeof AuthenticatedAdminRouteRouteWithChildren
+  '/employee-portal': typeof AuthenticatedEmployeePortalRouteRouteWithChildren
+  '/security': typeof AuthenticatedSecurityRouteRouteWithChildren
   '/admin/control-numbers': typeof AuthenticatedAdminControlNumbersRoute
+  '/admin/dashboard': typeof AuthenticatedAdminDashboardRoute
   '/admin/departments': typeof AuthenticatedAdminDepartmentsRoute
+  '/admin/roles': typeof AuthenticatedAdminRolesRoute
   '/admin/settings': typeof AuthenticatedAdminSettingsRoute
   '/admin/users': typeof AuthenticatedAdminUsersRoute
   '/admin/workflows': typeof AuthenticatedAdminWorkflowsRoute
+  '/employee-portal/assets': typeof AuthenticatedEmployeePortalAssetsRoute
+  '/employee-portal/dashboard': typeof AuthenticatedEmployeePortalDashboardRoute
+  '/employee-portal/gate-passes': typeof AuthenticatedEmployeePortalGatePassesRoute
+  '/employee-portal/help': typeof AuthenticatedEmployeePortalHelpRoute
+  '/employee-portal/leave': typeof AuthenticatedEmployeePortalLeaveRoute
+  '/employee-portal/mrf': typeof AuthenticatedEmployeePortalMrfRoute
+  '/employee-portal/my-activities': typeof AuthenticatedEmployeePortalMyActivitiesRoute
+  '/employee-portal/my-requests': typeof AuthenticatedEmployeePortalMyRequestsRoute
+  '/employee-portal/notifications': typeof AuthenticatedEmployeePortalNotificationsRoute
+  '/employee-portal/profile': typeof AuthenticatedEmployeePortalProfileRoute
+  '/employee-portal/purchase-requests': typeof AuthenticatedEmployeePortalPurchaseRequestsRoute
+  '/employee-portal/vehicles': typeof AuthenticatedEmployeePortalVehiclesRoute
+  '/employee-portal/visitors': typeof AuthenticatedEmployeePortalVisitorsRoute
+  '/employee/assets': typeof AuthenticatedEmployeeAssetsRoute
+  '/employee/employees': typeof AuthenticatedEmployeeEmployeesRoute
+  '/employee/gate-pass': typeof AuthenticatedEmployeeGatePassRoute
+  '/employee/gate-passes': typeof AuthenticatedEmployeeGatePassesRoute
+  '/employee/leave': typeof AuthenticatedEmployeeLeaveRoute
+  '/employee/mrf': typeof AuthenticatedEmployeeMrfRoute
+  '/employee/purchase-requests': typeof AuthenticatedEmployeePurchaseRequestsRoute
+  '/employee/vehicles': typeof AuthenticatedEmployeeVehiclesRoute
+  '/employee/visitors': typeof AuthenticatedEmployeeVisitorsRoute
+  '/security/dashboard': typeof AuthenticatedSecurityDashboardRoute
+  '/shared/approvals': typeof AuthenticatedSharedApprovalsRoute
+  '/shared/audit-logs': typeof AuthenticatedSharedAuditLogsRoute
+  '/shared/dashboard': typeof AuthenticatedSharedDashboardRoute
+  '/shared/notifications': typeof AuthenticatedSharedNotificationsRoute
+  '/shared/profile': typeof AuthenticatedSharedProfileRoute
+  '/shared/reports': typeof AuthenticatedSharedReportsRoute
+  '/security/gate-passes/release': typeof AuthenticatedSecurityGatePassesReleaseRoute
+  '/security/gate-passes/scanner': typeof AuthenticatedSecurityGatePassesScannerRoute
+  '/security/gate-passes/today': typeof AuthenticatedSecurityGatePassesTodayRoute
+  '/security/visitors/check-in': typeof AuthenticatedSecurityVisitorsCheckInRoute
+  '/security/visitors/check-out': typeof AuthenticatedSecurityVisitorsCheckOutRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
-  '/approvals': typeof AuthenticatedApprovalsRoute
-  '/assets': typeof AuthenticatedAssetsRoute
-  '/audit-logs': typeof AuthenticatedAuditLogsRoute
-  '/dashboard': typeof AuthenticatedDashboardRoute
-  '/employees': typeof AuthenticatedEmployeesRoute
-  '/gate-pass': typeof AuthenticatedGatePassRoute
-  '/gate-passes': typeof AuthenticatedGatePassesRoute
-  '/leave': typeof AuthenticatedLeaveRoute
-  '/mrf': typeof AuthenticatedMrfRoute
-  '/notifications': typeof AuthenticatedNotificationsRoute
-  '/profile': typeof AuthenticatedProfileRoute
-  '/purchase-requests': typeof AuthenticatedPurchaseRequestsRoute
-  '/reports': typeof AuthenticatedReportsRoute
-  '/vehicles': typeof AuthenticatedVehiclesRoute
-  '/visitors': typeof AuthenticatedVisitorsRoute
+  '/admin': typeof AuthenticatedAdminRouteRouteWithChildren
+  '/employee-portal': typeof AuthenticatedEmployeePortalRouteRouteWithChildren
+  '/security': typeof AuthenticatedSecurityRouteRouteWithChildren
   '/admin/control-numbers': typeof AuthenticatedAdminControlNumbersRoute
+  '/admin/dashboard': typeof AuthenticatedAdminDashboardRoute
   '/admin/departments': typeof AuthenticatedAdminDepartmentsRoute
+  '/admin/roles': typeof AuthenticatedAdminRolesRoute
   '/admin/settings': typeof AuthenticatedAdminSettingsRoute
   '/admin/users': typeof AuthenticatedAdminUsersRoute
   '/admin/workflows': typeof AuthenticatedAdminWorkflowsRoute
+  '/employee-portal/assets': typeof AuthenticatedEmployeePortalAssetsRoute
+  '/employee-portal/dashboard': typeof AuthenticatedEmployeePortalDashboardRoute
+  '/employee-portal/gate-passes': typeof AuthenticatedEmployeePortalGatePassesRoute
+  '/employee-portal/help': typeof AuthenticatedEmployeePortalHelpRoute
+  '/employee-portal/leave': typeof AuthenticatedEmployeePortalLeaveRoute
+  '/employee-portal/mrf': typeof AuthenticatedEmployeePortalMrfRoute
+  '/employee-portal/my-activities': typeof AuthenticatedEmployeePortalMyActivitiesRoute
+  '/employee-portal/my-requests': typeof AuthenticatedEmployeePortalMyRequestsRoute
+  '/employee-portal/notifications': typeof AuthenticatedEmployeePortalNotificationsRoute
+  '/employee-portal/profile': typeof AuthenticatedEmployeePortalProfileRoute
+  '/employee-portal/purchase-requests': typeof AuthenticatedEmployeePortalPurchaseRequestsRoute
+  '/employee-portal/vehicles': typeof AuthenticatedEmployeePortalVehiclesRoute
+  '/employee-portal/visitors': typeof AuthenticatedEmployeePortalVisitorsRoute
+  '/employee/assets': typeof AuthenticatedEmployeeAssetsRoute
+  '/employee/employees': typeof AuthenticatedEmployeeEmployeesRoute
+  '/employee/gate-pass': typeof AuthenticatedEmployeeGatePassRoute
+  '/employee/gate-passes': typeof AuthenticatedEmployeeGatePassesRoute
+  '/employee/leave': typeof AuthenticatedEmployeeLeaveRoute
+  '/employee/mrf': typeof AuthenticatedEmployeeMrfRoute
+  '/employee/purchase-requests': typeof AuthenticatedEmployeePurchaseRequestsRoute
+  '/employee/vehicles': typeof AuthenticatedEmployeeVehiclesRoute
+  '/employee/visitors': typeof AuthenticatedEmployeeVisitorsRoute
+  '/security/dashboard': typeof AuthenticatedSecurityDashboardRoute
+  '/shared/approvals': typeof AuthenticatedSharedApprovalsRoute
+  '/shared/audit-logs': typeof AuthenticatedSharedAuditLogsRoute
+  '/shared/dashboard': typeof AuthenticatedSharedDashboardRoute
+  '/shared/notifications': typeof AuthenticatedSharedNotificationsRoute
+  '/shared/profile': typeof AuthenticatedSharedProfileRoute
+  '/shared/reports': typeof AuthenticatedSharedReportsRoute
+  '/security/gate-passes/release': typeof AuthenticatedSecurityGatePassesReleaseRoute
+  '/security/gate-passes/scanner': typeof AuthenticatedSecurityGatePassesScannerRoute
+  '/security/gate-passes/today': typeof AuthenticatedSecurityGatePassesTodayRoute
+  '/security/visitors/check-in': typeof AuthenticatedSecurityVisitorsCheckInRoute
+  '/security/visitors/check-out': typeof AuthenticatedSecurityVisitorsCheckOutRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
-  '/_authenticated/approvals': typeof AuthenticatedApprovalsRoute
-  '/_authenticated/assets': typeof AuthenticatedAssetsRoute
-  '/_authenticated/audit-logs': typeof AuthenticatedAuditLogsRoute
-  '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
-  '/_authenticated/employees': typeof AuthenticatedEmployeesRoute
-  '/_authenticated/gate-pass': typeof AuthenticatedGatePassRoute
-  '/_authenticated/gate-passes': typeof AuthenticatedGatePassesRoute
-  '/_authenticated/leave': typeof AuthenticatedLeaveRoute
-  '/_authenticated/mrf': typeof AuthenticatedMrfRoute
-  '/_authenticated/notifications': typeof AuthenticatedNotificationsRoute
-  '/_authenticated/profile': typeof AuthenticatedProfileRoute
-  '/_authenticated/purchase-requests': typeof AuthenticatedPurchaseRequestsRoute
-  '/_authenticated/reports': typeof AuthenticatedReportsRoute
-  '/_authenticated/vehicles': typeof AuthenticatedVehiclesRoute
-  '/_authenticated/visitors': typeof AuthenticatedVisitorsRoute
+  '/_authenticated/admin': typeof AuthenticatedAdminRouteRouteWithChildren
+  '/_authenticated/employee-portal': typeof AuthenticatedEmployeePortalRouteRouteWithChildren
+  '/_authenticated/security': typeof AuthenticatedSecurityRouteRouteWithChildren
   '/_authenticated/admin/control-numbers': typeof AuthenticatedAdminControlNumbersRoute
+  '/_authenticated/admin/dashboard': typeof AuthenticatedAdminDashboardRoute
   '/_authenticated/admin/departments': typeof AuthenticatedAdminDepartmentsRoute
+  '/_authenticated/admin/roles': typeof AuthenticatedAdminRolesRoute
   '/_authenticated/admin/settings': typeof AuthenticatedAdminSettingsRoute
   '/_authenticated/admin/users': typeof AuthenticatedAdminUsersRoute
   '/_authenticated/admin/workflows': typeof AuthenticatedAdminWorkflowsRoute
+  '/_authenticated/employee-portal/assets': typeof AuthenticatedEmployeePortalAssetsRoute
+  '/_authenticated/employee-portal/dashboard': typeof AuthenticatedEmployeePortalDashboardRoute
+  '/_authenticated/employee-portal/gate-passes': typeof AuthenticatedEmployeePortalGatePassesRoute
+  '/_authenticated/employee-portal/help': typeof AuthenticatedEmployeePortalHelpRoute
+  '/_authenticated/employee-portal/leave': typeof AuthenticatedEmployeePortalLeaveRoute
+  '/_authenticated/employee-portal/mrf': typeof AuthenticatedEmployeePortalMrfRoute
+  '/_authenticated/employee-portal/my-activities': typeof AuthenticatedEmployeePortalMyActivitiesRoute
+  '/_authenticated/employee-portal/my-requests': typeof AuthenticatedEmployeePortalMyRequestsRoute
+  '/_authenticated/employee-portal/notifications': typeof AuthenticatedEmployeePortalNotificationsRoute
+  '/_authenticated/employee-portal/profile': typeof AuthenticatedEmployeePortalProfileRoute
+  '/_authenticated/employee-portal/purchase-requests': typeof AuthenticatedEmployeePortalPurchaseRequestsRoute
+  '/_authenticated/employee-portal/vehicles': typeof AuthenticatedEmployeePortalVehiclesRoute
+  '/_authenticated/employee-portal/visitors': typeof AuthenticatedEmployeePortalVisitorsRoute
+  '/_authenticated/employee/assets': typeof AuthenticatedEmployeeAssetsRoute
+  '/_authenticated/employee/employees': typeof AuthenticatedEmployeeEmployeesRoute
+  '/_authenticated/employee/gate-pass': typeof AuthenticatedEmployeeGatePassRoute
+  '/_authenticated/employee/gate-passes': typeof AuthenticatedEmployeeGatePassesRoute
+  '/_authenticated/employee/leave': typeof AuthenticatedEmployeeLeaveRoute
+  '/_authenticated/employee/mrf': typeof AuthenticatedEmployeeMrfRoute
+  '/_authenticated/employee/purchase-requests': typeof AuthenticatedEmployeePurchaseRequestsRoute
+  '/_authenticated/employee/vehicles': typeof AuthenticatedEmployeeVehiclesRoute
+  '/_authenticated/employee/visitors': typeof AuthenticatedEmployeeVisitorsRoute
+  '/_authenticated/security/dashboard': typeof AuthenticatedSecurityDashboardRoute
+  '/_authenticated/shared/approvals': typeof AuthenticatedSharedApprovalsRoute
+  '/_authenticated/shared/audit-logs': typeof AuthenticatedSharedAuditLogsRoute
+  '/_authenticated/shared/dashboard': typeof AuthenticatedSharedDashboardRoute
+  '/_authenticated/shared/notifications': typeof AuthenticatedSharedNotificationsRoute
+  '/_authenticated/shared/profile': typeof AuthenticatedSharedProfileRoute
+  '/_authenticated/shared/reports': typeof AuthenticatedSharedReportsRoute
+  '/_authenticated/security/gate-passes/release': typeof AuthenticatedSecurityGatePassesReleaseRoute
+  '/_authenticated/security/gate-passes/scanner': typeof AuthenticatedSecurityGatePassesScannerRoute
+  '/_authenticated/security/gate-passes/today': typeof AuthenticatedSecurityGatePassesTodayRoute
+  '/_authenticated/security/visitors/check-in': typeof AuthenticatedSecurityVisitorsCheckInRoute
+  '/_authenticated/security/visitors/check-out': typeof AuthenticatedSecurityVisitorsCheckOutRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/auth'
-    | '/approvals'
-    | '/assets'
-    | '/audit-logs'
-    | '/dashboard'
-    | '/employees'
-    | '/gate-pass'
-    | '/gate-passes'
-    | '/leave'
-    | '/mrf'
-    | '/notifications'
-    | '/profile'
-    | '/purchase-requests'
-    | '/reports'
-    | '/vehicles'
-    | '/visitors'
+    | '/admin'
+    | '/employee-portal'
+    | '/security'
     | '/admin/control-numbers'
+    | '/admin/dashboard'
     | '/admin/departments'
+    | '/admin/roles'
     | '/admin/settings'
     | '/admin/users'
     | '/admin/workflows'
+    | '/employee-portal/assets'
+    | '/employee-portal/dashboard'
+    | '/employee-portal/gate-passes'
+    | '/employee-portal/help'
+    | '/employee-portal/leave'
+    | '/employee-portal/mrf'
+    | '/employee-portal/my-activities'
+    | '/employee-portal/my-requests'
+    | '/employee-portal/notifications'
+    | '/employee-portal/profile'
+    | '/employee-portal/purchase-requests'
+    | '/employee-portal/vehicles'
+    | '/employee-portal/visitors'
+    | '/employee/assets'
+    | '/employee/employees'
+    | '/employee/gate-pass'
+    | '/employee/gate-passes'
+    | '/employee/leave'
+    | '/employee/mrf'
+    | '/employee/purchase-requests'
+    | '/employee/vehicles'
+    | '/employee/visitors'
+    | '/security/dashboard'
+    | '/shared/approvals'
+    | '/shared/audit-logs'
+    | '/shared/dashboard'
+    | '/shared/notifications'
+    | '/shared/profile'
+    | '/shared/reports'
+    | '/security/gate-passes/release'
+    | '/security/gate-passes/scanner'
+    | '/security/gate-passes/today'
+    | '/security/visitors/check-in'
+    | '/security/visitors/check-out'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/auth'
-    | '/approvals'
-    | '/assets'
-    | '/audit-logs'
-    | '/dashboard'
-    | '/employees'
-    | '/gate-pass'
-    | '/gate-passes'
-    | '/leave'
-    | '/mrf'
-    | '/notifications'
-    | '/profile'
-    | '/purchase-requests'
-    | '/reports'
-    | '/vehicles'
-    | '/visitors'
+    | '/admin'
+    | '/employee-portal'
+    | '/security'
     | '/admin/control-numbers'
+    | '/admin/dashboard'
     | '/admin/departments'
+    | '/admin/roles'
     | '/admin/settings'
     | '/admin/users'
     | '/admin/workflows'
+    | '/employee-portal/assets'
+    | '/employee-portal/dashboard'
+    | '/employee-portal/gate-passes'
+    | '/employee-portal/help'
+    | '/employee-portal/leave'
+    | '/employee-portal/mrf'
+    | '/employee-portal/my-activities'
+    | '/employee-portal/my-requests'
+    | '/employee-portal/notifications'
+    | '/employee-portal/profile'
+    | '/employee-portal/purchase-requests'
+    | '/employee-portal/vehicles'
+    | '/employee-portal/visitors'
+    | '/employee/assets'
+    | '/employee/employees'
+    | '/employee/gate-pass'
+    | '/employee/gate-passes'
+    | '/employee/leave'
+    | '/employee/mrf'
+    | '/employee/purchase-requests'
+    | '/employee/vehicles'
+    | '/employee/visitors'
+    | '/security/dashboard'
+    | '/shared/approvals'
+    | '/shared/audit-logs'
+    | '/shared/dashboard'
+    | '/shared/notifications'
+    | '/shared/profile'
+    | '/shared/reports'
+    | '/security/gate-passes/release'
+    | '/security/gate-passes/scanner'
+    | '/security/gate-passes/today'
+    | '/security/visitors/check-in'
+    | '/security/visitors/check-out'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
     | '/auth'
-    | '/_authenticated/approvals'
-    | '/_authenticated/assets'
-    | '/_authenticated/audit-logs'
-    | '/_authenticated/dashboard'
-    | '/_authenticated/employees'
-    | '/_authenticated/gate-pass'
-    | '/_authenticated/gate-passes'
-    | '/_authenticated/leave'
-    | '/_authenticated/mrf'
-    | '/_authenticated/notifications'
-    | '/_authenticated/profile'
-    | '/_authenticated/purchase-requests'
-    | '/_authenticated/reports'
-    | '/_authenticated/vehicles'
-    | '/_authenticated/visitors'
+    | '/_authenticated/admin'
+    | '/_authenticated/employee-portal'
+    | '/_authenticated/security'
     | '/_authenticated/admin/control-numbers'
+    | '/_authenticated/admin/dashboard'
     | '/_authenticated/admin/departments'
+    | '/_authenticated/admin/roles'
     | '/_authenticated/admin/settings'
     | '/_authenticated/admin/users'
     | '/_authenticated/admin/workflows'
+    | '/_authenticated/employee-portal/assets'
+    | '/_authenticated/employee-portal/dashboard'
+    | '/_authenticated/employee-portal/gate-passes'
+    | '/_authenticated/employee-portal/help'
+    | '/_authenticated/employee-portal/leave'
+    | '/_authenticated/employee-portal/mrf'
+    | '/_authenticated/employee-portal/my-activities'
+    | '/_authenticated/employee-portal/my-requests'
+    | '/_authenticated/employee-portal/notifications'
+    | '/_authenticated/employee-portal/profile'
+    | '/_authenticated/employee-portal/purchase-requests'
+    | '/_authenticated/employee-portal/vehicles'
+    | '/_authenticated/employee-portal/visitors'
+    | '/_authenticated/employee/assets'
+    | '/_authenticated/employee/employees'
+    | '/_authenticated/employee/gate-pass'
+    | '/_authenticated/employee/gate-passes'
+    | '/_authenticated/employee/leave'
+    | '/_authenticated/employee/mrf'
+    | '/_authenticated/employee/purchase-requests'
+    | '/_authenticated/employee/vehicles'
+    | '/_authenticated/employee/visitors'
+    | '/_authenticated/security/dashboard'
+    | '/_authenticated/shared/approvals'
+    | '/_authenticated/shared/audit-logs'
+    | '/_authenticated/shared/dashboard'
+    | '/_authenticated/shared/notifications'
+    | '/_authenticated/shared/profile'
+    | '/_authenticated/shared/reports'
+    | '/_authenticated/security/gate-passes/release'
+    | '/_authenticated/security/gate-passes/scanner'
+    | '/_authenticated/security/gate-passes/today'
+    | '/_authenticated/security/visitors/check-in'
+    | '/_authenticated/security/visitors/check-out'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -333,193 +656,464 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_authenticated/visitors': {
-      id: '/_authenticated/visitors'
-      path: '/visitors'
-      fullPath: '/visitors'
-      preLoaderRoute: typeof AuthenticatedVisitorsRouteImport
+    '/_authenticated/security': {
+      id: '/_authenticated/security'
+      path: '/security'
+      fullPath: '/security'
+      preLoaderRoute: typeof AuthenticatedSecurityRouteRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/_authenticated/vehicles': {
-      id: '/_authenticated/vehicles'
-      path: '/vehicles'
-      fullPath: '/vehicles'
-      preLoaderRoute: typeof AuthenticatedVehiclesRouteImport
+    '/_authenticated/employee-portal': {
+      id: '/_authenticated/employee-portal'
+      path: '/employee-portal'
+      fullPath: '/employee-portal'
+      preLoaderRoute: typeof AuthenticatedEmployeePortalRouteRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/_authenticated/reports': {
-      id: '/_authenticated/reports'
-      path: '/reports'
-      fullPath: '/reports'
-      preLoaderRoute: typeof AuthenticatedReportsRouteImport
+    '/_authenticated/admin': {
+      id: '/_authenticated/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AuthenticatedAdminRouteRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/_authenticated/purchase-requests': {
-      id: '/_authenticated/purchase-requests'
-      path: '/purchase-requests'
-      fullPath: '/purchase-requests'
-      preLoaderRoute: typeof AuthenticatedPurchaseRequestsRouteImport
+    '/_authenticated/shared/reports': {
+      id: '/_authenticated/shared/reports'
+      path: '/shared/reports'
+      fullPath: '/shared/reports'
+      preLoaderRoute: typeof AuthenticatedSharedReportsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/_authenticated/profile': {
-      id: '/_authenticated/profile'
-      path: '/profile'
-      fullPath: '/profile'
-      preLoaderRoute: typeof AuthenticatedProfileRouteImport
+    '/_authenticated/shared/profile': {
+      id: '/_authenticated/shared/profile'
+      path: '/shared/profile'
+      fullPath: '/shared/profile'
+      preLoaderRoute: typeof AuthenticatedSharedProfileRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/_authenticated/notifications': {
-      id: '/_authenticated/notifications'
-      path: '/notifications'
-      fullPath: '/notifications'
-      preLoaderRoute: typeof AuthenticatedNotificationsRouteImport
+    '/_authenticated/shared/notifications': {
+      id: '/_authenticated/shared/notifications'
+      path: '/shared/notifications'
+      fullPath: '/shared/notifications'
+      preLoaderRoute: typeof AuthenticatedSharedNotificationsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/_authenticated/mrf': {
-      id: '/_authenticated/mrf'
-      path: '/mrf'
-      fullPath: '/mrf'
-      preLoaderRoute: typeof AuthenticatedMrfRouteImport
+    '/_authenticated/shared/dashboard': {
+      id: '/_authenticated/shared/dashboard'
+      path: '/shared/dashboard'
+      fullPath: '/shared/dashboard'
+      preLoaderRoute: typeof AuthenticatedSharedDashboardRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/_authenticated/leave': {
-      id: '/_authenticated/leave'
-      path: '/leave'
-      fullPath: '/leave'
-      preLoaderRoute: typeof AuthenticatedLeaveRouteImport
+    '/_authenticated/shared/audit-logs': {
+      id: '/_authenticated/shared/audit-logs'
+      path: '/shared/audit-logs'
+      fullPath: '/shared/audit-logs'
+      preLoaderRoute: typeof AuthenticatedSharedAuditLogsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/_authenticated/gate-passes': {
-      id: '/_authenticated/gate-passes'
-      path: '/gate-passes'
-      fullPath: '/gate-passes'
-      preLoaderRoute: typeof AuthenticatedGatePassesRouteImport
+    '/_authenticated/shared/approvals': {
+      id: '/_authenticated/shared/approvals'
+      path: '/shared/approvals'
+      fullPath: '/shared/approvals'
+      preLoaderRoute: typeof AuthenticatedSharedApprovalsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/_authenticated/gate-pass': {
-      id: '/_authenticated/gate-pass'
-      path: '/gate-pass'
-      fullPath: '/gate-pass'
-      preLoaderRoute: typeof AuthenticatedGatePassRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/employees': {
-      id: '/_authenticated/employees'
-      path: '/employees'
-      fullPath: '/employees'
-      preLoaderRoute: typeof AuthenticatedEmployeesRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/dashboard': {
-      id: '/_authenticated/dashboard'
+    '/_authenticated/security/dashboard': {
+      id: '/_authenticated/security/dashboard'
       path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof AuthenticatedDashboardRouteImport
+      fullPath: '/security/dashboard'
+      preLoaderRoute: typeof AuthenticatedSecurityDashboardRouteImport
+      parentRoute: typeof AuthenticatedSecurityRouteRoute
+    }
+    '/_authenticated/employee/visitors': {
+      id: '/_authenticated/employee/visitors'
+      path: '/employee/visitors'
+      fullPath: '/employee/visitors'
+      preLoaderRoute: typeof AuthenticatedEmployeeVisitorsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/_authenticated/audit-logs': {
-      id: '/_authenticated/audit-logs'
-      path: '/audit-logs'
-      fullPath: '/audit-logs'
-      preLoaderRoute: typeof AuthenticatedAuditLogsRouteImport
+    '/_authenticated/employee/vehicles': {
+      id: '/_authenticated/employee/vehicles'
+      path: '/employee/vehicles'
+      fullPath: '/employee/vehicles'
+      preLoaderRoute: typeof AuthenticatedEmployeeVehiclesRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/_authenticated/assets': {
-      id: '/_authenticated/assets'
+    '/_authenticated/employee/purchase-requests': {
+      id: '/_authenticated/employee/purchase-requests'
+      path: '/employee/purchase-requests'
+      fullPath: '/employee/purchase-requests'
+      preLoaderRoute: typeof AuthenticatedEmployeePurchaseRequestsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/employee/mrf': {
+      id: '/_authenticated/employee/mrf'
+      path: '/employee/mrf'
+      fullPath: '/employee/mrf'
+      preLoaderRoute: typeof AuthenticatedEmployeeMrfRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/employee/leave': {
+      id: '/_authenticated/employee/leave'
+      path: '/employee/leave'
+      fullPath: '/employee/leave'
+      preLoaderRoute: typeof AuthenticatedEmployeeLeaveRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/employee/gate-passes': {
+      id: '/_authenticated/employee/gate-passes'
+      path: '/employee/gate-passes'
+      fullPath: '/employee/gate-passes'
+      preLoaderRoute: typeof AuthenticatedEmployeeGatePassesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/employee/gate-pass': {
+      id: '/_authenticated/employee/gate-pass'
+      path: '/employee/gate-pass'
+      fullPath: '/employee/gate-pass'
+      preLoaderRoute: typeof AuthenticatedEmployeeGatePassRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/employee/employees': {
+      id: '/_authenticated/employee/employees'
+      path: '/employee/employees'
+      fullPath: '/employee/employees'
+      preLoaderRoute: typeof AuthenticatedEmployeeEmployeesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/employee/assets': {
+      id: '/_authenticated/employee/assets'
+      path: '/employee/assets'
+      fullPath: '/employee/assets'
+      preLoaderRoute: typeof AuthenticatedEmployeeAssetsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/employee-portal/visitors': {
+      id: '/_authenticated/employee-portal/visitors'
+      path: '/visitors'
+      fullPath: '/employee-portal/visitors'
+      preLoaderRoute: typeof AuthenticatedEmployeePortalVisitorsRouteImport
+      parentRoute: typeof AuthenticatedEmployeePortalRouteRoute
+    }
+    '/_authenticated/employee-portal/vehicles': {
+      id: '/_authenticated/employee-portal/vehicles'
+      path: '/vehicles'
+      fullPath: '/employee-portal/vehicles'
+      preLoaderRoute: typeof AuthenticatedEmployeePortalVehiclesRouteImport
+      parentRoute: typeof AuthenticatedEmployeePortalRouteRoute
+    }
+    '/_authenticated/employee-portal/purchase-requests': {
+      id: '/_authenticated/employee-portal/purchase-requests'
+      path: '/purchase-requests'
+      fullPath: '/employee-portal/purchase-requests'
+      preLoaderRoute: typeof AuthenticatedEmployeePortalPurchaseRequestsRouteImport
+      parentRoute: typeof AuthenticatedEmployeePortalRouteRoute
+    }
+    '/_authenticated/employee-portal/profile': {
+      id: '/_authenticated/employee-portal/profile'
+      path: '/profile'
+      fullPath: '/employee-portal/profile'
+      preLoaderRoute: typeof AuthenticatedEmployeePortalProfileRouteImport
+      parentRoute: typeof AuthenticatedEmployeePortalRouteRoute
+    }
+    '/_authenticated/employee-portal/notifications': {
+      id: '/_authenticated/employee-portal/notifications'
+      path: '/notifications'
+      fullPath: '/employee-portal/notifications'
+      preLoaderRoute: typeof AuthenticatedEmployeePortalNotificationsRouteImport
+      parentRoute: typeof AuthenticatedEmployeePortalRouteRoute
+    }
+    '/_authenticated/employee-portal/my-requests': {
+      id: '/_authenticated/employee-portal/my-requests'
+      path: '/my-requests'
+      fullPath: '/employee-portal/my-requests'
+      preLoaderRoute: typeof AuthenticatedEmployeePortalMyRequestsRouteImport
+      parentRoute: typeof AuthenticatedEmployeePortalRouteRoute
+    }
+    '/_authenticated/employee-portal/my-activities': {
+      id: '/_authenticated/employee-portal/my-activities'
+      path: '/my-activities'
+      fullPath: '/employee-portal/my-activities'
+      preLoaderRoute: typeof AuthenticatedEmployeePortalMyActivitiesRouteImport
+      parentRoute: typeof AuthenticatedEmployeePortalRouteRoute
+    }
+    '/_authenticated/employee-portal/mrf': {
+      id: '/_authenticated/employee-portal/mrf'
+      path: '/mrf'
+      fullPath: '/employee-portal/mrf'
+      preLoaderRoute: typeof AuthenticatedEmployeePortalMrfRouteImport
+      parentRoute: typeof AuthenticatedEmployeePortalRouteRoute
+    }
+    '/_authenticated/employee-portal/leave': {
+      id: '/_authenticated/employee-portal/leave'
+      path: '/leave'
+      fullPath: '/employee-portal/leave'
+      preLoaderRoute: typeof AuthenticatedEmployeePortalLeaveRouteImport
+      parentRoute: typeof AuthenticatedEmployeePortalRouteRoute
+    }
+    '/_authenticated/employee-portal/help': {
+      id: '/_authenticated/employee-portal/help'
+      path: '/help'
+      fullPath: '/employee-portal/help'
+      preLoaderRoute: typeof AuthenticatedEmployeePortalHelpRouteImport
+      parentRoute: typeof AuthenticatedEmployeePortalRouteRoute
+    }
+    '/_authenticated/employee-portal/gate-passes': {
+      id: '/_authenticated/employee-portal/gate-passes'
+      path: '/gate-passes'
+      fullPath: '/employee-portal/gate-passes'
+      preLoaderRoute: typeof AuthenticatedEmployeePortalGatePassesRouteImport
+      parentRoute: typeof AuthenticatedEmployeePortalRouteRoute
+    }
+    '/_authenticated/employee-portal/dashboard': {
+      id: '/_authenticated/employee-portal/dashboard'
+      path: '/dashboard'
+      fullPath: '/employee-portal/dashboard'
+      preLoaderRoute: typeof AuthenticatedEmployeePortalDashboardRouteImport
+      parentRoute: typeof AuthenticatedEmployeePortalRouteRoute
+    }
+    '/_authenticated/employee-portal/assets': {
+      id: '/_authenticated/employee-portal/assets'
       path: '/assets'
-      fullPath: '/assets'
-      preLoaderRoute: typeof AuthenticatedAssetsRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/approvals': {
-      id: '/_authenticated/approvals'
-      path: '/approvals'
-      fullPath: '/approvals'
-      preLoaderRoute: typeof AuthenticatedApprovalsRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
+      fullPath: '/employee-portal/assets'
+      preLoaderRoute: typeof AuthenticatedEmployeePortalAssetsRouteImport
+      parentRoute: typeof AuthenticatedEmployeePortalRouteRoute
     }
     '/_authenticated/admin/workflows': {
       id: '/_authenticated/admin/workflows'
-      path: '/admin/workflows'
+      path: '/workflows'
       fullPath: '/admin/workflows'
       preLoaderRoute: typeof AuthenticatedAdminWorkflowsRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
+      parentRoute: typeof AuthenticatedAdminRouteRoute
     }
     '/_authenticated/admin/users': {
       id: '/_authenticated/admin/users'
-      path: '/admin/users'
+      path: '/users'
       fullPath: '/admin/users'
       preLoaderRoute: typeof AuthenticatedAdminUsersRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
+      parentRoute: typeof AuthenticatedAdminRouteRoute
     }
     '/_authenticated/admin/settings': {
       id: '/_authenticated/admin/settings'
-      path: '/admin/settings'
+      path: '/settings'
       fullPath: '/admin/settings'
       preLoaderRoute: typeof AuthenticatedAdminSettingsRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
+    '/_authenticated/admin/roles': {
+      id: '/_authenticated/admin/roles'
+      path: '/roles'
+      fullPath: '/admin/roles'
+      preLoaderRoute: typeof AuthenticatedAdminRolesRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
     }
     '/_authenticated/admin/departments': {
       id: '/_authenticated/admin/departments'
-      path: '/admin/departments'
+      path: '/departments'
       fullPath: '/admin/departments'
       preLoaderRoute: typeof AuthenticatedAdminDepartmentsRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
+    '/_authenticated/admin/dashboard': {
+      id: '/_authenticated/admin/dashboard'
+      path: '/dashboard'
+      fullPath: '/admin/dashboard'
+      preLoaderRoute: typeof AuthenticatedAdminDashboardRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
     }
     '/_authenticated/admin/control-numbers': {
       id: '/_authenticated/admin/control-numbers'
-      path: '/admin/control-numbers'
+      path: '/control-numbers'
       fullPath: '/admin/control-numbers'
       preLoaderRoute: typeof AuthenticatedAdminControlNumbersRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
+    '/_authenticated/security/visitors/check-out': {
+      id: '/_authenticated/security/visitors/check-out'
+      path: '/visitors/check-out'
+      fullPath: '/security/visitors/check-out'
+      preLoaderRoute: typeof AuthenticatedSecurityVisitorsCheckOutRouteImport
+      parentRoute: typeof AuthenticatedSecurityRouteRoute
+    }
+    '/_authenticated/security/visitors/check-in': {
+      id: '/_authenticated/security/visitors/check-in'
+      path: '/visitors/check-in'
+      fullPath: '/security/visitors/check-in'
+      preLoaderRoute: typeof AuthenticatedSecurityVisitorsCheckInRouteImport
+      parentRoute: typeof AuthenticatedSecurityRouteRoute
+    }
+    '/_authenticated/security/gate-passes/today': {
+      id: '/_authenticated/security/gate-passes/today'
+      path: '/gate-passes/today'
+      fullPath: '/security/gate-passes/today'
+      preLoaderRoute: typeof AuthenticatedSecurityGatePassesTodayRouteImport
+      parentRoute: typeof AuthenticatedSecurityRouteRoute
+    }
+    '/_authenticated/security/gate-passes/scanner': {
+      id: '/_authenticated/security/gate-passes/scanner'
+      path: '/gate-passes/scanner'
+      fullPath: '/security/gate-passes/scanner'
+      preLoaderRoute: typeof AuthenticatedSecurityGatePassesScannerRouteImport
+      parentRoute: typeof AuthenticatedSecurityRouteRoute
+    }
+    '/_authenticated/security/gate-passes/release': {
+      id: '/_authenticated/security/gate-passes/release'
+      path: '/gate-passes/release'
+      fullPath: '/security/gate-passes/release'
+      preLoaderRoute: typeof AuthenticatedSecurityGatePassesReleaseRouteImport
+      parentRoute: typeof AuthenticatedSecurityRouteRoute
     }
   }
 }
 
-interface AuthenticatedRouteRouteChildren {
-  AuthenticatedApprovalsRoute: typeof AuthenticatedApprovalsRoute
-  AuthenticatedAssetsRoute: typeof AuthenticatedAssetsRoute
-  AuthenticatedAuditLogsRoute: typeof AuthenticatedAuditLogsRoute
-  AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
-  AuthenticatedEmployeesRoute: typeof AuthenticatedEmployeesRoute
-  AuthenticatedGatePassRoute: typeof AuthenticatedGatePassRoute
-  AuthenticatedGatePassesRoute: typeof AuthenticatedGatePassesRoute
-  AuthenticatedLeaveRoute: typeof AuthenticatedLeaveRoute
-  AuthenticatedMrfRoute: typeof AuthenticatedMrfRoute
-  AuthenticatedNotificationsRoute: typeof AuthenticatedNotificationsRoute
-  AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
-  AuthenticatedPurchaseRequestsRoute: typeof AuthenticatedPurchaseRequestsRoute
-  AuthenticatedReportsRoute: typeof AuthenticatedReportsRoute
-  AuthenticatedVehiclesRoute: typeof AuthenticatedVehiclesRoute
-  AuthenticatedVisitorsRoute: typeof AuthenticatedVisitorsRoute
+interface AuthenticatedAdminRouteRouteChildren {
   AuthenticatedAdminControlNumbersRoute: typeof AuthenticatedAdminControlNumbersRoute
+  AuthenticatedAdminDashboardRoute: typeof AuthenticatedAdminDashboardRoute
   AuthenticatedAdminDepartmentsRoute: typeof AuthenticatedAdminDepartmentsRoute
+  AuthenticatedAdminRolesRoute: typeof AuthenticatedAdminRolesRoute
   AuthenticatedAdminSettingsRoute: typeof AuthenticatedAdminSettingsRoute
   AuthenticatedAdminUsersRoute: typeof AuthenticatedAdminUsersRoute
   AuthenticatedAdminWorkflowsRoute: typeof AuthenticatedAdminWorkflowsRoute
 }
 
+const AuthenticatedAdminRouteRouteChildren: AuthenticatedAdminRouteRouteChildren =
+  {
+    AuthenticatedAdminControlNumbersRoute:
+      AuthenticatedAdminControlNumbersRoute,
+    AuthenticatedAdminDashboardRoute: AuthenticatedAdminDashboardRoute,
+    AuthenticatedAdminDepartmentsRoute: AuthenticatedAdminDepartmentsRoute,
+    AuthenticatedAdminRolesRoute: AuthenticatedAdminRolesRoute,
+    AuthenticatedAdminSettingsRoute: AuthenticatedAdminSettingsRoute,
+    AuthenticatedAdminUsersRoute: AuthenticatedAdminUsersRoute,
+    AuthenticatedAdminWorkflowsRoute: AuthenticatedAdminWorkflowsRoute,
+  }
+
+const AuthenticatedAdminRouteRouteWithChildren =
+  AuthenticatedAdminRouteRoute._addFileChildren(
+    AuthenticatedAdminRouteRouteChildren,
+  )
+
+interface AuthenticatedEmployeePortalRouteRouteChildren {
+  AuthenticatedEmployeePortalAssetsRoute: typeof AuthenticatedEmployeePortalAssetsRoute
+  AuthenticatedEmployeePortalDashboardRoute: typeof AuthenticatedEmployeePortalDashboardRoute
+  AuthenticatedEmployeePortalGatePassesRoute: typeof AuthenticatedEmployeePortalGatePassesRoute
+  AuthenticatedEmployeePortalHelpRoute: typeof AuthenticatedEmployeePortalHelpRoute
+  AuthenticatedEmployeePortalLeaveRoute: typeof AuthenticatedEmployeePortalLeaveRoute
+  AuthenticatedEmployeePortalMrfRoute: typeof AuthenticatedEmployeePortalMrfRoute
+  AuthenticatedEmployeePortalMyActivitiesRoute: typeof AuthenticatedEmployeePortalMyActivitiesRoute
+  AuthenticatedEmployeePortalMyRequestsRoute: typeof AuthenticatedEmployeePortalMyRequestsRoute
+  AuthenticatedEmployeePortalNotificationsRoute: typeof AuthenticatedEmployeePortalNotificationsRoute
+  AuthenticatedEmployeePortalProfileRoute: typeof AuthenticatedEmployeePortalProfileRoute
+  AuthenticatedEmployeePortalPurchaseRequestsRoute: typeof AuthenticatedEmployeePortalPurchaseRequestsRoute
+  AuthenticatedEmployeePortalVehiclesRoute: typeof AuthenticatedEmployeePortalVehiclesRoute
+  AuthenticatedEmployeePortalVisitorsRoute: typeof AuthenticatedEmployeePortalVisitorsRoute
+}
+
+const AuthenticatedEmployeePortalRouteRouteChildren: AuthenticatedEmployeePortalRouteRouteChildren =
+  {
+    AuthenticatedEmployeePortalAssetsRoute:
+      AuthenticatedEmployeePortalAssetsRoute,
+    AuthenticatedEmployeePortalDashboardRoute:
+      AuthenticatedEmployeePortalDashboardRoute,
+    AuthenticatedEmployeePortalGatePassesRoute:
+      AuthenticatedEmployeePortalGatePassesRoute,
+    AuthenticatedEmployeePortalHelpRoute: AuthenticatedEmployeePortalHelpRoute,
+    AuthenticatedEmployeePortalLeaveRoute:
+      AuthenticatedEmployeePortalLeaveRoute,
+    AuthenticatedEmployeePortalMrfRoute: AuthenticatedEmployeePortalMrfRoute,
+    AuthenticatedEmployeePortalMyActivitiesRoute:
+      AuthenticatedEmployeePortalMyActivitiesRoute,
+    AuthenticatedEmployeePortalMyRequestsRoute:
+      AuthenticatedEmployeePortalMyRequestsRoute,
+    AuthenticatedEmployeePortalNotificationsRoute:
+      AuthenticatedEmployeePortalNotificationsRoute,
+    AuthenticatedEmployeePortalProfileRoute:
+      AuthenticatedEmployeePortalProfileRoute,
+    AuthenticatedEmployeePortalPurchaseRequestsRoute:
+      AuthenticatedEmployeePortalPurchaseRequestsRoute,
+    AuthenticatedEmployeePortalVehiclesRoute:
+      AuthenticatedEmployeePortalVehiclesRoute,
+    AuthenticatedEmployeePortalVisitorsRoute:
+      AuthenticatedEmployeePortalVisitorsRoute,
+  }
+
+const AuthenticatedEmployeePortalRouteRouteWithChildren =
+  AuthenticatedEmployeePortalRouteRoute._addFileChildren(
+    AuthenticatedEmployeePortalRouteRouteChildren,
+  )
+
+interface AuthenticatedSecurityRouteRouteChildren {
+  AuthenticatedSecurityDashboardRoute: typeof AuthenticatedSecurityDashboardRoute
+  AuthenticatedSecurityGatePassesReleaseRoute: typeof AuthenticatedSecurityGatePassesReleaseRoute
+  AuthenticatedSecurityGatePassesScannerRoute: typeof AuthenticatedSecurityGatePassesScannerRoute
+  AuthenticatedSecurityGatePassesTodayRoute: typeof AuthenticatedSecurityGatePassesTodayRoute
+  AuthenticatedSecurityVisitorsCheckInRoute: typeof AuthenticatedSecurityVisitorsCheckInRoute
+  AuthenticatedSecurityVisitorsCheckOutRoute: typeof AuthenticatedSecurityVisitorsCheckOutRoute
+}
+
+const AuthenticatedSecurityRouteRouteChildren: AuthenticatedSecurityRouteRouteChildren =
+  {
+    AuthenticatedSecurityDashboardRoute: AuthenticatedSecurityDashboardRoute,
+    AuthenticatedSecurityGatePassesReleaseRoute:
+      AuthenticatedSecurityGatePassesReleaseRoute,
+    AuthenticatedSecurityGatePassesScannerRoute:
+      AuthenticatedSecurityGatePassesScannerRoute,
+    AuthenticatedSecurityGatePassesTodayRoute:
+      AuthenticatedSecurityGatePassesTodayRoute,
+    AuthenticatedSecurityVisitorsCheckInRoute:
+      AuthenticatedSecurityVisitorsCheckInRoute,
+    AuthenticatedSecurityVisitorsCheckOutRoute:
+      AuthenticatedSecurityVisitorsCheckOutRoute,
+  }
+
+const AuthenticatedSecurityRouteRouteWithChildren =
+  AuthenticatedSecurityRouteRoute._addFileChildren(
+    AuthenticatedSecurityRouteRouteChildren,
+  )
+
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAdminRouteRoute: typeof AuthenticatedAdminRouteRouteWithChildren
+  AuthenticatedEmployeePortalRouteRoute: typeof AuthenticatedEmployeePortalRouteRouteWithChildren
+  AuthenticatedSecurityRouteRoute: typeof AuthenticatedSecurityRouteRouteWithChildren
+  AuthenticatedEmployeeAssetsRoute: typeof AuthenticatedEmployeeAssetsRoute
+  AuthenticatedEmployeeEmployeesRoute: typeof AuthenticatedEmployeeEmployeesRoute
+  AuthenticatedEmployeeGatePassRoute: typeof AuthenticatedEmployeeGatePassRoute
+  AuthenticatedEmployeeGatePassesRoute: typeof AuthenticatedEmployeeGatePassesRoute
+  AuthenticatedEmployeeLeaveRoute: typeof AuthenticatedEmployeeLeaveRoute
+  AuthenticatedEmployeeMrfRoute: typeof AuthenticatedEmployeeMrfRoute
+  AuthenticatedEmployeePurchaseRequestsRoute: typeof AuthenticatedEmployeePurchaseRequestsRoute
+  AuthenticatedEmployeeVehiclesRoute: typeof AuthenticatedEmployeeVehiclesRoute
+  AuthenticatedEmployeeVisitorsRoute: typeof AuthenticatedEmployeeVisitorsRoute
+  AuthenticatedSharedApprovalsRoute: typeof AuthenticatedSharedApprovalsRoute
+  AuthenticatedSharedAuditLogsRoute: typeof AuthenticatedSharedAuditLogsRoute
+  AuthenticatedSharedDashboardRoute: typeof AuthenticatedSharedDashboardRoute
+  AuthenticatedSharedNotificationsRoute: typeof AuthenticatedSharedNotificationsRoute
+  AuthenticatedSharedProfileRoute: typeof AuthenticatedSharedProfileRoute
+  AuthenticatedSharedReportsRoute: typeof AuthenticatedSharedReportsRoute
+}
+
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
-  AuthenticatedApprovalsRoute: AuthenticatedApprovalsRoute,
-  AuthenticatedAssetsRoute: AuthenticatedAssetsRoute,
-  AuthenticatedAuditLogsRoute: AuthenticatedAuditLogsRoute,
-  AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
-  AuthenticatedEmployeesRoute: AuthenticatedEmployeesRoute,
-  AuthenticatedGatePassRoute: AuthenticatedGatePassRoute,
-  AuthenticatedGatePassesRoute: AuthenticatedGatePassesRoute,
-  AuthenticatedLeaveRoute: AuthenticatedLeaveRoute,
-  AuthenticatedMrfRoute: AuthenticatedMrfRoute,
-  AuthenticatedNotificationsRoute: AuthenticatedNotificationsRoute,
-  AuthenticatedProfileRoute: AuthenticatedProfileRoute,
-  AuthenticatedPurchaseRequestsRoute: AuthenticatedPurchaseRequestsRoute,
-  AuthenticatedReportsRoute: AuthenticatedReportsRoute,
-  AuthenticatedVehiclesRoute: AuthenticatedVehiclesRoute,
-  AuthenticatedVisitorsRoute: AuthenticatedVisitorsRoute,
-  AuthenticatedAdminControlNumbersRoute: AuthenticatedAdminControlNumbersRoute,
-  AuthenticatedAdminDepartmentsRoute: AuthenticatedAdminDepartmentsRoute,
-  AuthenticatedAdminSettingsRoute: AuthenticatedAdminSettingsRoute,
-  AuthenticatedAdminUsersRoute: AuthenticatedAdminUsersRoute,
-  AuthenticatedAdminWorkflowsRoute: AuthenticatedAdminWorkflowsRoute,
+  AuthenticatedAdminRouteRoute: AuthenticatedAdminRouteRouteWithChildren,
+  AuthenticatedEmployeePortalRouteRoute:
+    AuthenticatedEmployeePortalRouteRouteWithChildren,
+  AuthenticatedSecurityRouteRoute: AuthenticatedSecurityRouteRouteWithChildren,
+  AuthenticatedEmployeeAssetsRoute: AuthenticatedEmployeeAssetsRoute,
+  AuthenticatedEmployeeEmployeesRoute: AuthenticatedEmployeeEmployeesRoute,
+  AuthenticatedEmployeeGatePassRoute: AuthenticatedEmployeeGatePassRoute,
+  AuthenticatedEmployeeGatePassesRoute: AuthenticatedEmployeeGatePassesRoute,
+  AuthenticatedEmployeeLeaveRoute: AuthenticatedEmployeeLeaveRoute,
+  AuthenticatedEmployeeMrfRoute: AuthenticatedEmployeeMrfRoute,
+  AuthenticatedEmployeePurchaseRequestsRoute:
+    AuthenticatedEmployeePurchaseRequestsRoute,
+  AuthenticatedEmployeeVehiclesRoute: AuthenticatedEmployeeVehiclesRoute,
+  AuthenticatedEmployeeVisitorsRoute: AuthenticatedEmployeeVisitorsRoute,
+  AuthenticatedSharedApprovalsRoute: AuthenticatedSharedApprovalsRoute,
+  AuthenticatedSharedAuditLogsRoute: AuthenticatedSharedAuditLogsRoute,
+  AuthenticatedSharedDashboardRoute: AuthenticatedSharedDashboardRoute,
+  AuthenticatedSharedNotificationsRoute: AuthenticatedSharedNotificationsRoute,
+  AuthenticatedSharedProfileRoute: AuthenticatedSharedProfileRoute,
+  AuthenticatedSharedReportsRoute: AuthenticatedSharedReportsRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =

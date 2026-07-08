@@ -7,21 +7,518 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Profile {
+  id                   String             @id @default(uuid())
+  email                String?            @unique
+  password             String?
+  employee_no          String?
+  first_name           String?
+  last_name            String?
+  full_name            String?
+  phone                String?
+  avatar_url           String?
+  date_hired           String?
+  employment_status    String             @default("active")
+  is_active            Boolean            @default(true)
+  department_id        String?
+  position_id          String?
+  supervisor_id        String?
+  created_at           String             @default(dbgenerated("CURRENT_TIMESTAMP"))
+  updated_at           String             @default(dbgenerated("CURRENT_TIMESTAMP"))
+  created_by           String?
+  updated_by           String?
+  deleted_at           String?
+  approval_actions     ApprovalAction[]
+  approval_requests    ApprovalRequest[]
+  gate_pass_approvals  GatePassApproval[]
+  gate_pass_logs       GatePassLog[]
+  current_approver_gps GatePass[]         @relation("GatePassCurrentApprover")
+  gate_passes          GatePass[]
+  department           Department?        @relation("ProfileDepartment", fields: [department_id], references: [id])
+  position             Position?          @relation("ProfilePosition", fields: [position_id], references: [id])
+  supervisor           Profile?           @relation("ProfileSupervisor", fields: [supervisor_id], references: [id])
+  subordinates         Profile[]          @relation("ProfileSupervisor")
+  user_roles           UserRole[]
+
+  @@map("profiles")
+}
+
+model Department {
+  id          String       @id @default(uuid())
+  code        String       @unique
+  name        String
+  description String?
+  parent_id   String?
+  is_active   Boolean      @default(true)
+  created_at  String       @default(dbgenerated("CURRENT_TIMESTAMP"))
+  updated_at  String       @default(dbgenerated("CURRENT_TIMESTAMP"))
+  created_by  String?
+  updated_by  String?
+  deleted_at  String?
+  parent      Department?  @relation("DepartmentHierarchy", fields: [parent_id], references: [id])
+  children    Department[] @relation("DepartmentHierarchy")
+  positions   Position[]   @relation("PositionDepartment")
+  profiles    Profile[]    @relation("ProfileDepartment")
+
+  @@map("departments")
+}
+
+model Position {
+  id            String      @id @default(uuid())
+  code          String      @unique
+  title         String
+  department_id String?
+  is_active     Boolean     @default(true)
+  created_at    String      @default(dbgenerated("CURRENT_TIMESTAMP"))
+  updated_at    String      @default(dbgenerated("CURRENT_TIMESTAMP"))
+  created_by    String?
+  updated_by    String?
+  deleted_at    String?
+  department    Department? @relation("PositionDepartment", fields: [department_id], references: [id])
+  profiles      Profile[]   @relation("ProfilePosition")
+
+  @@map("positions")
+}
+
+model Permission {
+  id               String           @id @default(uuid())
+  module           String
+  action           String
+  description      String?
+  created_at       String           @default(dbgenerated("CURRENT_TIMESTAMP"))
+  role_permissions RolePermission[]
+
+  @@unique([module, action])
+  @@map("permissions")
+}
+
+model RolePermission {
+  id            String     @id @default(uuid())
+  role          AppRole
+  permission_id String
+  permission    Permission @relation(fields: [permission_id], references: [id], onDelete: Cascade)
+
+  @@unique([role, permission_id])
+  @@map("role_permissions")
+}
+
+model UserRole {
+  id          String  @id @default(uuid())
+  user_id     String
+  role        AppRole
+  assigned_at String  @default(dbgenerated("CURRENT_TIMESTAMP"))
+  assigned_by String?
+  profile     Profile @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@unique([user_id, role])
+  @@map("user_roles")
+}
+
+model ApprovalWorkflow {
+  id          String                 @id @default(uuid())
+  name        String
+  description String?
+  module      String
+  is_active   Boolean                @default(true)
+  created_at  String                 @default(dbgenerated("CURRENT_TIMESTAMP"))
+  updated_at  String                 @default(dbgenerated("CURRENT_TIMESTAMP"))
+  created_by  String?
+  updated_by  String?
+  deleted_at  String?
+  requests    ApprovalRequest[]
+  steps       ApprovalWorkflowStep[]
+
+  @@map("approval_workflows")
+}
+
+model ApprovalWorkflowStep {
+  id               String           @id @default(uuid())
+  workflow_id      String
+  name             String
+  step_order       Int
+  approver_role    AppRole?
+  approver_user_id String?
+  is_optional      Boolean          @default(false)
+  workflow         ApprovalWorkflow @relation(fields: [workflow_id], references: [id], onDelete: Cascade)
+
+  @@map("approval_workflow_steps")
+}
+
+model ApprovalRequest {
+  id           String            @id @default(uuid())
+  module       String
+  entity_type  String
+  entity_id    String
+  workflow_id  String?
+  status       ApprovalStatus    @default(pending)
+  current_step Int               @default(0)
+  notes        String?
+  requested_by String
+  requested_at String            @default(dbgenerated("CURRENT_TIMESTAMP"))
+  completed_at String?
+  created_at   String            @default(dbgenerated("CURRENT_TIMESTAMP"))
+  updated_at   String            @default(dbgenerated("CURRENT_TIMESTAMP"))
+  deleted_at   String?
+  actions      ApprovalAction[]
+  requester    Profile           @relation(fields: [requested_by], references: [id])
+  workflow     ApprovalWorkflow? @relation(fields: [workflow_id], references: [id])
+
+  @@map("approval_requests")
+}
+
+model ApprovalAction {
+  id         String          @id @default(uuid())
+  request_id String
+  step_order Int
+  action     String
+  actor_id   String
+  comment    String?
+  created_at String          @default(dbgenerated("CURRENT_TIMESTAMP"))
+  actor      Profile         @relation(fields: [actor_id], references: [id])
+  request    ApprovalRequest @relation(fields: [request_id], references: [id], onDelete: Cascade)
+
+  @@map("approval_actions")
+}
+
+model Notification {
+  id           String           @id @default(uuid())
+  user_id      String
+  title        String
+  body         String?
+  type         NotificationType @default(info)
+  module       String?
+  reference_id String?
+  is_read      Boolean          @default(false)
+  read_at      String?
+  link         String?
+  created_at   String           @default(dbgenerated("CURRENT_TIMESTAMP"))
+
+  @@map("notifications")
+}
+
+model AuditLog {
+  id          String  @id @default(uuid())
+  user_id     String?
+  module      String
+  action      String
+  entity_type String?
+  entity_id   String?
+  old_value   Json?
+  new_value   Json?
+  ip_address  Json?
+  user_agent  String?
+  created_at  String  @default(dbgenerated("CURRENT_TIMESTAMP"))
+
+  @@map("audit_logs")
+}
+
+model ControlNumberSetting {
+  id              String  @id @default(uuid())
+  module          String  @unique
+  prefix          String
+  padding         Int     @default(6)
+  next_sequence   Int     @default(1)
+  format_template String
+  year            Int
+  updated_at      String  @default(dbgenerated("CURRENT_TIMESTAMP"))
+  updated_by      String?
+
+  @@map("control_number_settings")
+}
+
+model GatePassPurposeCategory {
+  id          String  @id @default(uuid())
+  code        String  @unique
+  name        String
+  description String?
+  is_active   Boolean @default(true)
+  sort_order  Int     @default(0)
+  created_at  String  @default(dbgenerated("CURRENT_TIMESTAMP"))
+  updated_at  String  @default(dbgenerated("CURRENT_TIMESTAMP"))
+
+  @@map("gate_pass_purpose_categories")
+}
+
+model GatePassTransportationMethod {
+  id         String  @id @default(uuid())
+  code       String  @unique
+  name       String
+  icon       String?
+  is_active  Boolean @default(true)
+  sort_order Int     @default(0)
+  created_at String  @default(dbgenerated("CURRENT_TIMESTAMP"))
+  updated_at String  @default(dbgenerated("CURRENT_TIMESTAMP"))
+
+  @@map("gate_pass_transportation_methods")
+}
+
+model CompanyVehicle {
+  id                       String                   @id @default(uuid())
+  plate_number             String                   @unique
+  make                     String
+  model                    String
+  year                     String
+  color                    String
+  vehicle_type             String
+  status                   VehicleStatus            @default(available)
+  assigned_to              String?
+  mileage_current          String?
+  last_service_at          String?
+  is_active                Boolean                  @default(true)
+  created_at               String                   @default(dbgenerated("CURRENT_TIMESTAMP"))
+  updated_at               String                   @default(dbgenerated("CURRENT_TIMESTAMP"))
+  deleted_at               String?
+  gate_pass_transportation GatePassTransportation[]
+
+  @@map("company_vehicles")
+}
+
+model GatePassType {
+  id                String     @id @default(uuid())
+  code              String     @unique
+  name              String
+  description       String?
+  is_active         Boolean    @default(true)
+  requires_vehicle  Boolean    @default(false)
+  requires_approval Boolean    @default(true)
+  created_at        String     @default(dbgenerated("CURRENT_TIMESTAMP"))
+  updated_at        String     @default(dbgenerated("CURRENT_TIMESTAMP"))
+  gate_passes       GatePass[]
+
+  @@map("gate_pass_types")
+}
+
+model GatePass {
+  id                   String                  @id @default(uuid())
+  control_number       String                  @unique
+  gate_pass_type_id    String?
+  employee_id          String
+  status               GatePassStatus          @default(draft)
+  qr_code_data         String?                 @unique
+  qr_code_generated_at String?
+  print_count          Int                     @default(0)
+  last_printed_at      String?
+  created_at           String                  @default(dbgenerated("CURRENT_TIMESTAMP"))
+  updated_at           String                  @default(dbgenerated("CURRENT_TIMESTAMP"))
+  created_by           String?
+  updated_by           String?
+  deleted_at           String?
+  released_at          String?
+  completed_at         String?
+  current_approver_id  String?
+  priority             GatePassPriority        @default(normal)
+  purpose_category     PurposeCategory         @default(personal)
+  approvals            GatePassApproval[]
+  attachments          GatePassAttachment[]
+  comments             GatePassComment[]
+  logs                 GatePassLog[]
+  meal_allowance       GatePassMealAllowance?
+  print_logs           GatePassPrintLog[]
+  security_log         GatePassSecurityLog?
+  status_history       GatePassStatusHistory[]
+  transportation       GatePassTransportation?
+  trip                 GatePassTrip?
+  current_approver     Profile?                @relation("GatePassCurrentApprover", fields: [current_approver_id], references: [id])
+  employee             Profile                 @relation(fields: [employee_id], references: [id])
+  gate_pass_type       GatePassType?           @relation(fields: [gate_pass_type_id], references: [id])
+
+  @@map("gate_passes")
+}
+
+model GatePassTrip {
+  id                   String   @id @default(uuid())
+  gate_pass_id         String   @unique
+  departure_date       String
+  departure_time       String
+  expected_return_date String?
+  expected_return_time String?
+  actual_return_date   String?
+  actual_return_time   String?
+  destination          String
+  purpose              String
+  remarks              String?
+  created_at           String   @default(dbgenerated("CURRENT_TIMESTAMP"))
+  updated_at           String   @default(dbgenerated("CURRENT_TIMESTAMP"))
+  gate_pass            GatePass @relation(fields: [gate_pass_id], references: [id], onDelete: Cascade)
+
+  @@map("gate_pass_trips")
+}
+
+model GatePassTransportation {
+  id                    String               @id @default(uuid())
+  gate_pass_id          String               @unique
+  method                TransportationMethod
+  company_vehicle_id    String?
+  private_vehicle_plate String?
+  private_vehicle_type  String?
+  public_transport_type String?
+  driver_name           String?
+  driver_license        String?
+  vehicle_assignment    String?
+  created_at            String               @default(dbgenerated("CURRENT_TIMESTAMP"))
+  updated_at            String               @default(dbgenerated("CURRENT_TIMESTAMP"))
+  company_vehicle       CompanyVehicle?      @relation(fields: [company_vehicle_id], references: [id])
+  gate_pass             GatePass             @relation(fields: [gate_pass_id], references: [id], onDelete: Cascade)
+
+  @@map("gate_pass_transportation")
+}
+
+model GatePassSecurityLog {
+  id               String   @id @default(uuid())
+  gate_pass_id     String   @unique
+  time_out         String?
+  time_in          String?
+  vehicle_out      String?
+  vehicle_in       String?
+  odometer_start   String?
+  odometer_end     String?
+  checked_by       String?
+  security_remarks String?
+  verified_at      String?
+  created_at       String   @default(dbgenerated("CURRENT_TIMESTAMP"))
+  updated_at       String   @default(dbgenerated("CURRENT_TIMESTAMP"))
+  gate_pass        GatePass @relation(fields: [gate_pass_id], references: [id], onDelete: Cascade)
+
+  @@map("gate_pass_security_logs")
+}
+
+model GatePassMealAllowance {
+  id           String   @id @default(uuid())
+  gate_pass_id String   @unique
+  with_meal    Boolean  @default(false)
+  amount       Decimal? @db.Decimal(10, 2)
+  approved_by  String?
+  approved_at  String?
+  created_at   String   @default(dbgenerated("CURRENT_TIMESTAMP"))
+  updated_at   String   @default(dbgenerated("CURRENT_TIMESTAMP"))
+  gate_pass    GatePass @relation(fields: [gate_pass_id], references: [id], onDelete: Cascade)
+
+  @@map("gate_pass_meal_allowances")
+}
+
+model GatePassComment {
+  id           String   @id @default(uuid())
+  gate_pass_id String
+  user_id      String
+  content      String
+  is_internal  Boolean  @default(false)
+  created_at   String   @default(dbgenerated("CURRENT_TIMESTAMP"))
+  updated_at   String   @default(dbgenerated("CURRENT_TIMESTAMP"))
+  gate_pass    GatePass @relation(fields: [gate_pass_id], references: [id], onDelete: Cascade)
+
+  @@map("gate_pass_comments")
+}
+
+model GatePassApproval {
+  id           String              @id @default(uuid())
+  gate_pass_id String
+  approver_id  String
+  step_order   Int
+  role         AppRole?
+  action       ApprovalActionType?
+  comment      String?
+  ip_address   Json?
+  user_agent   String?
+  acted_at     String?
+  created_at   String              @default(dbgenerated("CURRENT_TIMESTAMP"))
+  approver     Profile             @relation(fields: [approver_id], references: [id])
+  gate_pass    GatePass            @relation(fields: [gate_pass_id], references: [id], onDelete: Cascade)
+
+  @@map("gate_pass_approvals")
+}
+
+model GatePassStatusHistory {
+  id           String         @id @default(uuid())
+  gate_pass_id String
+  status       GatePassStatus
+  notes        String?
+  changed_by   String?
+  changed_at   String         @default(dbgenerated("CURRENT_TIMESTAMP"))
+  ip_address   Json?
+  gate_pass    GatePass       @relation(fields: [gate_pass_id], references: [id], onDelete: Cascade)
+
+  @@map("gate_pass_status_history")
+}
+
+model GatePassVehicle {
+  id              String  @id @default(uuid())
+  gate_pass_id    String  @unique
+  plate_number    String
+  vehicle_type    String
+  driver_name     String
+  driver_license  String?
+  make            String?
+  model           String?
+  year            String?
+  color           String?
+  mileage_start   String?
+  mileage_end     String?
+  trip_started_at String?
+  trip_ended_at   String?
+  created_at      String  @default(dbgenerated("CURRENT_TIMESTAMP"))
+  updated_at      String  @default(dbgenerated("CURRENT_TIMESTAMP"))
+
+  @@map("gate_pass_vehicles")
+}
+
+model GatePassPrintLog {
+  id           String   @id @default(uuid())
+  gate_pass_id String
+  printed_by   String?
+  printed_at   String   @default(dbgenerated("CURRENT_TIMESTAMP"))
+  printer_name String?
+  copies       Int      @default(1)
+  ip_address   Json?
+  gate_pass    GatePass @relation(fields: [gate_pass_id], references: [id], onDelete: Cascade)
+
+  @@map("gate_pass_print_logs")
+}
+
+model GatePassLog {
+  id           String   @id @default(uuid())
+  gate_pass_id String
+  user_id      String?
+  action       String
+  description  String?
+  ip_address   Json?
+  user_agent   String?
+  created_at   String   @default(dbgenerated("CURRENT_TIMESTAMP"))
+  gate_pass    GatePass @relation(fields: [gate_pass_id], references: [id], onDelete: Cascade)
+  user         Profile? @relation(fields: [user_id], references: [id])
+
+  @@map("gate_pass_logs")
+}
+
+model GatePassAttachment {
+  id           String   @id @default(uuid())
+  gate_pass_id String
+  file_name    String
+  file_path    String
+  file_type    String?
+  file_size    Int?
+  uploaded_by  String?
+  created_at   String   @default(dbgenerated("CURRENT_TIMESTAMP"))
+  gate_pass    GatePass @relation(fields: [gate_pass_id], references: [id], onDelete: Cascade)
+
+  @@map("gate_pass_attachments")
+}
+
 enum AppRole {
-  administrator
-  hr
-  security
-  engineering
-  qa
-  production
-  warehouse
-  purchasing
-  accounting
-  maintenance
-  department_head
-  employee
+  super_administrator
+  system_administrator
   executive
-  it_administrator
+  department_manager
+  department_supervisor
+  approver
+  employee
+  hr_officer
+  gad
+  security_guard
+  purchasing_officer
+  warehouse_officer
+  vehicle_coordinator
+  it_support
+  auditor
 }
 
 enum ApprovalStatus {
@@ -46,429 +543,50 @@ enum NotificationType {
 enum GatePassStatus {
   draft
   submitted
-  for_supervisor_approval
-  for_department_head_approval
-  for_vehicle_coordinator_approval
-  for_general_administration_approval
+  pending_supervisor
+  pending_department_head
+  pending_vehicle_assignee
+  pending_general_admin
+  pending_security
   approved
   released
-  returned
-  completed
+  returned_for_revision
   rejected
   cancelled
+  completed
   expired
 }
 
-enum VehicleType {
-  company
-  private
-  public_transport
+enum PurposeCategory {
+  official_business
+  personal
+}
+
+enum TransportationMethod {
+  company_vehicle
+  private_vehicle
+  public_transportation
+  company_shuttle
   walking
+  others
+}
+
+enum VehicleStatus {
+  available
+  in_use
+  under_maintenance
+  retired
+}
+
+enum GatePassPriority {
+  critical
+  high
+  normal
+  low
 }
 
 enum ApprovalActionType {
   approve
   reject
   return_for_revision
-}
-
-model Profile {
-  id                String    @id @default(uuid())
-  email             String?   @unique
-  password          String?
-  employee_no       String?
-  first_name        String?
-  last_name         String?
-  full_name         String?
-  phone             String?
-  avatar_url        String?
-  date_hired        String?
-  employment_status String    @default("active")
-  is_active         Boolean   @default(true)
-  department_id     String?
-  position_id       String?
-  supervisor_id     String?
-  created_at        String    @default(dbgenerated("CURRENT_TIMESTAMP"))
-  updated_at        String    @default(dbgenerated("CURRENT_TIMESTAMP"))
-  created_by        String?
-  updated_by        String?
-  deleted_at        String?
-
-  department  Department?  @relation("ProfileDepartment", fields: [department_id], references: [id])
-  position    Position?    @relation("ProfilePosition", fields: [position_id], references: [id])
-  supervisor  Profile?     @relation("ProfileSupervisor", fields: [supervisor_id], references: [id])
-  subordinates Profile[]  @relation("ProfileSupervisor")
-
-  user_roles         UserRole[]
-  approval_requests  ApprovalRequest[]
-  approval_actions   ApprovalAction[]
-  gate_passes        GatePass[]
-  gate_pass_approvals GatePassApproval[]
-  gate_pass_logs     GatePassLog[]
-
-  @@map("profiles")
-}
-
-model Department {
-  id          String   @id @default(uuid())
-  code        String   @unique
-  name        String
-  description String?
-  parent_id   String?
-  is_active   Boolean  @default(true)
-  created_at  String   @default(dbgenerated("CURRENT_TIMESTAMP"))
-  updated_at  String   @default(dbgenerated("CURRENT_TIMESTAMP"))
-  created_by  String?
-  updated_by  String?
-  deleted_at  String?
-
-  parent    Department?  @relation("DepartmentHierarchy", fields: [parent_id], references: [id])
-  children  Department[] @relation("DepartmentHierarchy")
-
-  profiles  Profile[]    @relation("ProfileDepartment")
-  positions Position[]   @relation("PositionDepartment")
-
-  @@map("departments")
-}
-
-model Position {
-  id          String   @id @default(uuid())
-  code        String   @unique
-  title       String
-  department_id String?
-  is_active   Boolean  @default(true)
-  created_at  String   @default(dbgenerated("CURRENT_TIMESTAMP"))
-  updated_at  String   @default(dbgenerated("CURRENT_TIMESTAMP"))
-  created_by  String?
-  updated_by  String?
-  deleted_at  String?
-
-  department Department? @relation("PositionDepartment", fields: [department_id], references: [id])
-  profiles   Profile[]   @relation("ProfilePosition")
-
-  @@map("positions")
-}
-
-model Permission {
-  id          String   @id @default(uuid())
-  module      String
-  action      String
-  description String?
-  created_at  String   @default(dbgenerated("CURRENT_TIMESTAMP"))
-
-  role_permissions RolePermission[]
-
-  @@unique([module, action])
-  @@map("permissions")
-}
-
-model RolePermission {
-  id           String    @id @default(uuid())
-  role         AppRole
-  permission_id String
-
-  permission Permission @relation(fields: [permission_id], references: [id], onDelete: Cascade)
-
-  @@unique([role, permission_id])
-  @@map("role_permissions")
-}
-
-model UserRole {
-  id          String   @id @default(uuid())
-  user_id     String
-  role        AppRole
-  assigned_at String   @default(dbgenerated("CURRENT_TIMESTAMP"))
-  assigned_by String?
-
-  profile Profile @relation(fields: [user_id], references: [id], onDelete: Cascade)
-
-  @@unique([user_id, role])
-  @@map("user_roles")
-}
-
-model ApprovalWorkflow {
-  id          String   @id @default(uuid())
-  name        String
-  description String?
-  module      String
-  is_active   Boolean  @default(true)
-  created_at  String   @default(dbgenerated("CURRENT_TIMESTAMP"))
-  updated_at  String   @default(dbgenerated("CURRENT_TIMESTAMP"))
-  created_by  String?
-  updated_by  String?
-  deleted_at  String?
-
-  steps    ApprovalWorkflowStep[]
-  requests ApprovalRequest[]
-
-  @@map("approval_workflows")
-}
-
-model ApprovalWorkflowStep {
-  id               String   @id @default(uuid())
-  workflow_id      String
-  name             String
-  step_order       Int
-  approver_role    AppRole?
-  approver_user_id String?
-  is_optional      Boolean  @default(false)
-
-  workflow ApprovalWorkflow @relation(fields: [workflow_id], references: [id], onDelete: Cascade)
-
-  @@map("approval_workflow_steps")
-}
-
-model ApprovalRequest {
-  id            String         @id @default(uuid())
-  module        String
-  entity_type   String
-  entity_id     String
-  workflow_id   String?
-  status        ApprovalStatus @default(pending)
-  current_step  Int            @default(0)
-  notes         String?
-  requested_by  String
-  requested_at  String         @default(dbgenerated("CURRENT_TIMESTAMP"))
-  completed_at  String?
-  created_at    String         @default(dbgenerated("CURRENT_TIMESTAMP"))
-  updated_at    String         @default(dbgenerated("CURRENT_TIMESTAMP"))
-  deleted_at    String?
-
-  workflow  ApprovalWorkflow? @relation(fields: [workflow_id], references: [id])
-  requester Profile            @relation(fields: [requested_by], references: [id])
-  actions   ApprovalAction[]
-
-  @@map("approval_requests")
-}
-
-model ApprovalAction {
-  id          String   @id @default(uuid())
-  request_id  String
-  step_order  Int
-  action      String
-  actor_id    String
-  comment     String?
-  created_at  String   @default(dbgenerated("CURRENT_TIMESTAMP"))
-
-  request ApprovalRequest @relation(fields: [request_id], references: [id], onDelete: Cascade)
-  actor   Profile         @relation(fields: [actor_id], references: [id])
-
-  @@map("approval_actions")
-}
-
-model Notification {
-  id          String          @id @default(uuid())
-  user_id     String
-  title       String
-  body        String?
-  type        NotificationType @default(info)
-  module      String?
-  reference_id String?
-  is_read     Boolean         @default(false)
-  read_at     String?
-  link        String?
-  created_at  String          @default(dbgenerated("CURRENT_TIMESTAMP"))
-
-  @@map("notifications")
-}
-
-model AuditLog {
-  id          String   @id @default(uuid())
-  user_id     String?
-  module      String
-  action      String
-  entity_type String?
-  entity_id   String?
-  old_value   Json?
-  new_value   Json?
-  ip_address  Json?
-  user_agent  String?
-  created_at  String   @default(dbgenerated("CURRENT_TIMESTAMP"))
-
-  @@map("audit_logs")
-}
-
-model ControlNumberSetting {
-  id              String   @id @default(uuid())
-  module          String   @unique
-  prefix          String
-  padding         Int      @default(6)
-  next_sequence   Int      @default(1)
-  format_template String
-  year            Int
-  updated_at      String   @default(dbgenerated("CURRENT_TIMESTAMP"))
-  updated_by      String?
-
-  @@map("control_number_settings")
-}
-
-// Gate Pass Models
-model GatePassType {
-  id          String   @id @default(uuid())
-  code        String   @unique
-  name        String
-  description String?
-  is_active   Boolean  @default(true)
-  requires_vehicle Boolean @default(false)
-  requires_approval Boolean @default(true)
-  created_at  String   @default(dbgenerated("CURRENT_TIMESTAMP"))
-  updated_at  String   @default(dbgenerated("CURRENT_TIMESTAMP"))
-
-  gate_passes GatePass[]
-
-  @@map("gate_pass_types")
-}
-
-model GatePass {
-  id                  String         @id @default(uuid())
-  control_number      String         @unique
-  gate_pass_type_id   String
-  employee_id         String
-  status              GatePassStatus @default(draft)
-  
-  // Trip Details
-  departure_date      String
-  departure_time      String
-  expected_return_date String?
-  expected_return_time String?
-  actual_return_date  String?
-  actual_return_time  String?
-  
-  // Location and Purpose
-  destination         String
-  purpose             String
-  remarks             String?
-  
-  // Transportation
-  vehicle_type        VehicleType    @default(private)
-  company_vehicle_id  String?
-  private_vehicle_plate String?
-  driver_name         String?
-  driver_license      String?
-  mileage_start       String?
-  mileage_end         String?
-  
-  // QR and Printing
-  qr_code_data        String?        @unique
-  qr_code_generated_at String?
-  print_count         Int            @default(0)
-  last_printed_at     String?
-  
-  // Metadata
-  created_at          String         @default(dbgenerated("CURRENT_TIMESTAMP"))
-  updated_at          String         @default(dbgenerated("CURRENT_TIMESTAMP"))
-  created_by          String?
-  updated_by          String?
-  deleted_at          String?
-  released_at         String?
-  completed_at        String?
-
-  gate_pass_type      GatePassType @relation(fields: [gate_pass_type_id], references: [id])
-  employee            Profile        @relation(fields: [employee_id], references: [id])
-  approvals           GatePassApproval[]
-  status_history      GatePassStatusHistory[]
-  logs                GatePassLog[]
-  attachments         GatePassAttachment[]
-  vehicle             GatePassVehicle?
-
-  @@map("gate_passes")
-}
-
-model GatePassApproval {
-  id              String            @id @default(uuid())
-  gate_pass_id    String
-  approver_id     String
-  step_order      Int
-  role            AppRole?
-  action          ApprovalActionType?
-  comment         String?
-  ip_address      Json?
-  user_agent      String?
-  acted_at        String?
-  created_at      String            @default(dbgenerated("CURRENT_TIMESTAMP"))
-
-  gate_pass GatePass @relation(fields: [gate_pass_id], references: [id], onDelete: Cascade)
-  approver  Profile  @relation(fields: [approver_id], references: [id])
-
-  @@map("gate_pass_approvals")
-}
-
-model GatePassStatusHistory {
-  id          String         @id @default(uuid())
-  gate_pass_id String
-  status      GatePassStatus
-  notes       String?
-  changed_by  String?
-  changed_at  String         @default(dbgenerated("CURRENT_TIMESTAMP"))
-  ip_address  Json?
-
-  gate_pass GatePass @relation(fields: [gate_pass_id], references: [id], onDelete: Cascade)
-
-  @@map("gate_pass_status_history")
-}
-
-model GatePassVehicle {
-  id                String   @id @default(uuid())
-  gate_pass_id      String   @unique
-  plate_number      String
-  vehicle_type      String
-  driver_name       String
-  driver_license    String?
-  make              String?
-  model             String?
-  year              String?
-  color             String?
-  mileage_start     String?
-  mileage_end       String?
-  trip_started_at   String?
-  trip_ended_at     String?
-  created_at        String   @default(dbgenerated("CURRENT_TIMESTAMP"))
-  updated_at        String   @default(dbgenerated("CURRENT_TIMESTAMP"))
-
-  gate_pass GatePass @relation(fields: [gate_pass_id], references: [id], onDelete: Cascade)
-
-  @@map("gate_pass_vehicles")
-}
-
-model GatePassLog {
-  id          String   @id @default(uuid())
-  gate_pass_id String
-  user_id     String?
-  action      String
-  description String?
-  ip_address  Json?
-  user_agent  String?
-  created_at  String   @default(dbgenerated("CURRENT_TIMESTAMP"))
-
-  gate_pass GatePass @relation(fields: [gate_pass_id], references: [id], onDelete: Cascade)
-  user      Profile?  @relation(fields: [user_id], references: [id])
-
-  @@map("gate_pass_logs")
-}
-
-model GatePassAttachment {
-  id          String   @id @default(uuid())
-  gate_pass_id String
-  file_name   String
-  file_path   String
-  file_type   String?
-  file_size   Int?
-  uploaded_by String?
-  created_at  String   @default(dbgenerated("CURRENT_TIMESTAMP"))
-
-  gate_pass GatePass @relation(fields: [gate_pass_id], references: [id], onDelete: Cascade)
-
-  @@map("gate_pass_attachments")
-}
-
-model GatePassPrintLog {
-  id          String   @id @default(uuid())
-  gate_pass_id String
-  printed_by  String?
-  printed_at  String   @default(dbgenerated("CURRENT_TIMESTAMP"))
-  printer_name String?
-  copies      Int      @default(1)
-  ip_address  Json?
-
-  @@map("gate_pass_print_logs")
 }

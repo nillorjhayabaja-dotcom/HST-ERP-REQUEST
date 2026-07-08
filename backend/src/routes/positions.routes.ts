@@ -25,7 +25,7 @@ router.get('/', authenticate, requirePermission('positions', 'read'), async (req
 router.get('/:id', authenticate, requirePermission('positions', 'read'), async (req, res) => {
   try {
     const position = await prisma.position.findUnique({
-      where: { id: req.params.id },
+      where: { id: String(req.params.id) },
       include: { department: true, profiles: true },
     });
     if (!position) return res.status(404).json({ error: 'Position not found' });
@@ -53,7 +53,7 @@ router.put('/:id', authenticate, requirePermission('positions', 'update'), async
   try {
     const { code, title, department_id, is_active } = req.body;
     const position = await prisma.position.update({
-      where: { id: req.params.id },
+      where: { id: String(req.params.id) },
       data: { code, title, department_id, is_active, updated_by: (req as any).user?.id },
     });
     res.json(position);
@@ -66,7 +66,7 @@ router.put('/:id', authenticate, requirePermission('positions', 'update'), async
 router.delete('/:id', authenticate, requirePermission('positions', 'delete'), async (req, res) => {
   try {
     await prisma.position.update({
-      where: { id: req.params.id },
+      where: { id: String(req.params.id) },
       data: { deleted_at: new Date().toISOString(), updated_by: (req as any).user?.id },
     });
     res.json({ message: 'Position deleted successfully' });

@@ -32,7 +32,7 @@ router.post('/', authenticate, requirePermission('roles', 'create'), async (req,
 
 router.delete('/:id', authenticate, requirePermission('roles', 'delete'), async (req, res) => {
   try {
-    await prisma.userRole.delete({ where: { id: req.params.id } });
+    await prisma.userRole.delete({ where: { id: String(req.params.id) } });
     res.json({ message: 'Role removed successfully' });
   } catch (error) {
     console.error('Error removing role:', error);

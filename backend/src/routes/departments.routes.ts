@@ -24,7 +24,7 @@ router.get('/', authenticate, requirePermission('departments', 'read'), async (r
 router.get('/:id', authenticate, requirePermission('departments', 'read'), async (req, res) => {
   try {
     const department = await prisma.department.findUnique({
-      where: { id: req.params.id },
+      where: { id: String(req.params.id) },
       include: {
         parent: true,
         children: true,
@@ -71,7 +71,7 @@ router.put('/:id', authenticate, requirePermission('departments', 'update'), asy
     const { code, name, description, parent_id, is_active } = req.body;
 
     const department = await prisma.department.update({
-      where: { id: req.params.id },
+      where: { id: String(req.params.id) },
       data: {
         code,
         name,
@@ -92,7 +92,7 @@ router.put('/:id', authenticate, requirePermission('departments', 'update'), asy
 router.delete('/:id', authenticate, requirePermission('departments', 'delete'), async (req, res) => {
   try {
     await prisma.department.update({
-      where: { id: req.params.id },
+      where: { id: String(req.params.id) },
       data: {
         deleted_at: new Date().toISOString(),
         updated_by: (req as any).user?.id,

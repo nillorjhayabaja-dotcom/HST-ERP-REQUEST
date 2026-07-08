@@ -29,7 +29,7 @@ router.get('/', authenticate, requirePermission('audit_logs', 'read'), async (re
 
 router.get('/:id', authenticate, requirePermission('audit_logs', 'read'), async (req, res) => {
   try {
-    const log = await prisma.auditLog.findUnique({ where: { id: req.params.id } });
+    const log = await prisma.auditLog.findUnique({ where: { id: String(req.params.id) } });
     if (!log) return res.status(404).json({ error: 'Audit log not found' });
     res.json(log);
   } catch (error) {
