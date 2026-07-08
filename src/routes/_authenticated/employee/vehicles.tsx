@@ -8,7 +8,14 @@ export const Route = createFileRoute("/_authenticated/employee/vehicles")({
       title="Vehicle Monitoring"
       module="vehicle"
       description="Company vehicles, drivers, trips, fuel, and maintenance."
-      features={["Vehicles & drivers", "Trip requests", "Fuel & mileage", "Maintenance schedule", "Trip history", "Reports"]}
+      features={[
+        "Vehicles & drivers",
+        "Trip requests",
+        "Fuel & mileage",
+        "Maintenance schedule",
+        "Trip history",
+        "Reports",
+      ]}
     />
   ),
 });

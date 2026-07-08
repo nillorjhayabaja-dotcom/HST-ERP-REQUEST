@@ -47,7 +47,7 @@ export function TopBar({ userEmail, userName }: { userEmail: string; userName: s
     queryFn: async () => {
       try {
         const response = await apiClient.get<{ notifications: any[]; total: number }>(
-          "/notifications/?is_read=false"
+          "/notifications/?is_read=false",
         );
         if (response.error) throw new Error(response.error);
         return response.data?.total ?? 0;
@@ -66,12 +66,13 @@ export function TopBar({ userEmail, userName }: { userEmail: string; userName: s
     navigate({ to: "/auth", replace: true });
   };
 
-  const initials = userName
-    .split(/\s+/)
-    .filter(Boolean)
-    .slice(0, 2)
-    .map((s) => s[0]?.toUpperCase())
-    .join("") || "U";
+  const initials =
+    userName
+      .split(/\s+/)
+      .filter(Boolean)
+      .slice(0, 2)
+      .map((s) => s[0]?.toUpperCase())
+      .join("") || "U";
 
   return (
     <header className="sticky top-0 z-30 h-14 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -126,7 +127,10 @@ export function TopBar({ userEmail, userName }: { userEmail: string; userName: s
                 <Link to="/shared/notifications">Notifications</Link>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={handleSignOut} className="text-destructive focus:text-destructive">
+              <DropdownMenuItem
+                onClick={handleSignOut}
+                className="text-destructive focus:text-destructive"
+              >
                 <LogOut className="h-4 w-4" /> Sign out
               </DropdownMenuItem>
             </DropdownMenuContent>

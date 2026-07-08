@@ -8,7 +8,14 @@ export const Route = createFileRoute("/_authenticated/employee/visitors")({
       title="Visitor Management"
       module="visitor"
       description="Visitor registration, badges, and gate history."
-      features={["Registration + photo capture", "Host employee & purpose", "QR badge", "Entry/exit tracking", "Visitor history", "Reports"]}
+      features={[
+        "Registration + photo capture",
+        "Host employee & purpose",
+        "QR badge",
+        "Entry/exit tracking",
+        "Visitor history",
+        "Reports",
+      ]}
     />
   ),
 });

@@ -4,7 +4,14 @@ import { useQuery } from "@tanstack/react-query";
 import { apiClient } from "@/lib/api-client";
 import { PageHeader } from "@/components/page-header";
 import { Card, CardContent } from "@/components/ui/card";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 
 interface ApprovalRequest {
@@ -25,7 +32,9 @@ function ApprovalsPage() {
   const { data = [] } = useQuery<ApprovalRequest[]>({
     queryKey: ["approvals-pending"],
     queryFn: async () => {
-      const response = await apiClient.get<{ approvals: ApprovalRequest[] }>("/approval-requests?status=pending,in_progress");
+      const response = await apiClient.get<{ approvals: ApprovalRequest[] }>(
+        "/approval-requests?status=pending,in_progress",
+      );
       if (response.error) throw new Error(response.error);
       return response.data?.approvals ?? [];
     },
@@ -53,18 +62,27 @@ function ApprovalsPage() {
               <TableBody>
                 {data.length === 0 && (
                   <TableRow>
-                    <TableCell colSpan={5} className="text-center py-10 text-muted-foreground text-sm">
+                    <TableCell
+                      colSpan={5}
+                      className="text-center py-10 text-muted-foreground text-sm"
+                    >
                       No pending approvals in your queue.
                     </TableCell>
                   </TableRow>
                 )}
                 {data.map((r: ApprovalRequest) => (
                   <TableRow key={r.id}>
-                    <TableCell className="text-xs font-mono">{new Date(r.requested_at).toLocaleString()}</TableCell>
-                    <TableCell><Badge variant="outline">{r.module}</Badge></TableCell>
+                    <TableCell className="text-xs font-mono">
+                      {new Date(r.requested_at).toLocaleString()}
+                    </TableCell>
+                    <TableCell>
+                      <Badge variant="outline">{r.module}</Badge>
+                    </TableCell>
                     <TableCell className="text-sm">{r.entity_type}</TableCell>
                     <TableCell>Step {r.current_step}</TableCell>
-                    <TableCell><Badge>{r.status}</Badge></TableCell>
+                    <TableCell>
+                      <Badge>{r.status}</Badge>
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>

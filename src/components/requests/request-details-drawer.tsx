@@ -75,9 +75,7 @@ export function RequestDetailsDrawer({
             <div className="min-w-0 flex-1">
               <SheetTitle className="text-lg truncate">{title}</SheetTitle>
               <SheetDescription className="mt-1 flex items-center gap-2 flex-wrap">
-                <span className="text-xs font-mono text-muted-foreground">
-                  {controlNumber}
-                </span>
+                <span className="text-xs font-mono text-muted-foreground">{controlNumber}</span>
                 <span className="text-[10px] uppercase text-muted-foreground bg-muted px-1.5 py-0.5 rounded">
                   {module}
                 </span>
@@ -91,9 +89,7 @@ export function RequestDetailsDrawer({
             <StatusBadge status={status} />
             <PriorityBadge priority={priority} />
           </div>
-          {description && (
-            <p className="mt-2 text-sm text-muted-foreground">{description}</p>
-          )}
+          {description && <p className="mt-2 text-sm text-muted-foreground">{description}</p>}
         </SheetHeader>
 
         {isLoading ? (
@@ -131,17 +127,12 @@ export function RequestDetailsDrawer({
               <TabsContent value="details" className="mt-4 space-y-4">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {fields.map((field, idx) => (
-                    <div
-                      key={idx}
-                      className="rounded-lg border bg-card p-3 space-y-1"
-                    >
+                    <div key={idx} className="rounded-lg border bg-card p-3 space-y-1">
                       <div className="flex items-center gap-1.5 text-[10px] font-medium text-muted-foreground uppercase tracking-wider">
                         {field.icon}
                         {field.label}
                       </div>
-                      <div className="text-sm font-medium">
-                        {field.value}
-                      </div>
+                      <div className="text-sm font-medium">{field.value}</div>
                     </div>
                   ))}
                 </div>

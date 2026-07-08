@@ -1,4 +1,4 @@
-import { useApiQuery } from '../hooks.js';
+import { useApiQuery } from "../hooks.js";
 
 export function useDashboardStats() {
   return useApiQuery<{
@@ -7,9 +7,9 @@ export function useDashboardStats() {
     rejectedToday: number;
     employees: number;
     unread: number;
-  }>(['dashboard-stats'], '/dashboard/stats');
+  }>(["dashboard-stats"], "/dashboard/stats");
 }
 
 export function useDashboardActivity() {
-  return useApiQuery<any[]>(['dashboard-activity'], '/dashboard/activity');
+  return useApiQuery<any[]>(["dashboard-activity"], "/dashboard/activity");
 }

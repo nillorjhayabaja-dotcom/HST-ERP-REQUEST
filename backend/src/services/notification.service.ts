@@ -1,4 +1,4 @@
-import prisma from '../config/database.js';
+import prisma from "../config/database.js";
 
 export async function createNotification(data: {
   user_id: string;
@@ -15,26 +15,29 @@ export async function createNotification(data: {
         user_id: data.user_id,
         title: data.title,
         body: data.body,
-        type: (data.type as any) || 'info',
+        type: (data.type as any) || "info",
         module: data.module,
         reference_id: data.reference_id,
         link: data.link,
       },
     });
   } catch (error) {
-    console.error('Failed to create notification:', error);
+    console.error("Failed to create notification:", error);
     return null;
   }
 }
 
-export async function notifyRole(role: string, data: {
-  title: string;
-  body?: string;
-  type?: string;
-  module?: string;
-  reference_id?: string;
-  link?: string;
-}) {
+export async function notifyRole(
+  role: string,
+  data: {
+    title: string;
+    body?: string;
+    type?: string;
+    module?: string;
+    reference_id?: string;
+    link?: string;
+  },
+) {
   try {
     const users = await prisma.userRole.findMany({
       where: { role: role as any },
@@ -44,6 +47,6 @@ export async function notifyRole(role: string, data: {
       await createNotification({ user_id: u.user_id, ...data });
     }
   } catch (error) {
-    console.error('Failed to notify role:', error);
+    console.error("Failed to notify role:", error);
   }
 }

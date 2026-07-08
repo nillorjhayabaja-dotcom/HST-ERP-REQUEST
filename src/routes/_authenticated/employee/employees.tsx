@@ -58,7 +58,12 @@ function EmployeesPage() {
       <div className="p-6 space-y-4">
         <div className="relative max-w-sm">
           <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-          <Input placeholder="Search name, email, employee no…" className="pl-8" value={q} onChange={(e) => setQ(e.target.value)} />
+          <Input
+            placeholder="Search name, email, employee no…"
+            className="pl-8"
+            value={q}
+            onChange={(e) => setQ(e.target.value)}
+          />
         </div>
 
         <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
@@ -83,7 +88,10 @@ function EmployeesPage() {
                     </div>
                     <div className="text-xs text-muted-foreground truncate">{emp.email}</div>
                     <div className="mt-2 flex items-center gap-2">
-                      <Badge variant={emp.is_active ? "default" : "secondary"} className="text-[10px]">
+                      <Badge
+                        variant={emp.is_active ? "default" : "secondary"}
+                        className="text-[10px]"
+                      >
                         {emp.employment_status}
                       </Badge>
                       {emp.employee_no && (

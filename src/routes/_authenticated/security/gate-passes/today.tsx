@@ -32,10 +32,8 @@ function TodayGatePasses() {
     },
   });
 
-  const today = new Date().toISOString().split('T')[0];
-  const todayPasses = (gatePasses || []).filter((gp: any) =>
-    gp.created_at?.startsWith(today)
-  );
+  const today = new Date().toISOString().split("T")[0];
+  const todayPasses = (gatePasses || []).filter((gp: any) => gp.created_at?.startsWith(today));
 
   return (
     <div className="p-6 space-y-6">
@@ -43,7 +41,12 @@ function TodayGatePasses() {
         <div>
           <h1 className="text-2xl font-bold">Today's Gate Passes</h1>
           <p className="text-muted-foreground">
-            {new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+            {new Date().toLocaleDateString("en-US", {
+              weekday: "long",
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })}
           </p>
         </div>
         <div className="flex gap-2">
@@ -87,11 +90,13 @@ function TodayGatePasses() {
                 <TableRow key={gp.id}>
                   <TableCell className="font-mono font-medium">{gp.control_number}</TableCell>
                   <TableCell>{gp.employee?.full_name || "N/A"}</TableCell>
-                  <TableCell className="capitalize">{gp.purpose_category?.replace(/_/g, ' ')}</TableCell>
+                  <TableCell className="capitalize">
+                    {gp.purpose_category?.replace(/_/g, " ")}
+                  </TableCell>
                   <TableCell>{gp.trip?.destination || "-"}</TableCell>
                   <TableCell>
-                    <Badge variant={gp.status === 'pending_security' ? 'default' : 'secondary'}>
-                      {gp.status?.replace(/_/g, ' ')}
+                    <Badge variant={gp.status === "pending_security" ? "default" : "secondary"}>
+                      {gp.status?.replace(/_/g, " ")}
                     </Badge>
                   </TableCell>
                   <TableCell>
@@ -99,7 +104,7 @@ function TodayGatePasses() {
                       <Button variant="ghost" size="sm">
                         <Eye className="h-3 w-3 mr-1" /> View
                       </Button>
-                      {gp.status === 'pending_security' && (
+                      {gp.status === "pending_security" && (
                         <Button variant="default" size="sm">
                           <DoorOpen className="h-3 w-3 mr-1" /> Release
                         </Button>
@@ -119,7 +124,7 @@ function TodayGatePasses() {
             <div>
               <p className="text-sm text-muted-foreground">Pending Release</p>
               <p className="text-2xl font-bold">
-                {todayPasses.filter((gp: any) => gp.status === 'pending_security').length}
+                {todayPasses.filter((gp: any) => gp.status === "pending_security").length}
               </p>
             </div>
             <DoorOpen className="h-8 w-8 text-amber-500" />
@@ -130,7 +135,7 @@ function TodayGatePasses() {
             <div>
               <p className="text-sm text-muted-foreground">Released</p>
               <p className="text-2xl font-bold">
-                {todayPasses.filter((gp: any) => gp.status === 'released').length}
+                {todayPasses.filter((gp: any) => gp.status === "released").length}
               </p>
             </div>
             <DoorOpen className="h-8 w-8 text-green-500" />
@@ -141,7 +146,7 @@ function TodayGatePasses() {
             <div>
               <p className="text-sm text-muted-foreground">Completed</p>
               <p className="text-2xl font-bold">
-                {todayPasses.filter((gp: any) => gp.status === 'completed').length}
+                {todayPasses.filter((gp: any) => gp.status === "completed").length}
               </p>
             </div>
             <DoorOpen className="h-8 w-8 text-blue-500" />

@@ -103,7 +103,11 @@ function ProfilePage() {
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="first_name">First name</Label>
-                  <Input id="first_name" name="first_name" defaultValue={profile?.first_name ?? ""} />
+                  <Input
+                    id="first_name"
+                    name="first_name"
+                    defaultValue={profile?.first_name ?? ""}
+                  />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="last_name">Last name</Label>
@@ -121,10 +125,16 @@ function ProfilePage() {
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="employee_no">Employee No.</Label>
-                  <Input id="employee_no" name="employee_no" defaultValue={profile?.employee_no ?? ""} />
+                  <Input
+                    id="employee_no"
+                    name="employee_no"
+                    defaultValue={profile?.employee_no ?? ""}
+                  />
                 </div>
               </div>
-              <Button type="submit" disabled={saving}>Save changes</Button>
+              <Button type="submit" disabled={saving}>
+                Save changes
+              </Button>
             </form>
           </CardContent>
         </Card>

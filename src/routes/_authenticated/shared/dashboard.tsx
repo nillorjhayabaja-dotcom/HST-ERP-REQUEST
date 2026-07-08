@@ -45,9 +45,15 @@ function DashboardPage() {
   const { data: recentActivity = [] } = useQuery({
     queryKey: ["dashboard-activity"],
     queryFn: async () => {
-      const response = await apiClient.get<Array<{ id: string; module: string; action: string; entity_type?: string | null; created_at: string }>>(
-        "/dashboard/activity"
-      );
+      const response = await apiClient.get<
+        Array<{
+          id: string;
+          module: string;
+          action: string;
+          entity_type?: string | null;
+          created_at: string;
+        }>
+      >("/dashboard/activity");
       if (response.error) throw new Error(response.error);
       return response.data ?? [];
     },
@@ -55,11 +61,26 @@ function DashboardPage() {
 
   const kpis = [
     { label: "Pending Approvals", value: stats?.pending ?? 0, icon: Clock, tone: "text-warning" },
-    { label: "Approved Today", value: stats?.approvedToday ?? 0, icon: CheckCircle2, tone: "text-success" },
-    { label: "Rejected Today", value: stats?.rejectedToday ?? 0, icon: XCircle, tone: "text-destructive" },
+    {
+      label: "Approved Today",
+      value: stats?.approvedToday ?? 0,
+      icon: CheckCircle2,
+      tone: "text-success",
+    },
+    {
+      label: "Rejected Today",
+      value: stats?.rejectedToday ?? 0,
+      icon: XCircle,
+      tone: "text-destructive",
+    },
     { label: "Active Employees", value: stats?.employees ?? 0, icon: Users, tone: "text-primary" },
     { label: "Unread Notifications", value: stats?.unread ?? 0, icon: Bell, tone: "text-gold" },
-    { label: "Open Requests", value: stats?.pending ?? 0, icon: ClipboardList, tone: "text-primary" },
+    {
+      label: "Open Requests",
+      value: stats?.pending ?? 0,
+      icon: ClipboardList,
+      tone: "text-primary",
+    },
   ];
 
   return (
@@ -110,7 +131,8 @@ function DashboardPage() {
                       {a.module}
                     </Badge>
                     <span className="text-sm truncate">
-                      {a.action} <span className="text-muted-foreground">on {a.entity_type ?? "—"}</span>
+                      {a.action}{" "}
+                      <span className="text-muted-foreground">on {a.entity_type ?? "—"}</span>
                     </span>
                   </div>
                   <span className="text-xs text-muted-foreground shrink-0 ml-4">
@@ -146,7 +168,9 @@ function Row({ label, value, ok }: { label: string; value: string; ok?: boolean 
   return (
     <div className="flex items-center justify-between">
       <span className="text-muted-foreground">{label}</span>
-      <span className={`inline-flex items-center gap-1.5 text-xs font-medium ${ok ? "text-success" : "text-destructive"}`}>
+      <span
+        className={`inline-flex items-center gap-1.5 text-xs font-medium ${ok ? "text-success" : "text-destructive"}`}
+      >
         <span className={`h-1.5 w-1.5 rounded-full ${ok ? "bg-success" : "bg-destructive"}`} />
         {value}
       </span>

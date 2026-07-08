@@ -37,9 +37,15 @@ function ReportsPage() {
                 </div>
               </div>
               <div className="mt-4 flex gap-2 text-xs text-muted-foreground">
-                <span className="inline-flex items-center gap-1"><FileText className="h-3.5 w-3.5" /> PDF</span>
-                <span className="inline-flex items-center gap-1"><FileSpreadsheet className="h-3.5 w-3.5" /> Excel</span>
-                <span className="inline-flex items-center gap-1"><Printer className="h-3.5 w-3.5" /> Print</span>
+                <span className="inline-flex items-center gap-1">
+                  <FileText className="h-3.5 w-3.5" /> PDF
+                </span>
+                <span className="inline-flex items-center gap-1">
+                  <FileSpreadsheet className="h-3.5 w-3.5" /> Excel
+                </span>
+                <span className="inline-flex items-center gap-1">
+                  <Printer className="h-3.5 w-3.5" /> Print
+                </span>
               </div>
             </CardContent>
           </Card>

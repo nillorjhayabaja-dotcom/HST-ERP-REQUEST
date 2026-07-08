@@ -14,7 +14,9 @@ function ProfilePage() {
       <div className="flex items-start justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold">My Profile</h1>
-          <p className="text-muted-foreground mt-1 text-sm">Update the information you’re allowed to edit.</p>
+          <p className="text-muted-foreground mt-1 text-sm">
+            Update the information you’re allowed to edit.
+          </p>
         </div>
       </div>
 
@@ -31,4 +33,3 @@ function ProfilePage() {
     </div>
   );
 }
-

@@ -47,14 +47,43 @@ function EmployeeDashboard() {
     { label: "Visitors", icon: Users, href: "/employee-portal/visitors", color: "bg-orange-500" },
     { label: "Vehicles", icon: Car, href: "/employee-portal/vehicles", color: "bg-cyan-500" },
     { label: "Assets", icon: Package, href: "/employee-portal/assets", color: "bg-pink-500" },
-    { label: "Purchase Req.", icon: Building2, href: "/employee-portal/purchase-requests", color: "bg-indigo-500" },
+    {
+      label: "Purchase Req.",
+      icon: Building2,
+      href: "/employee-portal/purchase-requests",
+      color: "bg-indigo-500",
+    },
   ];
 
   const statCards = [
-    { label: "Total Requests", value: stats?.totalRequests || 0, icon: FileText, color: "text-blue-600", bg: "bg-blue-50" },
-    { label: "Pending", value: stats?.pending || 0, icon: Clock, color: "text-amber-600", bg: "bg-amber-50" },
-    { label: "Approved", value: stats?.approved || 0, icon: CheckCircle, color: "text-green-600", bg: "bg-green-50" },
-    { label: "Rejected", value: stats?.rejected || 0, icon: XCircle, color: "text-red-600", bg: "bg-red-50" },
+    {
+      label: "Total Requests",
+      value: stats?.totalRequests || 0,
+      icon: FileText,
+      color: "text-blue-600",
+      bg: "bg-blue-50",
+    },
+    {
+      label: "Pending",
+      value: stats?.pending || 0,
+      icon: Clock,
+      color: "text-amber-600",
+      bg: "bg-amber-50",
+    },
+    {
+      label: "Approved",
+      value: stats?.approved || 0,
+      icon: CheckCircle,
+      color: "text-green-600",
+      bg: "bg-green-50",
+    },
+    {
+      label: "Rejected",
+      value: stats?.rejected || 0,
+      icon: XCircle,
+      color: "text-red-600",
+      bg: "bg-red-50",
+    },
   ];
 
   return (

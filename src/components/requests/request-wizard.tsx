@@ -3,14 +3,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import {
-  ChevronLeft,
-  ChevronRight,
-  Check,
-  Loader2,
-  Save,
-  Send,
-} from "lucide-react";
+import { ChevronLeft, ChevronRight, Check, Loader2, Save, Send } from "lucide-react";
 
 export interface WizardStep {
   id: string;
@@ -96,7 +89,7 @@ export function RequestWizard({
                 "flex items-center gap-2 text-xs font-medium transition-colors",
                 isActive && "text-gold",
                 isCompleted && "text-emerald-600 cursor-pointer hover:text-emerald-700",
-                !isActive && !isCompleted && "text-muted-foreground"
+                !isActive && !isCompleted && "text-muted-foreground",
               )}
             >
               <span
@@ -104,7 +97,7 @@ export function RequestWizard({
                   "flex h-6 w-6 items-center justify-center rounded-full border-2 text-[10px] font-bold",
                   isActive && "border-gold bg-gold text-gold-foreground",
                   isCompleted && "border-emerald-500 bg-emerald-50 text-emerald-600",
-                  !isActive && !isCompleted && "border-muted-foreground/30"
+                  !isActive && !isCompleted && "border-muted-foreground/30",
                 )}
               >
                 {isCompleted ? <Check className="h-3 w-3" /> : idx + 1}
@@ -117,9 +110,7 @@ export function RequestWizard({
 
       {/* Step content */}
       <Card>
-        <CardContent className="pt-6">
-          {childrenArray[currentStep] || children}
-        </CardContent>
+        <CardContent className="pt-6">{childrenArray[currentStep] || children}</CardContent>
         <Separator />
         <CardFooter className="flex items-center justify-between py-4">
           <Button
@@ -133,11 +124,7 @@ export function RequestWizard({
 
           <div className="flex items-center gap-2">
             {onSaveDraft && (
-              <Button
-                variant="outline"
-                onClick={onSaveDraft}
-                disabled={isSaving || isSubmitting}
-              >
+              <Button variant="outline" onClick={onSaveDraft} disabled={isSaving || isSubmitting}>
                 {isSaving ? (
                   <Loader2 className="h-4 w-4 mr-1 animate-spin" />
                 ) : (

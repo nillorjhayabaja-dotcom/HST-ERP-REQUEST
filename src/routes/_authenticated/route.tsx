@@ -6,9 +6,8 @@ import { apiClient } from "@/lib/api-client";
 import { isAuthenticated, signOut } from "@/lib/auth-helper";
 import { onAuthLogout } from "@/lib/auth-events";
 import { useIdleTimeout } from "@/hooks/useIdleTimeout";
-import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
-import { AppSidebar } from "@/components/app-sidebar";
-import { TopBar } from "@/components/top-bar";
+import { useTokenRefresh } from "@/hooks/useTokenRefresh";
+import { SessionWarningDialog } from "@/components/session-warning-dialog";
 
 export const Route = createFileRoute("/_authenticated")({
   ssr: false,
@@ -34,6 +33,9 @@ function AuthenticatedLayout() {
     });
     return unsub;
   }, [navigate]);
+
+  // Auto-refresh token before expiration to prevent session timeout
+  useTokenRefresh();
 
   // Idle timeout: auto-logout after 30 minutes of inactivity
   useIdleTimeout(forceLogout, 30 * 60 * 1000);
@@ -76,16 +78,9 @@ function AuthenticatedLayout() {
     "User";
 
   return (
-    <SidebarProvider>
-      <div className="flex min-h-screen w-full bg-background">
-        <AppSidebar />
-        <SidebarInset className="flex-1 flex flex-col min-w-0">
-          <TopBar userEmail={profile?.email ?? ""} userName={displayName} />
-          <main className="flex-1 min-w-0">
-            <Outlet />
-          </main>
-        </SidebarInset>
-      </div>
-    </SidebarProvider>
+    <div className="flex min-h-screen w-full bg-background">
+      <Outlet />
+      <SessionWarningDialog />
+    </div>
   );
 }

@@ -70,12 +70,20 @@ function AdminRoles() {
   });
 
   const togglePermissionMutation = useMutation({
-    mutationFn: async ({ role, permission_id, add }: { role: string; permission_id: string; add: boolean }) => {
+    mutationFn: async ({
+      role,
+      permission_id,
+      add,
+    }: {
+      role: string;
+      permission_id: string;
+      add: boolean;
+    }) => {
       if (add) {
         const response = await apiClient.post("/permissions/assign", { role, permission_id });
         if (response.error) throw new Error(response.error);
       } else {
-        const existing = roles?.find(r => r.role === role && r.permission_id === permission_id);
+        const existing = roles?.find((r) => r.role === role && r.permission_id === permission_id);
         if (existing) {
           const response = await apiClient.delete(`/permissions/assign/${existing.id}`);
           if (response.error) throw new Error(response.error);
@@ -93,14 +101,14 @@ function AdminRoles() {
 
   // Group permissions by module
   const permissionsByModule: Record<string, Permission[]> = {};
-  (allPermissions || []).forEach(p => {
+  (allPermissions || []).forEach((p) => {
     if (!permissionsByModule[p.module]) permissionsByModule[p.module] = [];
     permissionsByModule[p.module].push(p);
   });
 
   // Get permissions assigned to selected role
   const rolePermissions = selectedRole
-    ? (roles || []).filter(rp => rp.role === selectedRole).map(rp => rp.permission_id)
+    ? (roles || []).filter((rp) => rp.role === selectedRole).map((rp) => rp.permission_id)
     : [];
 
   const modules = Object.keys(permissionsByModule).sort();
@@ -115,8 +123,8 @@ function AdminRoles() {
       </div>
 
       <div className="flex flex-wrap gap-2">
-        {Object.values(ROLE_GROUPS).flatMap(group => 
-          group.roles.map(role => (
+        {Object.values(ROLE_GROUPS).flatMap((group) =>
+          group.roles.map((role) => (
             <Button
               key={role}
               variant={selectedRole === role ? "default" : "outline"}
@@ -126,7 +134,7 @@ function AdminRoles() {
             >
               {ROLE_LABELS[role]}
             </Button>
-          ))
+          )),
         )}
       </div>
 
@@ -148,8 +156,10 @@ function AdminRoles() {
               onChange={(e) => setSelectedModule(e.target.value)}
             >
               <option value="all">All Modules</option>
-              {modules.map(m => (
-                <option key={m} value={m}>{m.replace(/_/g, ' ')}</option>
+              {modules.map((m) => (
+                <option key={m} value={m}>
+                  {m.replace(/_/g, " ")}
+                </option>
               ))}
             </select>
             <div className="text-sm text-muted-foreground">
@@ -170,21 +180,36 @@ function AdminRoles() {
               <TableBody>
                 {Object.entries(permissionsByModule)
                   .filter(([module]) => selectedModule === "all" || module === selectedModule)
-                  .map(([module, perms]) => (
+                  .map(([module, perms]) =>
                     perms
-                      .filter(p => !search || p.action.toLowerCase().includes(search.toLowerCase()) || p.description?.toLowerCase().includes(search.toLowerCase()))
-                      .map(permission => (
+                      .filter(
+                        (p) =>
+                          !search ||
+                          p.action.toLowerCase().includes(search.toLowerCase()) ||
+                          p.description?.toLowerCase().includes(search.toLowerCase()),
+                      )
+                      .map((permission) => (
                         <TableRow key={permission.id}>
-                          <TableCell className="font-medium capitalize">{module.replace(/_/g, ' ')}</TableCell>
-                          <TableCell><code className="text-xs bg-muted px-1 py-0.5 rounded">{permission.action}</code></TableCell>
-                          <TableCell className="text-sm text-muted-foreground">{permission.description}</TableCell>
+                          <TableCell className="font-medium capitalize">
+                            {module.replace(/_/g, " ")}
+                          </TableCell>
+                          <TableCell>
+                            <code className="text-xs bg-muted px-1 py-0.5 rounded">
+                              {permission.action}
+                            </code>
+                          </TableCell>
+                          <TableCell className="text-sm text-muted-foreground">
+                            {permission.description}
+                          </TableCell>
                           <TableCell className="text-center">
                             <button
-                              onClick={() => togglePermissionMutation.mutate({
-                                role: selectedRole,
-                                permission_id: permission.id,
-                                add: !getPermissionStatus(permission.id),
-                              })}
+                              onClick={() =>
+                                togglePermissionMutation.mutate({
+                                  role: selectedRole,
+                                  permission_id: permission.id,
+                                  add: !getPermissionStatus(permission.id),
+                                })
+                              }
                               className="transition-colors"
                             >
                               {getPermissionStatus(permission.id) ? (
@@ -195,8 +220,8 @@ function AdminRoles() {
                             </button>
                           </TableCell>
                         </TableRow>
-                      ))
-                  ))}
+                      )),
+                  )}
               </TableBody>
             </Table>
           </div>
@@ -207,7 +232,9 @@ function AdminRoles() {
         <Card>
           <CardContent className="p-12 text-center">
             <Shield className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-            <p className="text-muted-foreground">Select a role above to view and manage its permissions</p>
+            <p className="text-muted-foreground">
+              Select a role above to view and manage its permissions
+            </p>
           </CardContent>
         </Card>
       )}

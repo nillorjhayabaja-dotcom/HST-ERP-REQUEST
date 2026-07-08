@@ -13,5 +13,3 @@ export const Route = createFileRoute("/_authenticated/employee-portal/visitors")
     />
   ),
 });
-
-

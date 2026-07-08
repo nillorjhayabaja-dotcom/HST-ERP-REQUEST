@@ -30,9 +30,9 @@ export function ModuleStub({
             <div>
               <h3 className="text-lg font-semibold">Module scaffolded</h3>
               <p className="text-sm text-muted-foreground max-w-md mx-auto mt-1">
-                The <span className="font-medium">{title}</span> module is wired into the
-                platform. Foundation services (auth, RBAC, approvals, audit,
-                notifications) are already available.
+                The <span className="font-medium">{title}</span> module is wired into the platform.
+                Foundation services (auth, RBAC, approvals, audit, notifications) are already
+                available.
               </p>
             </div>
             <div className="max-w-lg mx-auto grid grid-cols-1 sm:grid-cols-2 gap-2 text-left pt-4">

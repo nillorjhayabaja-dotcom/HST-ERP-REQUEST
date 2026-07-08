@@ -1,4 +1,10 @@
-export { StatusBadge, PriorityBadge, humanizeStatus, REQUEST_STATUS_CONFIG, PRIORITY_CONFIG } from "./status-badge";
+export {
+  StatusBadge,
+  PriorityBadge,
+  humanizeStatus,
+  REQUEST_STATUS_CONFIG,
+  PRIORITY_CONFIG,
+} from "./status-badge";
 export type { StatusConfig } from "./status-badge";
 
 export { ApprovalTimeline } from "./approval-timeline";

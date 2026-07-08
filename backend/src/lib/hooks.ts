@@ -1,5 +1,5 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { fetchWithAuth, mutateWithAuth } from './query-client.js';
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { fetchWithAuth, mutateWithAuth } from "./query-client.js";
 
 export function useApiQuery<T>(key: string[], endpoint: string) {
   return useQuery({
@@ -8,13 +8,17 @@ export function useApiQuery<T>(key: string[], endpoint: string) {
   });
 }
 
-export function useApiMutation<T>(method: 'POST' | 'PUT' | 'DELETE', endpoint: string, invalidateKeys?: string[][]) {
+export function useApiMutation<T>(
+  method: "POST" | "PUT" | "DELETE",
+  endpoint: string,
+  invalidateKeys?: string[][],
+) {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (body?: any) => mutateWithAuth<T>(method, endpoint, body),
     onSuccess: () => {
       if (invalidateKeys) {
-        invalidateKeys.forEach(k => queryClient.invalidateQueries({ queryKey: k }));
+        invalidateKeys.forEach((k) => queryClient.invalidateQueries({ queryKey: k }));
       }
     },
   });

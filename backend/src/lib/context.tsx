@@ -1,6 +1,6 @@
-import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
-import { signIn, signOut, getProfile, type AuthUser } from './auth.js';
-import { queryClient } from './query-client.js';
+import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
+import { signIn, signOut, getProfile, type AuthUser } from "./auth.js";
+import { queryClient } from "./query-client.js";
 
 interface AuthContextType {
   user: AuthUser | null;
@@ -19,15 +19,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const init = async () => {
       try {
-        const token = localStorage.getItem('auth_token');
+        const token = localStorage.getItem("auth_token");
         if (token) {
           const profile = await getProfile();
           setUser(profile);
         }
       } catch (error) {
-        console.error('Failed to load profile:', error);
-        localStorage.removeItem('auth_token');
-        localStorage.removeItem('refresh_token');
+        console.error("Failed to load profile:", error);
+        localStorage.removeItem("auth_token");
+        localStorage.removeItem("refresh_token");
       } finally {
         setLoading(false);
       }
@@ -51,12 +51,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const profile = await getProfile();
       setUser(profile);
     } catch (error) {
-      console.error('Failed to refresh profile:', error);
+      console.error("Failed to refresh profile:", error);
     }
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, signIn: handleSignIn, signOut: handleSignOut, refreshProfile }}>
+    <AuthContext.Provider
+      value={{ user, loading, signIn: handleSignIn, signOut: handleSignOut, refreshProfile }}
+    >
       {children}
     </AuthContext.Provider>
   );
@@ -65,7 +67,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 export function useAuth() {
   const context = useContext(AuthContext);
   if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
+    throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
 }

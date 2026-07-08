@@ -72,7 +72,7 @@ export function AttachmentManager({
   const deleteMutation = useMutation({
     mutationFn: async (attachmentId: string) => {
       const response = await apiClient.delete(
-        `/${requestType}/${requestId}/attachments/${attachmentId}`
+        `/${requestType}/${requestId}/attachments/${attachmentId}`,
       );
       if (response.error) throw new Error(response.error);
       return response.data;
@@ -147,12 +147,7 @@ export function AttachmentManager({
         </div>
         {!readonly && (
           <div>
-            <input
-              type="file"
-              ref={fileInputRef}
-              onChange={handleFileSelect}
-              className="hidden"
-            />
+            <input type="file" ref={fileInputRef} onChange={handleFileSelect} className="hidden" />
             <Button
               variant="outline"
               size="sm"

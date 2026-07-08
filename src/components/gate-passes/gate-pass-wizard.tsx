@@ -29,7 +29,11 @@ const STEPS: WizardStep[] = [
   { id: "type", title: "Gate Pass Type", description: "Select the type of gate pass you need." },
   { id: "details", title: "Trip Details", description: "Provide details about your trip." },
   { id: "schedule", title: "Schedule", description: "Set departure and return dates." },
-  { id: "review", title: "Review & Submit", description: "Verify all information before submitting." },
+  {
+    id: "review",
+    title: "Review & Submit",
+    description: "Verify all information before submitting.",
+  },
 ];
 
 interface GatePassFormData {
@@ -152,10 +156,7 @@ export function GatePassWizard({ onComplete }: GatePassWizardProps) {
         </div>
         <div className="space-y-2">
           <Label>Priority</Label>
-          <Select
-            value={formData.priority}
-            onValueChange={(v) => updateField("priority", v)}
-          >
+          <Select value={formData.priority} onValueChange={(v) => updateField("priority", v)}>
             <SelectTrigger>
               <SelectValue />
             </SelectTrigger>
@@ -245,36 +246,54 @@ export function GatePassWizard({ onComplete }: GatePassWizardProps) {
               <p className="text-sm font-medium">{selectedType?.name || "Not selected"}</p>
             </div>
             <div>
-              <span className="text-[10px] uppercase text-muted-foreground font-medium">Priority</span>
-              <p className="text-sm"><PriorityBadge priority={formData.priority} /></p>
+              <span className="text-[10px] uppercase text-muted-foreground font-medium">
+                Priority
+              </span>
+              <p className="text-sm">
+                <PriorityBadge priority={formData.priority} />
+              </p>
             </div>
             <div className="sm:col-span-2">
-              <span className="text-[10px] uppercase text-muted-foreground font-medium">Purpose</span>
+              <span className="text-[10px] uppercase text-muted-foreground font-medium">
+                Purpose
+              </span>
               <p className="text-sm">{formData.purpose || "—"}</p>
             </div>
             <div className="sm:col-span-2">
-              <span className="text-[10px] uppercase text-muted-foreground font-medium">Destination</span>
+              <span className="text-[10px] uppercase text-muted-foreground font-medium">
+                Destination
+              </span>
               <p className="text-sm">{formData.destination || "—"}</p>
             </div>
             <div>
-              <span className="text-[10px] uppercase text-muted-foreground font-medium">Passengers</span>
+              <span className="text-[10px] uppercase text-muted-foreground font-medium">
+                Passengers
+              </span>
               <p className="text-sm">{formData.passenger_count}</p>
             </div>
             <div>
-              <span className="text-[10px] uppercase text-muted-foreground font-medium">Vehicle</span>
+              <span className="text-[10px] uppercase text-muted-foreground font-medium">
+                Vehicle
+              </span>
               <p className="text-sm">{formData.vehicle_info || "—"}</p>
             </div>
             <div>
-              <span className="text-[10px] uppercase text-muted-foreground font-medium">Departure</span>
+              <span className="text-[10px] uppercase text-muted-foreground font-medium">
+                Departure
+              </span>
               <p className="text-sm">{formData.departure_date || "—"}</p>
             </div>
             <div>
-              <span className="text-[10px] uppercase text-muted-foreground font-medium">Return</span>
+              <span className="text-[10px] uppercase text-muted-foreground font-medium">
+                Return
+              </span>
               <p className="text-sm">{formData.expected_return_date || "—"}</p>
             </div>
             {formData.remarks && (
               <div className="sm:col-span-2">
-                <span className="text-[10px] uppercase text-muted-foreground font-medium">Remarks</span>
+                <span className="text-[10px] uppercase text-muted-foreground font-medium">
+                  Remarks
+                </span>
                 <p className="text-sm">{formData.remarks}</p>
               </div>
             )}

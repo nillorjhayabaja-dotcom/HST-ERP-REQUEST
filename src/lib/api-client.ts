@@ -2,7 +2,7 @@ import { getAccessToken, getRefreshToken, refreshAccessToken, clearAuth } from "
 import { isTokenExpired } from "./token";
 import { emitAuthLogout } from "./auth-events";
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
+const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3001/api";
 
 export interface ApiResponse<T = any> {
   data?: T;
@@ -26,11 +26,11 @@ class ApiClient {
   private getAuthHeaders(): Record<string, string> {
     const token = getAccessToken();
     const headers: Record<string, string> = {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     };
 
     if (token) {
-      headers['Authorization'] = `Bearer ${token}`;
+      headers["Authorization"] = `Bearer ${token}`;
     }
 
     return headers;
@@ -72,7 +72,7 @@ class ApiClient {
         if (!refreshed) {
           clearAuth();
           emitAuthLogout();
-          return { error: 'Session expired', status: 401 };
+          return { error: "Session expired", status: 401 };
         }
       }
 
@@ -94,7 +94,7 @@ class ApiClient {
           // Even if refresh succeeded, the original request still failed.
           // The caller should retry. Return the error so they know.
         }
-        return { error: data?.error || 'Request failed', status: response.status };
+        return { error: data?.error || "Request failed", status: response.status };
       }
 
       return { data, status: response.status };
@@ -106,7 +106,11 @@ class ApiClient {
   /**
    * Execute a request with automatic retry on 401 if token refresh succeeds.
    */
-  private async requestWithRetry<T>(method: string, endpoint: string, body?: any): Promise<ApiResponse<T>> {
+  private async requestWithRetry<T>(
+    method: string,
+    endpoint: string,
+    body?: any,
+  ): Promise<ApiResponse<T>> {
     const result = await this.request<T>(method, endpoint, body);
 
     // If we got a 401 and the token has since been refreshed (i.e., new token exists),
@@ -122,19 +126,19 @@ class ApiClient {
   }
 
   get<T>(endpoint: string) {
-    return this.requestWithRetry<T>('GET', endpoint);
+    return this.requestWithRetry<T>("GET", endpoint);
   }
 
   post<T>(endpoint: string, body?: any) {
-    return this.requestWithRetry<T>('POST', endpoint, body);
+    return this.requestWithRetry<T>("POST", endpoint, body);
   }
 
   put<T>(endpoint: string, body?: any) {
-    return this.requestWithRetry<T>('PUT', endpoint, body);
+    return this.requestWithRetry<T>("PUT", endpoint, body);
   }
 
   delete<T>(endpoint: string) {
-    return this.requestWithRetry<T>('DELETE', endpoint);
+    return this.requestWithRetry<T>("DELETE", endpoint);
   }
 }
 

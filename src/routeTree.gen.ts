@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as ForbiddenRouteImport } from './routes/forbidden'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
@@ -57,6 +58,11 @@ import { Route as AuthenticatedSecurityGatePassesTodayRouteImport } from './rout
 import { Route as AuthenticatedSecurityGatePassesScannerRouteImport } from './routes/_authenticated/security/gate-passes/scanner'
 import { Route as AuthenticatedSecurityGatePassesReleaseRouteImport } from './routes/_authenticated/security/gate-passes/release'
 
+const ForbiddenRoute = ForbiddenRouteImport.update({
+  id: '/forbidden',
+  path: '/forbidden',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
@@ -336,6 +342,7 @@ const AuthenticatedSecurityGatePassesReleaseRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/forbidden': typeof ForbiddenRoute
   '/admin': typeof AuthenticatedAdminRouteRouteWithChildren
   '/employee-portal': typeof AuthenticatedEmployeePortalRouteRouteWithChildren
   '/security': typeof AuthenticatedSecurityRouteRouteWithChildren
@@ -384,6 +391,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/forbidden': typeof ForbiddenRoute
   '/admin': typeof AuthenticatedAdminRouteRouteWithChildren
   '/employee-portal': typeof AuthenticatedEmployeePortalRouteRouteWithChildren
   '/security': typeof AuthenticatedSecurityRouteRouteWithChildren
@@ -434,6 +442,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
+  '/forbidden': typeof ForbiddenRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRouteRouteWithChildren
   '/_authenticated/employee-portal': typeof AuthenticatedEmployeePortalRouteRouteWithChildren
   '/_authenticated/security': typeof AuthenticatedSecurityRouteRouteWithChildren
@@ -484,6 +493,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/auth'
+    | '/forbidden'
     | '/admin'
     | '/employee-portal'
     | '/security'
@@ -532,6 +542,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/auth'
+    | '/forbidden'
     | '/admin'
     | '/employee-portal'
     | '/security'
@@ -581,6 +592,7 @@ export interface FileRouteTypes {
     | '/'
     | '/_authenticated'
     | '/auth'
+    | '/forbidden'
     | '/_authenticated/admin'
     | '/_authenticated/employee-portal'
     | '/_authenticated/security'
@@ -631,10 +643,18 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
+  ForbiddenRoute: typeof ForbiddenRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/forbidden': {
+      id: '/forbidden'
+      path: '/forbidden'
+      fullPath: '/forbidden'
+      preLoaderRoute: typeof ForbiddenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/auth': {
       id: '/auth'
       path: '/auth'
@@ -1123,6 +1143,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
+  ForbiddenRoute: ForbiddenRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

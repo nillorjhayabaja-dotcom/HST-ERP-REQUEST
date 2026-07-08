@@ -10,8 +10,22 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "@/components/ui/dialog";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogFooter,
+} from "@/components/ui/dialog";
 
 interface Department {
   id: string;
@@ -70,17 +84,30 @@ function DepartmentsAdmin() {
         actions={
           <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-              <Button><Plus className="h-4 w-4" /> New department</Button>
+              <Button>
+                <Plus className="h-4 w-4" /> New department
+              </Button>
             </DialogTrigger>
             <DialogContent>
               <DialogHeader>
                 <DialogTitle>New department</DialogTitle>
               </DialogHeader>
               <form onSubmit={onSubmit} className="space-y-4">
-                <div className="space-y-2"><Label htmlFor="code">Code</Label><Input id="code" name="code" required maxLength={16} /></div>
-                <div className="space-y-2"><Label htmlFor="name">Name</Label><Input id="name" name="name" required maxLength={120} /></div>
-                <div className="space-y-2"><Label htmlFor="description">Description</Label><Input id="description" name="description" /></div>
-                <DialogFooter><Button type="submit">Create</Button></DialogFooter>
+                <div className="space-y-2">
+                  <Label htmlFor="code">Code</Label>
+                  <Input id="code" name="code" required maxLength={16} />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="name">Name</Label>
+                  <Input id="name" name="name" required maxLength={120} />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="description">Description</Label>
+                  <Input id="description" name="description" />
+                </div>
+                <DialogFooter>
+                  <Button type="submit">Create</Button>
+                </DialogFooter>
               </form>
             </DialogContent>
           </Dialog>

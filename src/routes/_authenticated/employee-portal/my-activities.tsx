@@ -31,4 +31,3 @@ function MyActivitiesPage() {
     </div>
   );
 }
-

@@ -4,14 +4,7 @@ import { apiClient } from "@/lib/api-client";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import {
-  Users,
-  Building2,
-  KeyRound,
-  FileCheck,
-  TrendingUp,
-  ShieldCheck,
-} from "lucide-react";
+import { Users, Building2, KeyRound, FileCheck, TrendingUp, ShieldCheck } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_authenticated/admin/dashboard")({
@@ -36,10 +29,34 @@ function AdminDashboard() {
   });
 
   const statCards = [
-    { label: "Total Users", value: stats?.totalUsers || 0, icon: Users, color: "text-blue-500", bg: "bg-blue-500/10" },
-    { label: "Departments", value: stats?.totalDepartments || 0, icon: Building2, color: "text-green-500", bg: "bg-green-500/10" },
-    { label: "Active Roles", value: stats?.activeRoles || 0, icon: KeyRound, color: "text-purple-500", bg: "bg-purple-500/10" },
-    { label: "Pending Approvals", value: stats?.pendingApprovals || 0, icon: FileCheck, color: "text-amber-500", bg: "bg-amber-500/10" },
+    {
+      label: "Total Users",
+      value: stats?.totalUsers || 0,
+      icon: Users,
+      color: "text-blue-500",
+      bg: "bg-blue-500/10",
+    },
+    {
+      label: "Departments",
+      value: stats?.totalDepartments || 0,
+      icon: Building2,
+      color: "text-green-500",
+      bg: "bg-green-500/10",
+    },
+    {
+      label: "Active Roles",
+      value: stats?.activeRoles || 0,
+      icon: KeyRound,
+      color: "text-purple-500",
+      bg: "bg-purple-500/10",
+    },
+    {
+      label: "Pending Approvals",
+      value: stats?.pendingApprovals || 0,
+      icon: FileCheck,
+      color: "text-amber-500",
+      bg: "bg-amber-500/10",
+    },
   ];
 
   const quickActions = [
@@ -118,15 +135,21 @@ function AdminDashboard() {
             <div className="space-y-3">
               <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
                 <span className="text-sm">Database</span>
-                <Badge variant="default" className="bg-green-500">Healthy</Badge>
+                <Badge variant="default" className="bg-green-500">
+                  Healthy
+                </Badge>
               </div>
               <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
                 <span className="text-sm">API Server</span>
-                <Badge variant="default" className="bg-green-500">Running</Badge>
+                <Badge variant="default" className="bg-green-500">
+                  Running
+                </Badge>
               </div>
               <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
                 <span className="text-sm">Authentication</span>
-                <Badge variant="default" className="bg-green-500">Active</Badge>
+                <Badge variant="default" className="bg-green-500">
+                  Active
+                </Badge>
               </div>
             </div>
           </CardContent>

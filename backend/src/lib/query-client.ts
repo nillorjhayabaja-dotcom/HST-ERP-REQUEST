@@ -1,5 +1,5 @@
-import { QueryClient } from '@tanstack/react-query';
-import { apiClient } from './api-client.js';
+import { QueryClient } from "@tanstack/react-query";
+import { apiClient } from "./api-client.js";
 
 export const queryClient = new QueryClient({
   defaultOptions: {
@@ -19,8 +19,15 @@ export async function fetchWithAuth<T>(endpoint: string): Promise<T> {
   return response.data!;
 }
 
-export async function mutateWithAuth<T>(method: 'POST' | 'PUT' | 'DELETE', endpoint: string, body?: any): Promise<T> {
-  const response = await apiClient[method.toLowerCase() as 'post' | 'put' | 'delete']<T>(endpoint, body);
+export async function mutateWithAuth<T>(
+  method: "POST" | "PUT" | "DELETE",
+  endpoint: string,
+  body?: any,
+): Promise<T> {
+  const response = await apiClient[method.toLowerCase() as "post" | "put" | "delete"]<T>(
+    endpoint,
+    body,
+  );
   if (response.error) {
     throw new Error(response.error);
   }

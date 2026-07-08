@@ -4,7 +4,14 @@ import { useQuery } from "@tanstack/react-query";
 import { apiClient } from "@/lib/api-client";
 import { PageHeader } from "@/components/page-header";
 import { Card, CardContent } from "@/components/ui/card";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 
 interface WorkflowStep {
@@ -47,9 +54,12 @@ function WorkflowsAdmin() {
       />
       <div className="p-6 space-y-4">
         {data.length === 0 && (
-          <Card><CardContent className="p-10 text-center text-sm text-muted-foreground">
-            No workflows configured yet. Every module can share a single, versioned approval chain.
-          </CardContent></Card>
+          <Card>
+            <CardContent className="p-10 text-center text-sm text-muted-foreground">
+              No workflows configured yet. Every module can share a single, versioned approval
+              chain.
+            </CardContent>
+          </Card>
         )}
         {data.map((wf: Workflow) => (
           <Card key={wf.id}>
@@ -59,9 +69,15 @@ function WorkflowsAdmin() {
                   <div className="flex items-center gap-2">
                     <h3 className="font-semibold">{wf.name}</h3>
                     <Badge variant="outline">{wf.module}</Badge>
-                    {wf.is_active ? <Badge>Active</Badge> : <Badge variant="secondary">Inactive</Badge>}
+                    {wf.is_active ? (
+                      <Badge>Active</Badge>
+                    ) : (
+                      <Badge variant="secondary">Inactive</Badge>
+                    )}
                   </div>
-                  {wf.description && <p className="text-sm text-muted-foreground mt-1">{wf.description}</p>}
+                  {wf.description && (
+                    <p className="text-sm text-muted-foreground mt-1">{wf.description}</p>
+                  )}
                 </div>
               </div>
               <Table>
@@ -74,14 +90,16 @@ function WorkflowsAdmin() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {[...(wf.steps ?? [])].sort((a, b) => a.step_order - b.step_order).map((s) => (
-                    <TableRow key={s.id}>
-                      <TableCell className="font-mono">{s.step_order}</TableCell>
-                      <TableCell className="font-medium">{s.name}</TableCell>
-                      <TableCell>{s.approver_role?.replace(/_/g, " ") ?? "—"}</TableCell>
-                      <TableCell>{s.is_optional ? "Optional" : "Required"}</TableCell>
-                    </TableRow>
-                  ))}
+                  {[...(wf.steps ?? [])]
+                    .sort((a, b) => a.step_order - b.step_order)
+                    .map((s) => (
+                      <TableRow key={s.id}>
+                        <TableCell className="font-mono">{s.step_order}</TableCell>
+                        <TableCell className="font-medium">{s.name}</TableCell>
+                        <TableCell>{s.approver_role?.replace(/_/g, " ") ?? "—"}</TableCell>
+                        <TableCell>{s.is_optional ? "Optional" : "Required"}</TableCell>
+                      </TableRow>
+                    ))}
                 </TableBody>
               </Table>
             </CardContent>

@@ -1,12 +1,5 @@
 import { cn } from "@/lib/utils";
-import {
-  CheckCircle2,
-  XCircle,
-  Clock,
-  User,
-  AlertCircle,
-  LucideIcon,
-} from "lucide-react";
+import { CheckCircle2, XCircle, Clock, User, AlertCircle, LucideIcon } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
@@ -67,15 +60,13 @@ export function ApprovalTimeline({ steps, className }: ApprovalTimelineProps) {
         return (
           <div key={step.id} className="relative flex gap-4 pb-2">
             {/* Vertical connector line */}
-            {!isLast && (
-              <div className="absolute left-[19px] top-10 bottom-0 w-px bg-border" />
-            )}
+            {!isLast && <div className="absolute left-[19px] top-10 bottom-0 w-px bg-border" />}
 
             {/* Icon */}
             <div
               className={cn(
                 "relative z-10 flex h-9 w-9 shrink-0 items-center justify-center rounded-full border-2",
-                stepColors[step.status] || stepColors.pending
+                stepColors[step.status] || stepColors.pending,
               )}
             >
               <Icon className="h-4 w-4" />
@@ -85,9 +76,7 @@ export function ApprovalTimeline({ steps, className }: ApprovalTimelineProps) {
             <div className="flex-1 pb-4 min-w-0">
               <div className="flex items-center justify-between gap-2">
                 <div className="flex items-center gap-2 min-w-0">
-                  <span className="text-sm font-medium truncate">
-                    {step.approver_name}
-                  </span>
+                  <span className="text-sm font-medium truncate">{step.approver_name}</span>
                   <Badge variant="outline" className="text-[10px] px-1.5 py-0 h-5 shrink-0">
                     {step.approver_role}
                   </Badge>
@@ -97,8 +86,8 @@ export function ApprovalTimeline({ steps, className }: ApprovalTimelineProps) {
                     step.status === "approved"
                       ? "default"
                       : step.status === "rejected"
-                      ? "destructive"
-                      : "outline"
+                        ? "destructive"
+                        : "outline"
                   }
                   className="shrink-0 text-[10px] px-1.5 py-0 h-5 capitalize"
                 >
@@ -113,12 +102,8 @@ export function ApprovalTimeline({ steps, className }: ApprovalTimelineProps) {
               )}
 
               <div className="mt-1 flex items-center gap-3 text-[10px] text-muted-foreground">
-                {step.actioned_at && (
-                  <span>Actioned: {step.actioned_at}</span>
-                )}
-                {step.duration && (
-                  <span>Duration: {step.duration}</span>
-                )}
+                {step.actioned_at && <span>Actioned: {step.actioned_at}</span>}
+                {step.duration && <span>Duration: {step.duration}</span>}
               </div>
             </div>
           </div>

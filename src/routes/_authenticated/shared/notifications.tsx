@@ -31,7 +31,9 @@ function NotificationsPage() {
   const { data = [], isLoading } = useQuery<Notification[]>({
     queryKey: ["notifications", "all"],
     queryFn: async () => {
-      const response = await apiClient.get<{ notifications: Notification[] }>("/notifications?limit=100");
+      const response = await apiClient.get<{ notifications: Notification[] }>(
+        "/notifications?limit=100",
+      );
       if (response.error) throw new Error(response.error);
       return response.data?.notifications ?? [];
     },
@@ -79,12 +81,20 @@ function NotificationsPage() {
         {data.map((n: Notification) => (
           <Card key={n.id} className={n.is_read ? "opacity-70" : ""}>
             <CardContent className="p-4 flex items-start gap-3">
-              <div className={`h-2 w-2 rounded-full mt-2 shrink-0 ${n.is_read ? "bg-muted" : "bg-gold"}`} />
+              <div
+                className={`h-2 w-2 rounded-full mt-2 shrink-0 ${n.is_read ? "bg-muted" : "bg-gold"}`}
+              />
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 flex-wrap">
                   <span className="font-medium">{n.title}</span>
-                  {n.module && <Badge variant="outline" className="text-[10px] uppercase">{n.module}</Badge>}
-                  <Badge variant="secondary" className="text-[10px]">{n.type}</Badge>
+                  {n.module && (
+                    <Badge variant="outline" className="text-[10px] uppercase">
+                      {n.module}
+                    </Badge>
+                  )}
+                  <Badge variant="secondary" className="text-[10px]">
+                    {n.type}
+                  </Badge>
                 </div>
                 {n.body && <p className="text-sm text-muted-foreground mt-1">{n.body}</p>}
                 <p className="text-xs text-muted-foreground mt-2">

@@ -1,4 +1,4 @@
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
+const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3001/api";
 
 export interface ApiResponse<T = any> {
   data?: T;
@@ -12,15 +12,15 @@ class ApiClient {
 
   constructor(baseURL: string) {
     this.baseURL = baseURL;
-    this.token = localStorage.getItem('auth_token');
+    this.token = localStorage.getItem("auth_token");
   }
 
   setToken(token: string | null) {
     this.token = token;
     if (token) {
-      localStorage.setItem('auth_token', token);
+      localStorage.setItem("auth_token", token);
     } else {
-      localStorage.removeItem('auth_token');
+      localStorage.removeItem("auth_token");
     }
   }
 
@@ -31,11 +31,11 @@ class ApiClient {
   private async request<T>(method: string, endpoint: string, body?: any): Promise<ApiResponse<T>> {
     try {
       const headers: Record<string, string> = {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       };
 
       if (this.token) {
-        headers['Authorization'] = `Bearer ${this.token}`;
+        headers["Authorization"] = `Bearer ${this.token}`;
       }
 
       const response = await fetch(`${this.baseURL}${endpoint}`, {
@@ -47,7 +47,7 @@ class ApiClient {
       const data = await response.json().catch(() => null);
 
       if (!response.ok) {
-        return { error: data?.error || 'Request failed', status: response.status };
+        return { error: data?.error || "Request failed", status: response.status };
       }
 
       return { data, status: response.status };
@@ -57,19 +57,19 @@ class ApiClient {
   }
 
   get<T>(endpoint: string) {
-    return this.request<T>('GET', endpoint);
+    return this.request<T>("GET", endpoint);
   }
 
   post<T>(endpoint: string, body?: any) {
-    return this.request<T>('POST', endpoint, body);
+    return this.request<T>("POST", endpoint, body);
   }
 
   put<T>(endpoint: string, body?: any) {
-    return this.request<T>('PUT', endpoint, body);
+    return this.request<T>("PUT", endpoint, body);
   }
 
   delete<T>(endpoint: string) {
-    return this.request<T>('DELETE', endpoint);
+    return this.request<T>("DELETE", endpoint);
   }
 }
 

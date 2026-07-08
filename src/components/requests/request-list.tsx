@@ -11,14 +11,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { StatusBadge, PriorityBadge } from "./status-badge";
-import {
-  Search,
-  ChevronDown,
-  ChevronUp,
-  FileText,
-  RefreshCw,
-  Loader2,
-} from "lucide-react";
+import { Search, ChevronDown, ChevronUp, FileText, RefreshCw, Loader2 } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export interface RequestListItem {
@@ -67,7 +60,9 @@ export function RequestList({
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [moduleFilter, setModuleFilter] = useState("all");
-  const [sortField, setSortField] = useState<"created_at" | "updated_at" | "priority">("created_at");
+  const [sortField, setSortField] = useState<"created_at" | "updated_at" | "priority">(
+    "created_at",
+  );
   const [sortDir, setSortDir] = useState<"asc" | "desc">("desc");
 
   const filtered = useMemo(() => {
@@ -80,7 +75,7 @@ export function RequestList({
         (i) =>
           i.control_number.toLowerCase().includes(q) ||
           i.title.toLowerCase().includes(q) ||
-          i.summary?.toLowerCase().includes(q)
+          i.summary?.toLowerCase().includes(q),
       );
     }
 
@@ -99,7 +94,9 @@ export function RequestList({
       let cmp = 0;
       if (sortField === "priority") {
         const order = { critical: 4, high: 3, normal: 2, low: 1 };
-        cmp = (order[a.priority as keyof typeof order] || 0) - (order[b.priority as keyof typeof order] || 0);
+        cmp =
+          (order[a.priority as keyof typeof order] || 0) -
+          (order[b.priority as keyof typeof order] || 0);
       } else {
         cmp = new Date(a[sortField]).getTime() - new Date(b[sortField]).getTime();
       }
@@ -173,7 +170,7 @@ export function RequestList({
             onClick={() => toggleSort(field)}
             className={cn(
               "flex items-center gap-0.5 px-2 py-0.5 rounded hover:bg-muted transition-colors",
-              sortField === field && "bg-muted font-semibold text-foreground"
+              sortField === field && "bg-muted font-semibold text-foreground",
             )}
           >
             {field.replace(/_/g, " ").replace(/\b\w/g, (l) => l.toUpperCase())}
@@ -220,7 +217,7 @@ export function RequestList({
               key={item.id}
               className={cn(
                 "cursor-pointer transition-colors hover:bg-accent/50",
-                onItemClick && "cursor-pointer"
+                onItemClick && "cursor-pointer",
               )}
               onClick={() => onItemClick?.(item)}
             >

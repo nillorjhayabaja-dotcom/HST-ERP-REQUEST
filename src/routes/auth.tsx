@@ -7,6 +7,8 @@ import { toast } from "sonner";
 import { Building2, Loader2 } from "lucide-react";
 
 import { signIn, isAuthenticated } from "@/lib/auth-helper";
+import { apiClient } from "@/lib/api-client";
+import { resolveRedirectAfterLogin } from "@/lib/auth/redirect-after-login";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -15,13 +17,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 export const Route = createFileRoute("/auth")({
   ssr: false,
   beforeLoad: async () => {
-    if (isAuthenticated()) throw redirect({ to: "/shared/dashboard" });
+    if (isAuthenticated()) throw redirect({ to: "/" });
   },
   head: () => ({
-    meta: [
-      { title: "Sign in — HST Enterprise Portal" },
-      { name: "robots", content: "noindex" },
-    ],
+    meta: [{ title: "Sign in — HST Enterprise Portal" }, { name: "robots", content: "noindex" }],
   }),
   component: AuthPage,
 });
@@ -30,7 +29,6 @@ const signInSchema = z.object({
   email: z.string().trim().email("Enter a valid email").max(255),
   password: z.string().min(6, "At least 6 characters").max(128),
 });
-
 
 function AuthPage() {
   const navigate = useNavigate();
@@ -48,14 +46,24 @@ function AuthPage() {
     try {
       await signIn(parsed.data.email, parsed.data.password);
       toast.success("Welcome back");
-      navigate({ to: "/shared/dashboard" });
+
+      // Fetch user profile and redirect via centralized portal resolver
+      const profileResponse = await apiClient.get<{ roles: string[] }>("/auth/profile");
+      if (profileResponse.error) {
+        toast.error("Failed to fetch user profile. Redirecting to employee portal.");
+        navigate({ to: "/employee-portal/dashboard" });
+        return;
+      }
+
+      const roles = profileResponse.data?.roles || [];
+      const { to } = await resolveRedirectAfterLogin({ roles, preserveIntendedTo: false });
+      navigate({ to: to as any });
     } catch (err: any) {
       toast.error(err?.response?.data?.error || err?.message || "Sign in failed");
     } finally {
       setBusy(false);
     }
   };
-
 
   return (
     <div className="min-h-screen w-full grid lg:grid-cols-2">
@@ -67,9 +75,7 @@ function AuthPage() {
           </div>
           <div>
             <div className="font-semibold tracking-tight">HST Enterprise Portal</div>
-            <div className="text-xs text-sidebar-foreground/70">
-              HS Technologies (Phils.), Inc.
-            </div>
+            <div className="text-xs text-sidebar-foreground/70">HS Technologies (Phils.), Inc.</div>
           </div>
         </div>
 
@@ -78,15 +84,22 @@ function AuthPage() {
             One centralized platform for every internal process.
           </h1>
           <p className="text-sidebar-foreground/70 leading-relaxed">
-            Employee records, gate passes, MRFs, approvals, and administration —
-            unified under a single secure workspace built for metal stamping &
-            plastic injection manufacturing.
+            Employee records, gate passes, MRFs, approvals, and administration — unified under a
+            single secure workspace built for metal stamping & plastic injection manufacturing.
           </p>
           <ul className="space-y-2 text-sm text-sidebar-foreground/80">
-            <li className="flex gap-2"><span className="text-gold">◆</span> Role-based access control</li>
-            <li className="flex gap-2"><span className="text-gold">◆</span> Configurable approval workflows</li>
-            <li className="flex gap-2"><span className="text-gold">◆</span> Immutable audit trail</li>
-            <li className="flex gap-2"><span className="text-gold">◆</span> Modular by design</li>
+            <li className="flex gap-2">
+              <span className="text-gold">◆</span> Role-based access control
+            </li>
+            <li className="flex gap-2">
+              <span className="text-gold">◆</span> Configurable approval workflows
+            </li>
+            <li className="flex gap-2">
+              <span className="text-gold">◆</span> Immutable audit trail
+            </li>
+            <li className="flex gap-2">
+              <span className="text-gold">◆</span> Modular by design
+            </li>
           </ul>
         </div>
 
@@ -107,9 +120,7 @@ function AuthPage() {
 
           <div className="mt-6">
             <h2 className="text-2xl font-semibold tracking-tight">Sign in</h2>
-            <p className="text-sm text-muted-foreground mb-6">
-              Access your enterprise workspace.
-            </p>
+            <p className="text-sm text-muted-foreground mb-6">Access your enterprise workspace.</p>
             <form onSubmit={handleSignIn} className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="email">Company email</Label>
@@ -117,7 +128,13 @@ function AuthPage() {
               </div>
               <div className="space-y-2">
                 <Label htmlFor="password">Password</Label>
-                <Input id="password" name="password" type="password" autoComplete="current-password" required />
+                <Input
+                  id="password"
+                  name="password"
+                  type="password"
+                  autoComplete="current-password"
+                  required
+                />
               </div>
               <Button type="submit" className="w-full" disabled={busy}>
                 {busy && <Loader2 className="h-4 w-4 animate-spin" />}

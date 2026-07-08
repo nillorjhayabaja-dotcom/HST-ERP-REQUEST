@@ -37,17 +37,61 @@ function SecurityDashboard() {
   });
 
   const statCards = [
-    { label: "Pending Release", value: stats?.pendingRelease || 0, icon: DoorOpen, color: "text-amber-500", bg: "bg-amber-500/10" },
-    { label: "Released Today", value: stats?.releasedToday || 0, icon: QrCode, color: "text-green-500", bg: "bg-green-500/10" },
-    { label: "Active Visitors", value: stats?.activeVisitors || 0, icon: UserCheck, color: "text-blue-500", bg: "bg-blue-500/10" },
-    { label: "Pending Returns", value: 0, icon: Clock, color: "text-purple-500", bg: "bg-purple-500/10" },
+    {
+      label: "Pending Release",
+      value: stats?.pendingRelease || 0,
+      icon: DoorOpen,
+      color: "text-amber-500",
+      bg: "bg-amber-500/10",
+    },
+    {
+      label: "Released Today",
+      value: stats?.releasedToday || 0,
+      icon: QrCode,
+      color: "text-green-500",
+      bg: "bg-green-500/10",
+    },
+    {
+      label: "Active Visitors",
+      value: stats?.activeVisitors || 0,
+      icon: UserCheck,
+      color: "text-blue-500",
+      bg: "bg-blue-500/10",
+    },
+    {
+      label: "Pending Returns",
+      value: 0,
+      icon: Clock,
+      color: "text-purple-500",
+      bg: "bg-purple-500/10",
+    },
   ];
 
   const quickActions = [
-    { label: "Today's Gate Passes", href: "/security/gate-passes/today", icon: ClipboardList, color: "bg-blue-500" },
-    { label: "QR Scanner", href: "/security/gate-passes/scanner", icon: QrCode, color: "bg-purple-500" },
-    { label: "Visitor Check-in", href: "/security/visitors/check-in", icon: UserCheck, color: "bg-green-500" },
-    { label: "Visitor Check-out", href: "/security/visitors/check-out", icon: UserMinus, color: "bg-red-500" },
+    {
+      label: "Today's Gate Passes",
+      href: "/security/gate-passes/today",
+      icon: ClipboardList,
+      color: "bg-blue-500",
+    },
+    {
+      label: "QR Scanner",
+      href: "/security/gate-passes/scanner",
+      icon: QrCode,
+      color: "bg-purple-500",
+    },
+    {
+      label: "Visitor Check-in",
+      href: "/security/visitors/check-in",
+      icon: UserCheck,
+      color: "bg-green-500",
+    },
+    {
+      label: "Visitor Check-out",
+      href: "/security/visitors/check-out",
+      icon: UserMinus,
+      color: "bg-red-500",
+    },
   ];
 
   return (
@@ -142,9 +186,7 @@ function SecurityDashboard() {
                 <AlertTriangle className="h-8 w-8 text-muted-foreground" />
               </div>
               <p className="text-sm font-medium">No alerts</p>
-              <p className="text-xs text-muted-foreground mt-1">
-                Security alerts will appear here
-              </p>
+              <p className="text-xs text-muted-foreground mt-1">Security alerts will appear here</p>
             </div>
           </CardContent>
         </Card>

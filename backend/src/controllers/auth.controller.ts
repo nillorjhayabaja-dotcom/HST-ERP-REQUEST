@@ -1,33 +1,39 @@
-import { Request, Response } from 'express';
-import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
-import prisma from '../config/database.js';
-import { AuthRequest } from '../middleware/auth.js';
-import { sendPasswordResetEmail } from '../services/email.service.js';
+import { Request, Response } from "express";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import prisma from "../config/database.js";
+import { AuthRequest } from "../middleware/auth.js";
+import { sendPasswordResetEmail } from "../services/email.service.js";
 
 export const signup = async (_req: Request, res: Response) => {
-  res.status(403).json({ error: 'Public signup is disabled. Contact your administrator to create an account.' });
+  res
+    .status(403)
+    .json({ error: "Public signup is disabled. Contact your administrator to create an account." });
 };
 
 export const signin = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
-    if (!email || !password) return res.status(400).json({ error: 'Email and password are required' });
+    if (!email || !password)
+      return res.status(400).json({ error: "Email and password are required" });
 
-    const profile = await prisma.profile.findFirst({ where: { email }, include: { user_roles: true } });
-    if (!profile) return res.status(401).json({ error: 'Invalid email or password' });
+    const profile = await prisma.profile.findFirst({
+      where: { email },
+      include: { user_roles: true },
+    });
+    if (!profile) return res.status(401).json({ error: "Invalid email or password" });
 
     if (!profile.password) {
-      return res.status(401).json({ error: 'Invalid email or password' });
+      return res.status(401).json({ error: "Invalid email or password" });
     }
 
     const isValidPassword = await bcrypt.compare(password, profile.password);
     if (!isValidPassword) {
-      return res.status(401).json({ error: 'Invalid email or password' });
+      return res.status(401).json({ error: "Invalid email or password" });
     }
 
     if (!profile.is_active) {
-      return res.status(401).json({ error: 'Account is deactivated. Contact your administrator.' });
+      return res.status(401).json({ error: "Account is deactivated. Contact your administrator." });
     }
 
     const tokens = generateTokens(profile.id, profile.email!);
@@ -43,64 +49,67 @@ export const signin = async (req: Request, res: Response) => {
       ...tokens,
     });
   } catch (error) {
-    console.error('Signin error:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    console.error("Signin error:", error);
+    res.status(500).json({ error: "Internal server error" });
   }
 };
 
 export const refreshToken = async (req: Request, res: Response) => {
   try {
     const { refreshToken: rt } = req.body;
-    if (!rt) return res.status(401).json({ error: 'Refresh token required' });
+    if (!rt) return res.status(401).json({ error: "Refresh token required" });
 
     const refreshSecret = process.env.JWT_REFRESH_SECRET;
     const jwtSecret = process.env.JWT_SECRET;
-    if (!refreshSecret || !jwtSecret) throw new Error('JWT secrets not defined');
+    if (!refreshSecret || !jwtSecret) throw new Error("JWT secrets not defined");
 
     const decoded = jwt.verify(rt, refreshSecret) as { userId: string };
     const profile = await prisma.profile.findUnique({
       where: { id: decoded.userId },
       include: { user_roles: true },
     });
-    if (!profile) return res.status(401).json({ error: 'Invalid refresh token' });
+    if (!profile) return res.status(401).json({ error: "Invalid refresh token" });
 
     const tokens = generateTokens(profile.id, profile.email!);
     res.json(tokens);
   } catch (error) {
-    console.error('Refresh error:', error);
-    res.status(401).json({ error: 'Invalid or expired refresh token' });
+    console.error("Refresh error:", error);
+    res.status(401).json({ error: "Invalid or expired refresh token" });
   }
 };
 
 export const forgotPassword = async (req: Request, res: Response) => {
   try {
     const { email } = req.body;
-    if (!email) return res.status(400).json({ error: 'Email required' });
+    if (!email) return res.status(400).json({ error: "Email required" });
 
     const profile = await prisma.profile.findFirst({ where: { email } });
     if (profile) {
-      const resetToken = jwt.sign({ userId: profile.id }, process.env.JWT_SECRET!, { expiresIn: '1h' });
+      const resetToken = jwt.sign({ userId: profile.id }, process.env.JWT_SECRET!, {
+        expiresIn: "1h",
+      });
       await sendPasswordResetEmail(email, resetToken);
     }
-    res.json({ message: 'If the email exists, a reset link has been sent' });
+    res.json({ message: "If the email exists, a reset link has been sent" });
   } catch (error) {
-    console.error('Forgot password error:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    console.error("Forgot password error:", error);
+    res.status(500).json({ error: "Internal server error" });
   }
 };
 
 export const resetPassword = async (req: Request, res: Response) => {
   try {
     const { token, new_password } = req.body;
-    if (!token || !new_password) return res.status(400).json({ error: 'Token and new password required' });
+    if (!token || !new_password)
+      return res.status(400).json({ error: "Token and new password required" });
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET!) as { userId: string };
     const hashed = await bcrypt.hash(new_password, 10);
     await prisma.profile.update({ where: { id: decoded.userId }, data: { password: hashed } });
-    res.json({ message: 'Password reset successfully' });
+    res.json({ message: "Password reset successfully" });
   } catch (error) {
-    console.error('Reset password error:', error);
-    res.status(400).json({ error: 'Invalid or expired token' });
+    console.error("Reset password error:", error);
+    res.status(400).json({ error: "Invalid or expired token" });
   }
 };
 
@@ -114,7 +123,7 @@ export const getProfile = async (req: AuthRequest, res: Response) => {
         user_roles: true,
       },
     });
-    if (!profile) return res.status(404).json({ error: 'Profile not found' });
+    if (!profile) return res.status(404).json({ error: "Profile not found" });
 
     // Get permissions from user's roles
     const roles = profile.user_roles.map((r: { role: string }) => r.role);
@@ -122,7 +131,9 @@ export const getProfile = async (req: AuthRequest, res: Response) => {
       where: { role: { in: roles as any } },
       include: { permission: true },
     });
-    const uniquePermissions = [...new Set(permissions.map((p: any) => `${p.permission.module}:${p.permission.action}`))];
+    const uniquePermissions = [
+      ...new Set(permissions.map((p: any) => `${p.permission.module}:${p.permission.action}`)),
+    ];
 
     res.json({
       id: profile.id,
@@ -141,13 +152,13 @@ export const getProfile = async (req: AuthRequest, res: Response) => {
       permissions: uniquePermissions,
     });
   } catch (error) {
-    console.error('Get profile error:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    console.error("Get profile error:", error);
+    res.status(500).json({ error: "Internal server error" });
   }
 };
 
 export const signout = async (_req: Request, res: Response) => {
-  res.json({ message: 'Signed out successfully' });
+  res.json({ message: "Signed out successfully" });
 };
 
 export const updateProfile = async (req: AuthRequest, res: Response) => {
@@ -159,19 +170,28 @@ export const updateProfile = async (req: AuthRequest, res: Response) => {
       data: { first_name, last_name, full_name, phone, avatar_url },
     });
     res.json({
-      id: profile.id, email: profile.email, first_name: profile.first_name, last_name: profile.last_name,
-      full_name: profile.full_name, phone: profile.phone, avatar_url: profile.avatar_url,
+      id: profile.id,
+      email: profile.email,
+      first_name: profile.first_name,
+      last_name: profile.last_name,
+      full_name: profile.full_name,
+      phone: profile.phone,
+      avatar_url: profile.avatar_url,
     });
   } catch (error) {
-    console.error('Update profile error:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    console.error("Update profile error:", error);
+    res.status(500).json({ error: "Internal server error" });
   }
 };
 
 function generateTokens(userId: string, email: string) {
   const jwtSecret = process.env.JWT_SECRET!;
   const refreshSecret = process.env.JWT_REFRESH_SECRET || jwtSecret;
-  const token = jwt.sign({ userId, email }, jwtSecret, { expiresIn: (process.env.JWT_EXPIRES_IN || '15m') as any });
-  const refreshToken = jwt.sign({ userId }, refreshSecret, { expiresIn: (process.env.JWT_REFRESH_EXPIRES_IN || '7d') as any });
+  const token = jwt.sign({ userId, email }, jwtSecret, {
+    expiresIn: (process.env.JWT_EXPIRES_IN || "15m") as any,
+  });
+  const refreshToken = jwt.sign({ userId }, refreshSecret, {
+    expiresIn: (process.env.JWT_REFRESH_EXPIRES_IN || "7d") as any,
+  });
   return { token, refreshToken };
 }

@@ -1,4 +1,4 @@
-import prisma from '../config/database.js';
+import prisma from "../config/database.js";
 
 export async function logAudit(data: {
   user_id?: string;
@@ -26,6 +26,6 @@ export async function logAudit(data: {
       },
     });
   } catch (error) {
-    console.error('Failed to write audit log:', error);
+    console.error("Failed to write audit log:", error);
   }
 }

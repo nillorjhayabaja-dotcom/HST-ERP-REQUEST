@@ -15,7 +15,6 @@ import {
   ShoppingCart,
   FileClock,
   HelpCircle,
-  LogOut,
 } from "lucide-react";
 import {
   Sidebar,
@@ -32,12 +31,8 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { useMemo } from "react";
-import { Button } from "@/components/ui/button";
-import { signOut } from "@/lib/auth-helper";
-import { toast } from "sonner";
 
 // Note: TanStack routes are strongly typed; this sidebar uses existing route strings only.
-
 
 type NavItem = { title: string; url: string; icon: ComponentType<{ className?: string }> };
 
@@ -62,9 +57,7 @@ const history: NavItem[] = [
   { title: "My Activities", url: "/employee-portal/my-activities", icon: FileClock },
 ];
 
-const support: NavItem[] = [
-  { title: "Help", url: "/employee-portal/help", icon: HelpCircle },
-];
+const support: NavItem[] = [{ title: "Help", url: "/employee-portal/help", icon: HelpCircle }];
 
 export function EmployeeSidebar() {
   const { state } = useSidebar();
@@ -119,31 +112,8 @@ export function EmployeeSidebar() {
       </SidebarContent>
 
       <SidebarFooter className="px-2 py-2">
-        {collapsed ? (
-          <Button
-            variant="ghost"
-            size="icon"
-            className="w-full"
-            onClick={() => {
-              void signOut().then(() => toast.success("Signed out"));
-            }}
-            aria-label="Sign out"
-          >
-            <LogOut className="h-4 w-4" />
-          </Button>
-        ) : (
-          <div className="flex items-center gap-2 rounded-md border border-border bg-background p-2">
-            <LogOut className="h-4 w-4 text-muted-foreground" />
-            <Button
-              variant="link"
-              className="p-0 h-auto text-sm text-destructive"
-              onClick={() => {
-                void signOut().then(() => toast.success("Signed out"));
-              }}
-            >
-              Logout
-            </Button>
-          </div>
+        {!collapsed && (
+          <div className="text-[10px] text-sidebar-foreground/60">Employee Self-Service · v1.0</div>
         )}
       </SidebarFooter>
     </Sidebar>

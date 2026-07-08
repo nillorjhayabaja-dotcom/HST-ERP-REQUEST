@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response, NextFunction } from "express";
 
 interface RateLimitEntry {
   count: number;
@@ -9,7 +9,7 @@ const store = new Map<string, RateLimitEntry>();
 
 export function rateLimiter(windowMs: number = 900000, maxRequests: number = 100) {
   return (req: Request, res: Response, next: NextFunction) => {
-    const key = req.ip || 'unknown';
+    const key = req.ip || "unknown";
     const now = Date.now();
 
     const entry = store.get(key);
@@ -19,7 +19,7 @@ export function rateLimiter(windowMs: number = 900000, maxRequests: number = 100
     }
 
     if (entry.count >= maxRequests) {
-      return res.status(429).json({ error: 'Too many requests, please try again later' });
+      return res.status(429).json({ error: "Too many requests, please try again later" });
     }
 
     entry.count++;

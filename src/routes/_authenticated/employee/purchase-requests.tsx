@@ -8,7 +8,14 @@ export const Route = createFileRoute("/_authenticated/employee/purchase-requests
       title="Purchase Requests"
       module="purchase_request"
       description="Purchase requisitions, approvals, suppliers, POs, and receiving."
-      features={["PR creation", "Approval workflow", "Supplier & PO", "Receiving", "Status tracking", "Reports"]}
+      features={[
+        "PR creation",
+        "Approval workflow",
+        "Supplier & PO",
+        "Receiving",
+        "Status tracking",
+        "Reports",
+      ]}
     />
   ),
 });

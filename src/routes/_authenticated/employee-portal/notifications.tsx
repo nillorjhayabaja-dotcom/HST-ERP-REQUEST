@@ -88,7 +88,9 @@ function NotificationsPage() {
                             <div className="space-y-1">
                               <p
                                 className={`text-sm font-medium ${
-                                  !notification.is_read ? "text-foreground" : "text-muted-foreground"
+                                  !notification.is_read
+                                    ? "text-foreground"
+                                    : "text-muted-foreground"
                                 }`}
                               >
                                 {notification.title}
@@ -121,9 +123,7 @@ function NotificationsPage() {
                     <Inbox className="h-12 w-12 text-muted-foreground" />
                   </div>
                   <p className="text-sm font-medium">All caught up!</p>
-                  <p className="text-xs text-muted-foreground mt-1">
-                    No new notifications
-                  </p>
+                  <p className="text-xs text-muted-foreground mt-1">No new notifications</p>
                 </div>
               )}
             </CardContent>

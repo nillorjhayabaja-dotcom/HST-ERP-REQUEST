@@ -34,7 +34,12 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 
-type NavItem = { title: string; url: string; icon: ComponentType<{ className?: string }>; adminOnly?: boolean };
+type NavItem = {
+  title: string;
+  url: string;
+  icon: ComponentType<{ className?: string }>;
+  adminOnly?: boolean;
+};
 
 const workspace: NavItem[] = [
   { title: "Dashboard", url: "/admin/dashboard", icon: LayoutDashboard },
@@ -95,15 +100,17 @@ export function AdminSidebar() {
   );
 
   return (
-    <Sidebar collapsible="icon" className="border-r-2 border-red-500/30">
-      <SidebarHeader className="border-b border-sidebar-border bg-red-50 dark:bg-red-950/20">
+    <Sidebar collapsible="icon">
+      <SidebarHeader className="border-b border-sidebar-border bg-sidebar">
         <div className="flex items-center gap-2 px-2 py-1.5">
-          <div className="h-8 w-8 rounded-md bg-red-600 text-white grid place-items-center text-sm font-bold shrink-0">
+          <div className="h-8 w-8 rounded-md bg-gold text-gold-foreground grid place-items-center text-sm font-bold shrink-0">
             AD
           </div>
           {!collapsed && (
             <div className="min-w-0">
-              <div className="text-sm font-semibold truncate">Admin Panel</div>
+              <div className="text-sm font-semibold truncate text-sidebar-foreground">
+                Admin Panel
+              </div>
               <div className="text-[10px] text-sidebar-foreground/60 truncate">
                 System Administration
               </div>
@@ -118,9 +125,9 @@ export function AdminSidebar() {
         {renderGroup("System", system)}
         {renderGroup("Oversight", oversight)}
       </SidebarContent>
-      <SidebarFooter className="border-t border-red-500/20 bg-red-50/50 dark:bg-red-950/10 px-2 py-2">
+      <SidebarFooter className="border-t border-sidebar-border bg-sidebar px-2 py-2">
         {!collapsed && (
-          <div className="text-[10px] text-red-700/60 dark:text-red-300/60">
+          <div className="text-[10px] text-sidebar-foreground/60">
             Administrator · v1.0 Enterprise
           </div>
         )}

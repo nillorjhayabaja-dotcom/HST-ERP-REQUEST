@@ -8,7 +8,13 @@ export const Route = createFileRoute("/_authenticated/employee/leave")({
       title="Leave Management"
       module="leave"
       description="Vacation, sick, and emergency leave with balance monitoring and calendar."
-      features={["Vacation / Sick / Emergency", "Balance tracking", "Approval workflow", "Calendar view", "Reports"]}
+      features={[
+        "Vacation / Sick / Emergency",
+        "Balance tracking",
+        "Approval workflow",
+        "Calendar view",
+        "Reports",
+      ]}
     />
   ),
 });

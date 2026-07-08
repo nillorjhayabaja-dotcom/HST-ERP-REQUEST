@@ -14,7 +14,16 @@ import { formatDistanceToNow } from "date-fns";
 
 export interface ActivityEvent {
   id: string;
-  type: "created" | "submitted" | "approved" | "rejected" | "commented" | "attached" | "updated" | "cancelled" | "expired";
+  type:
+    | "created"
+    | "submitted"
+    | "approved"
+    | "rejected"
+    | "commented"
+    | "attached"
+    | "updated"
+    | "cancelled"
+    | "expired";
   description: string;
   actor_name: string;
   created_at: string;
@@ -67,14 +76,12 @@ export function ActivityTimeline({ events, className }: ActivityTimelineProps) {
 
         return (
           <div key={event.id} className="relative flex gap-3 pb-3">
-            {!isLast && (
-              <div className="absolute left-[17px] top-9 bottom-0 w-px bg-border" />
-            )}
+            {!isLast && <div className="absolute left-[17px] top-9 bottom-0 w-px bg-border" />}
 
             <div
               className={cn(
                 "relative z-10 flex h-8 w-8 shrink-0 items-center justify-center rounded-full border",
-                color
+                color,
               )}
             >
               <Icon className="h-3.5 w-3.5" />
@@ -82,19 +89,13 @@ export function ActivityTimeline({ events, className }: ActivityTimelineProps) {
 
             <div className="flex-1 min-w-0 pb-2">
               <div className="flex items-center justify-between gap-2">
-                <span className="text-xs font-medium capitalize">
-                  {event.type}
-                </span>
+                <span className="text-xs font-medium capitalize">{event.type}</span>
                 <span className="text-[10px] text-muted-foreground shrink-0">
                   {formatDistanceToNow(new Date(event.created_at), { addSuffix: true })}
                 </span>
               </div>
-              <p className="mt-0.5 text-xs text-muted-foreground">
-                {event.description}
-              </p>
-              <p className="text-[10px] text-muted-foreground/60">
-                by {event.actor_name}
-              </p>
+              <p className="mt-0.5 text-xs text-muted-foreground">{event.description}</p>
+              <p className="text-[10px] text-muted-foreground/60">by {event.actor_name}</p>
             </div>
           </div>
         );

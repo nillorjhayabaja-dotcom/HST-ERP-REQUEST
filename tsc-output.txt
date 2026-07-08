@@ -1,0 +1,2 @@
+src/routes/_authenticated/employee-portal/notifications.tsx(58,20): error TS2304: Cannot find name 'Badge'.
+src/routes/_authenticated/employee-portal/notifications.tsx(60,21): error TS2304: Cannot find name 'Badge'.

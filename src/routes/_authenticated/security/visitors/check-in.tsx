@@ -37,7 +37,7 @@ function VisitorCheckIn() {
         check_in_time: new Date().toISOString(),
       });
       if (response.error) throw new Error(response.error);
-      
+
       toast.success("Visitor checked in successfully");
       setForm({
         full_name: "",

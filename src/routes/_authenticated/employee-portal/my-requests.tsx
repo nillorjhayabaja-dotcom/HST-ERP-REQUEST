@@ -5,7 +5,10 @@ import { apiClient } from "@/lib/api-client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { RequestList, type RequestListItem } from "@/components/requests/request-list";
-import { RequestDetailsDrawer, type RequestDetailField } from "@/components/requests/request-details-drawer";
+import {
+  RequestDetailsDrawer,
+  type RequestDetailField,
+} from "@/components/requests/request-details-drawer";
 import { PageHeader } from "@/components/page-header";
 
 export const Route = createFileRoute("/_authenticated/employee-portal/my-requests")({
@@ -82,9 +85,8 @@ function MyRequestsPage() {
   const isLoading = unifiedLoading || gpLoading;
 
   // Filter by module tab
-  const filteredItems = activeTab === "all"
-    ? allItems
-    : allItems.filter((i) => i.module === activeTab);
+  const filteredItems =
+    activeTab === "all" ? allItems : allItems.filter((i) => i.module === activeTab);
 
   // Detail drawer for selected request
   const { data: selectedDetail, isLoading: detailLoading } = useQuery({
@@ -114,10 +116,7 @@ function MyRequestsPage() {
 
   return (
     <div className="container mx-auto px-4 py-6">
-      <PageHeader
-        title="My Requests"
-        description="All requests you created across modules"
-      />
+      <PageHeader title="My Requests" description="All requests you created across modules" />
 
       <div className="mt-6">
         <Tabs value={activeTab} onValueChange={setActiveTab}>

@@ -1,4 +1,4 @@
-import prisma from '../config/database.js';
+import prisma from "../config/database.js";
 
 export interface AuditLogData {
   userId?: string;
@@ -23,11 +23,15 @@ export const logAudit = async (data: AuditLogData): Promise<void> => {
         entity_id: data.entityId,
         old_value: data.oldValue,
         new_value: data.newValue,
-        ip_address: data.ipAddress ? (Array.isArray(data.ipAddress) ? data.ipAddress : [data.ipAddress]) : [],
+        ip_address: data.ipAddress
+          ? Array.isArray(data.ipAddress)
+            ? data.ipAddress
+            : [data.ipAddress]
+          : [],
         user_agent: data.userAgent,
       },
     });
   } catch (error) {
-    console.error('Error logging audit:', error);
+    console.error("Error logging audit:", error);
   }
 };

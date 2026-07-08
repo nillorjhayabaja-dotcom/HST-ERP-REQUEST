@@ -51,11 +51,12 @@ function VisitorCheckOut() {
     },
   });
 
-  const filteredVisitors = (visitors || []).filter((v: any) =>
-    !search ||
-    v.full_name?.toLowerCase().includes(search.toLowerCase()) ||
-    v.company?.toLowerCase().includes(search.toLowerCase()) ||
-    v.person_to_visit?.toLowerCase().includes(search.toLowerCase())
+  const filteredVisitors = (visitors || []).filter(
+    (v: any) =>
+      !search ||
+      v.full_name?.toLowerCase().includes(search.toLowerCase()) ||
+      v.company?.toLowerCase().includes(search.toLowerCase()) ||
+      v.person_to_visit?.toLowerCase().includes(search.toLowerCase()),
   );
 
   return (

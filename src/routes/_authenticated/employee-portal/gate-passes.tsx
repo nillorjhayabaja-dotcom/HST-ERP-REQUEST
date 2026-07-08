@@ -68,10 +68,7 @@ function GatePassPage() {
           <div className="flex items-center gap-4">
             <div className="relative flex-1 max-w-md">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input
-                placeholder="Search..."
-                className="pl-9"
-              />
+              <Input placeholder="Search..." className="pl-9" />
             </div>
             <Button variant="outline" className="gap-2">
               <Filter className="h-4 w-4" />
@@ -138,9 +135,7 @@ function GatePassPage() {
                 <FileText className="h-12 w-12 text-muted-foreground" />
               </div>
               <p className="text-sm font-medium">No Gate Pass Requests Found</p>
-              <p className="text-xs text-muted-foreground mt-1">
-                No gate pass requests available
-              </p>
+              <p className="text-xs text-muted-foreground mt-1">No gate pass requests available</p>
             </div>
           )}
         </CardContent>

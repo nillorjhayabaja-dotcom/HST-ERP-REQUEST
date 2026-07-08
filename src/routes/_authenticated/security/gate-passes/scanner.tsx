@@ -26,7 +26,7 @@ function QRScanner() {
     try {
       const response = await apiClient.post("/gate-passes/verify-qr", { qr_code_data: qrData });
       if (response.error) throw new Error(response.error);
-      
+
       setScanResult(response.data);
       toast.success("QR code verified");
     } catch (error: any) {
@@ -130,10 +130,13 @@ function QRScanner() {
                   <span className="text-muted-foreground">Destination</span>
                   <span>{scanResult.trip?.destination || "-"}</span>
                 </div>
-                {scanResult.status === 'pending_security' && (
-                  <Button className="w-full mt-4" onClick={() => {
-                    toast.success("Gate pass released");
-                  }}>
+                {scanResult.status === "pending_security" && (
+                  <Button
+                    className="w-full mt-4"
+                    onClick={() => {
+                      toast.success("Gate pass released");
+                    }}
+                  >
                     Release Gate Pass
                   </Button>
                 )}

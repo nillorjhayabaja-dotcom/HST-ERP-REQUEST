@@ -1,6 +1,6 @@
-import { Request, Response, NextFunction } from 'express';
-import jwt from 'jsonwebtoken';
-import prisma from '../config/database.js';
+import { Request, Response, NextFunction } from "express";
+import jwt from "jsonwebtoken";
+import prisma from "../config/database.js";
 
 export interface AuthRequest extends Request {
   user?: {
@@ -65,24 +65,24 @@ export function getHighestRoleLevel(userRoles: string[]): number {
 export const authenticate = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const authHeader = req.headers.authorization;
-    
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      return res.status(401).json({ error: 'Unauthorized: No token provided' });
+
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      return res.status(401).json({ error: "Unauthorized: No token provided" });
     }
 
-    const token = authHeader.split(' ')[1];
-    
+    const token = authHeader.split(" ")[1];
+
     if (!token) {
-      return res.status(401).json({ error: 'Unauthorized: Invalid token format' });
+      return res.status(401).json({ error: "Unauthorized: Invalid token format" });
     }
 
     const jwtSecret = process.env.JWT_SECRET;
     if (!jwtSecret) {
-      throw new Error('JWT_SECRET is not defined in environment variables');
+      throw new Error("JWT_SECRET is not defined in environment variables");
     }
 
     const decoded = jwt.verify(token, jwtSecret) as { userId: string; email: string };
-    
+
     const profile = await prisma.profile.findUnique({
       where: { id: decoded.userId },
       select: {
@@ -95,7 +95,7 @@ export const authenticate = async (req: AuthRequest, res: Response, next: NextFu
     });
 
     if (!profile || !profile.is_active) {
-      return res.status(401).json({ error: 'Unauthorized: Account is inactive or not found' });
+      return res.status(401).json({ error: "Unauthorized: Account is inactive or not found" });
     }
 
     const userRoles = await prisma.userRole.findMany({
@@ -116,7 +116,9 @@ export const authenticate = async (req: AuthRequest, res: Response, next: NextFu
       },
     });
 
-    const uniquePermissions = [...new Set(permissions.map((p: any) => `${p.permission.module}:${p.permission.action}`))];
+    const uniquePermissions = [
+      ...new Set(permissions.map((p: any) => `${p.permission.module}:${p.permission.action}`)),
+    ];
 
     req.user = {
       id: profile.id,
@@ -129,33 +131,33 @@ export const authenticate = async (req: AuthRequest, res: Response, next: NextFu
 
     next();
   } catch (error) {
-    console.error('Authentication error:', error);
-    return res.status(401).json({ error: 'Unauthorized: Invalid or expired token' });
+    console.error("Authentication error:", error);
+    return res.status(401).json({ error: "Unauthorized: Invalid or expired token" });
   }
 };
 
 export const requirePermission = (module: string, action: string) => {
   return (req: AuthRequest, res: Response, next: NextFunction) => {
     if (!req.user) {
-      return res.status(401).json({ error: 'Unauthorized' });
+      return res.status(401).json({ error: "Unauthorized" });
     }
 
     // Super administrator bypasses all permission checks
-    if (req.user.roles.includes('super_administrator')) {
+    if (req.user.roles.includes("super_administrator")) {
       return next();
     }
 
     // System administrator can also bypass
-    if (req.user.roles.includes('system_administrator')) {
+    if (req.user.roles.includes("system_administrator")) {
       return next();
     }
 
     const hasPermission = req.user.permissions.some(
-      p => p === `${module}:${action}` || p === `${module}:*`
+      (p) => p === `${module}:${action}` || p === `${module}:*`,
     );
 
     if (!hasPermission) {
-      return res.status(403).json({ error: 'Forbidden: Insufficient permissions' });
+      return res.status(403).json({ error: "Forbidden: Insufficient permissions" });
     }
 
     next();
@@ -165,18 +167,21 @@ export const requirePermission = (module: string, action: string) => {
 export const requireRole = (...allowedRoles: string[]) => {
   return (req: AuthRequest, res: Response, next: NextFunction) => {
     if (!req.user) {
-      return res.status(401).json({ error: 'Unauthorized' });
+      return res.status(401).json({ error: "Unauthorized" });
     }
 
-    const hasRole = req.user.roles.some(role => allowedRoles.includes(role));
+    const hasRole = req.user.roles.some((role) => allowedRoles.includes(role));
 
     // Also check if the user has a higher role that can supersede
     if (!hasRole) {
       // Super admin and sys admin can do anything
-      if (req.user.roles.includes('super_administrator') || req.user.roles.includes('system_administrator')) {
+      if (
+        req.user.roles.includes("super_administrator") ||
+        req.user.roles.includes("system_administrator")
+      ) {
         return next();
       }
-      return res.status(403).json({ error: 'Forbidden: Insufficient role' });
+      return res.status(403).json({ error: "Forbidden: Insufficient role" });
     }
 
     next();
@@ -190,14 +195,14 @@ export const requireRole = (...allowedRoles: string[]) => {
 export const requireRoleLevel = (maxLevel: number) => {
   return (req: AuthRequest, res: Response, next: NextFunction) => {
     if (!req.user) {
-      return res.status(401).json({ error: 'Unauthorized' });
+      return res.status(401).json({ error: "Unauthorized" });
     }
 
     if (hasSufficientRoleLevel(req.user.roles, maxLevel)) {
       return next();
     }
 
-    return res.status(403).json({ error: 'Forbidden: Insufficient role level' });
+    return res.status(403).json({ error: "Forbidden: Insufficient role level" });
   };
 };
 
@@ -206,7 +211,7 @@ export const requireRoleLevel = (maxLevel: number) => {
  */
 export const requireDepartmentAccess = (req: AuthRequest, res: Response, next: NextFunction) => {
   if (!req.user) {
-    return res.status(401).json({ error: 'Unauthorized' });
+    return res.status(401).json({ error: "Unauthorized" });
   }
 
   // High level roles bypass department scoping
@@ -222,12 +227,12 @@ export const requireDepartmentAccess = (req: AuthRequest, res: Response, next: N
 export const optionalAuth = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const authHeader = req.headers.authorization;
-    
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
       return next();
     }
 
-    const token = authHeader.split(' ')[1];
+    const token = authHeader.split(" ")[1];
     if (!token) {
       return next();
     }
@@ -238,7 +243,7 @@ export const optionalAuth = async (req: AuthRequest, res: Response, next: NextFu
     }
 
     const decoded = jwt.verify(token, jwtSecret) as { userId: string; email: string };
-    
+
     const profile = await prisma.profile.findUnique({
       where: { id: decoded.userId },
       select: { id: true, email: true, department_id: true, position_id: true, is_active: true },
@@ -266,7 +271,9 @@ export const optionalAuth = async (req: AuthRequest, res: Response, next: NextFu
       },
     });
 
-    const uniquePermissions = [...new Set(permissions.map((p: any) => `${p.permission.module}:${p.permission.action}`))];
+    const uniquePermissions = [
+      ...new Set(permissions.map((p: any) => `${p.permission.module}:${p.permission.action}`)),
+    ];
 
     req.user = {
       id: profile.id,

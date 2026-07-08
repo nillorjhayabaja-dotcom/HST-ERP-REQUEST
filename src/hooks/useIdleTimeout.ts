@@ -8,7 +8,7 @@ type IdleCallback = () => void;
  */
 export function useIdleTimeout(
   onIdle: IdleCallback,
-  timeoutMs: number = 30 * 60 * 1000 // default 30 minutes
+  timeoutMs: number = 30 * 60 * 1000, // default 30 minutes
 ) {
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const callbackRef = useRef<IdleCallback>(onIdle);

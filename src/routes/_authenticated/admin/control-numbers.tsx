@@ -4,7 +4,14 @@ import { useQuery } from "@tanstack/react-query";
 import { apiClient } from "@/lib/api-client";
 import { PageHeader } from "@/components/page-header";
 import { Card, CardContent } from "@/components/ui/card";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 interface ControlNumberSetting {
   id: string;
@@ -25,7 +32,9 @@ function ControlNumbersAdmin() {
   const { data = [] } = useQuery<ControlNumberSetting[]>({
     queryKey: ["admin-control-numbers"],
     queryFn: async () => {
-      const response = await apiClient.get<{ settings: ControlNumberSetting[] }>("/control-numbers");
+      const response = await apiClient.get<{ settings: ControlNumberSetting[] }>(
+        "/control-numbers",
+      );
       if (response.error) throw new Error(response.error);
       return response.data?.settings ?? [];
     },

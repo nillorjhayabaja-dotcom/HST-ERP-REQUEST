@@ -216,7 +216,12 @@ function AdminUsers() {
       </div>
 
       {/* Assign Role Dialog */}
-      <Dialog open={!!showRoleDialog} onOpenChange={(open) => { if (!open) setShowRoleDialog(null); }}>
+      <Dialog
+        open={!!showRoleDialog}
+        onOpenChange={(open) => {
+          if (!open) setShowRoleDialog(null);
+        }}
+      >
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Assign Role</DialogTitle>

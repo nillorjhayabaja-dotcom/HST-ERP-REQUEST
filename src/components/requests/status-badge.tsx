@@ -126,7 +126,11 @@ export const REQUEST_STATUS_CONFIG: Record<string, StatusConfig> = {
 
 export const PRIORITY_CONFIG: Record<string, { label: string; color: string; icon: LucideIcon }> = {
   critical: { label: "Critical", color: "bg-red-100 text-red-700 border-red-200", icon: Flag },
-  high: { label: "High", color: "bg-orange-100 text-orange-700 border-orange-200", icon: AlertCircle },
+  high: {
+    label: "High",
+    color: "bg-orange-100 text-orange-700 border-orange-200",
+    icon: AlertCircle,
+  },
   normal: { label: "Normal", color: "bg-blue-100 text-blue-700 border-blue-200", icon: FileText },
   low: { label: "Low", color: "bg-gray-100 text-gray-700 border-gray-200", icon: Clock },
 };
@@ -146,7 +150,10 @@ export function StatusBadge({ status, className }: StatusBadgeProps) {
   const config = REQUEST_STATUS_CONFIG[status] || REQUEST_STATUS_CONFIG.draft;
   const Icon = config.icon;
   return (
-    <Badge variant={config.variant} className={`${config.bg} ${config.color} border px-2 py-1 ${className ?? ""}`}>
+    <Badge
+      variant={config.variant}
+      className={`${config.bg} ${config.color} border px-2 py-1 ${className ?? ""}`}
+    >
       <Icon className="h-3 w-3 mr-1" />
       {config.label}
     </Badge>

@@ -57,10 +57,11 @@ function ReleaseGatePass() {
     },
   });
 
-  const filteredPasses = (pendingPasses || []).filter((gp: any) =>
-    !search ||
-    gp.control_number?.toLowerCase().includes(search.toLowerCase()) ||
-    gp.employee?.full_name?.toLowerCase().includes(search.toLowerCase())
+  const filteredPasses = (pendingPasses || []).filter(
+    (gp: any) =>
+      !search ||
+      gp.control_number?.toLowerCase().includes(search.toLowerCase()) ||
+      gp.employee?.full_name?.toLowerCase().includes(search.toLowerCase()),
   );
 
   const handleRelease = () => {
@@ -118,7 +119,9 @@ function ReleaseGatePass() {
                           {gp.employee?.full_name || "N/A"}
                         </div>
                       </TableCell>
-                      <TableCell className="capitalize">{gp.purpose_category?.replace(/_/g, ' ')}</TableCell>
+                      <TableCell className="capitalize">
+                        {gp.purpose_category?.replace(/_/g, " ")}
+                      </TableCell>
                       <TableCell>
                         <div className="flex items-center gap-2">
                           <Car className="h-4 w-4 text-muted-foreground" />
@@ -150,7 +153,7 @@ function ReleaseGatePass() {
                   <FileText className="h-4 w-4" />
                   Gate Pass Details
                 </h3>
-                
+
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Control #</span>
@@ -166,7 +169,9 @@ function ReleaseGatePass() {
                   </div>
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Purpose</span>
-                    <span className="capitalize">{selectedPass.purpose_category?.replace(/_/g, ' ')}</span>
+                    <span className="capitalize">
+                      {selectedPass.purpose_category?.replace(/_/g, " ")}
+                    </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Destination</span>
@@ -174,7 +179,9 @@ function ReleaseGatePass() {
                   </div>
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Departure</span>
-                    <span>{selectedPass.trip?.departure_date} {selectedPass.trip?.departure_time}</span>
+                    <span>
+                      {selectedPass.trip?.departure_date} {selectedPass.trip?.departure_time}
+                    </span>
                   </div>
                 </div>
 

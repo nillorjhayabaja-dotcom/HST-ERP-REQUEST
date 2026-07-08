@@ -77,26 +77,26 @@ export function useRBAC() {
     user: profile,
     roles,
     permissions,
-    
+
     // Basic checks
     hasRole: (role: string) => hasRole(roles, role),
     hasAnyRole: (allowedRoles: string[]) => hasAnyRole(roles, allowedRoles),
     hasSufficientLevel: (level: number) => hasSufficientLevel(roles, level),
-    
+
     // Convenience checks
     isAdmin: isAdministrator(roles),
     isSecurityGuard: isSecurityGuard(roles),
     canApprove: canApprove(roles),
     canManageUsers: canManageUsers(roles),
     canViewAll: canViewAll(roles),
-    
+
     // Labels
     primaryRole: getPrimaryRoleLabel(roles),
     roleLabels: getRoleLabels(roles),
-    
+
     // Permission check
     can: (module: string, action: string) => checkPermission(permissions, roles, module, action),
-    
+
     // Hierarchy level
     hierarchyLevel: (() => {
       let highest = 999;
@@ -114,7 +114,7 @@ export function useRBAC() {
  */
 export function usePermission(module: string, action: string) {
   const rbac = useRBAC();
-  
+
   if (rbac.loading || !rbac.user) return false;
   return rbac.can(module, action);
 }
@@ -124,7 +124,7 @@ export function usePermission(module: string, action: string) {
  */
 export function useHasRole(role: string) {
   const rbac = useRBAC();
-  
+
   if (rbac.loading || !rbac.user) return false;
   return rbac.hasRole(role);
 }
@@ -134,7 +134,7 @@ export function useHasRole(role: string) {
  */
 export function useHasAnyRole(roles: string[]) {
   const rbac = useRBAC();
-  
+
   if (rbac.loading || !rbac.user) return false;
   return rbac.hasAnyRole(roles);
 }

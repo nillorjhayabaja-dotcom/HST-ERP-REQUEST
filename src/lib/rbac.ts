@@ -1,6 +1,6 @@
 /**
  * RBAC (Role-Based Access Control) Utilities
- * 
+ *
  * Role hierarchy levels (lower number = higher privilege)
  */
 export const ROLE_HIERARCHY: Record<string, number> = {
@@ -91,14 +91,14 @@ export function hasRole(roles: string[], role: string): boolean {
  * Check if user has any of the specified roles
  */
 export function hasAnyRole(roles: string[], allowedRoles: string[]): boolean {
-  return roles.some(role => allowedRoles.includes(role));
+  return roles.some((role) => allowedRoles.includes(role));
 }
 
 /**
  * Check if user has all of the specified roles
  */
 export function hasAllRoles(roles: string[], requiredRoles: string[]): boolean {
-  return requiredRoles.every(role => roles.includes(role));
+  return requiredRoles.every((role) => roles.includes(role));
 }
 
 /**
@@ -146,7 +146,7 @@ export function getPrimaryRoleLabel(roles: string[]): string {
  * Get all role labels for a user
  */
 export function getRoleLabels(roles: string[]): string[] {
-  return roles.map(role => ROLE_LABELS[role] || role);
+  return roles.map((role) => ROLE_LABELS[role] || role);
 }
 
 /**
@@ -208,12 +208,10 @@ export function checkPermission(
   userPermissions: string[],
   userRoles: string[],
   module: string,
-  action: string
+  action: string,
 ): boolean {
   // Administrators bypass permission checks
   if (isAdministrator(userRoles)) return true;
-  
-  return userPermissions.some(
-    p => p === `${module}:${action}` || p === `${module}:*`
-  );
+
+  return userPermissions.some((p) => p === `${module}:${action}` || p === `${module}:*`);
 }

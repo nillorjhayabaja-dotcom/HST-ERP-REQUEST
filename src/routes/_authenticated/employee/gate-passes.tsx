@@ -1,16 +1,16 @@
-import { createFileRoute } from '@tanstack/react-router';
-import { useState } from 'react';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { apiClient } from '@/lib/api-client';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { createFileRoute } from "@tanstack/react-router";
+import { useState } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { apiClient } from "@/lib/api-client";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
+} from "@/components/ui/select";
 import {
   Table,
   TableBody,
@@ -18,9 +18,9 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+} from "@/components/ui/table";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -28,19 +28,14 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from '@/components/ui/breadcrumb';
+} from "@/components/ui/breadcrumb";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
+} from "@/components/ui/dropdown-menu";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import {
   Calendar,
   FileText,
@@ -66,11 +61,11 @@ import {
   Copy,
   ExternalLink,
   Package,
-} from 'lucide-react';
+} from "lucide-react";
 
 // Status configuration
 interface StatusConfig {
-  variant: 'default' | 'secondary' | 'destructive' | 'outline';
+  variant: "default" | "secondary" | "destructive" | "outline";
   color: string;
   bg: string;
   icon: any;
@@ -82,38 +77,81 @@ interface PriorityConfig {
 }
 
 const statusConfig: Record<string, StatusConfig> = {
-  draft: { variant: 'outline' as const, color: 'text-gray-600', bg: 'bg-gray-100', icon: FileText },
-  submitted: { variant: 'outline' as const, color: 'text-blue-600', bg: 'bg-blue-50', icon: Mail },
-  pending_supervisor: { variant: 'secondary' as const, color: 'text-amber-600', bg: 'bg-amber-50', icon: Timer },
-  pending_department_head: { variant: 'secondary' as const, color: 'text-orange-600', bg: 'bg-orange-50', icon: Building2 },
-  pending_hr: { variant: 'secondary' as const, color: 'text-purple-600', bg: 'bg-purple-50', icon: Users },
-  pending_security: { variant: 'secondary' as const, color: 'text-cyan-600', bg: 'bg-cyan-50', icon: ShieldCheck },
-  approved: { variant: 'default' as const, color: 'text-emerald-600', bg: 'bg-emerald-50', icon: CheckCircle2 },
-  released: { variant: 'default' as const, color: 'text-blue-600', bg: 'bg-blue-50', icon: Car },
-  completed: { variant: 'default' as const, color: 'text-emerald-600', bg: 'bg-emerald-50', icon: CheckCircle2 },
-  rejected: { variant: 'destructive' as const, color: 'text-red-600', bg: 'bg-red-50', icon: XCircle },
-  cancelled: { variant: 'outline' as const, color: 'text-gray-500', bg: 'bg-gray-50', icon: X },
-  expired: { variant: 'destructive' as const, color: 'text-red-600', bg: 'bg-red-50', icon: AlertCircle },
+  draft: { variant: "outline" as const, color: "text-gray-600", bg: "bg-gray-100", icon: FileText },
+  submitted: { variant: "outline" as const, color: "text-blue-600", bg: "bg-blue-50", icon: Mail },
+  pending_supervisor: {
+    variant: "secondary" as const,
+    color: "text-amber-600",
+    bg: "bg-amber-50",
+    icon: Timer,
+  },
+  pending_department_head: {
+    variant: "secondary" as const,
+    color: "text-orange-600",
+    bg: "bg-orange-50",
+    icon: Building2,
+  },
+  pending_hr: {
+    variant: "secondary" as const,
+    color: "text-purple-600",
+    bg: "bg-purple-50",
+    icon: Users,
+  },
+  pending_security: {
+    variant: "secondary" as const,
+    color: "text-cyan-600",
+    bg: "bg-cyan-50",
+    icon: ShieldCheck,
+  },
+  approved: {
+    variant: "default" as const,
+    color: "text-emerald-600",
+    bg: "bg-emerald-50",
+    icon: CheckCircle2,
+  },
+  released: { variant: "default" as const, color: "text-blue-600", bg: "bg-blue-50", icon: Car },
+  completed: {
+    variant: "default" as const,
+    color: "text-emerald-600",
+    bg: "bg-emerald-50",
+    icon: CheckCircle2,
+  },
+  rejected: {
+    variant: "destructive" as const,
+    color: "text-red-600",
+    bg: "bg-red-50",
+    icon: XCircle,
+  },
+  cancelled: { variant: "outline" as const, color: "text-gray-500", bg: "bg-gray-50", icon: X },
+  expired: {
+    variant: "destructive" as const,
+    color: "text-red-600",
+    bg: "bg-red-50",
+    icon: AlertCircle,
+  },
 };
 
 const priorityConfig: Record<string, PriorityConfig> = {
-  critical: { color: 'bg-red-100 text-red-700 border-red-200', icon: Flag },
-  high: { color: 'bg-orange-100 text-orange-700 border-orange-200', icon: AlertCircle },
-  normal: { color: 'bg-blue-100 text-blue-700 border-blue-200', icon: FileText },
-  low: { color: 'bg-gray-100 text-gray-700 border-gray-200', icon: Clock },
+  critical: { color: "bg-red-100 text-red-700 border-red-200", icon: Flag },
+  high: { color: "bg-orange-100 text-orange-700 border-orange-200", icon: AlertCircle },
+  normal: { color: "bg-blue-100 text-blue-700 border-blue-200", icon: FileText },
+  low: { color: "bg-gray-100 text-gray-700 border-gray-200", icon: Clock },
 };
 
-export const Route = createFileRoute('/_authenticated/employee/gate-passes')({
+export const Route = createFileRoute("/_authenticated/employee/gate-passes")({
   component: GatePassesPage,
 });
 
 function GatePassesPage() {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedStatus, setSelectedStatus] = useState('all');
-  const [selectedDepartment, setSelectedDepartment] = useState('all');
-  const [selectedType, setSelectedType] = useState('all');
-  const [selectedPriority, setSelectedPriority] = useState('all');
-  const [sortConfig, setSortConfig] = useState<{ key: string; direction: 'asc' | 'desc' }>({ key: 'created_at', direction: 'desc' });
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedStatus, setSelectedStatus] = useState("all");
+  const [selectedDepartment, setSelectedDepartment] = useState("all");
+  const [selectedType, setSelectedType] = useState("all");
+  const [selectedPriority, setSelectedPriority] = useState("all");
+  const [sortConfig, setSortConfig] = useState<{ key: string; direction: "asc" | "desc" }>({
+    key: "created_at",
+    direction: "desc",
+  });
   const [page, setPage] = useState(1);
   const [limit] = useState(25);
 
@@ -121,18 +159,28 @@ function GatePassesPage() {
 
   // Fetch gate passes
   const { data: gatePassesData, isLoading: gatePassesLoading } = useQuery({
-    queryKey: ['gate-passes', searchQuery, selectedStatus, selectedDepartment, selectedType, selectedPriority, page, limit, sortConfig],
+    queryKey: [
+      "gate-passes",
+      searchQuery,
+      selectedStatus,
+      selectedDepartment,
+      selectedType,
+      selectedPriority,
+      page,
+      limit,
+      sortConfig,
+    ],
     queryFn: async () => {
       const params = new URLSearchParams();
-      if (searchQuery) params.append('search', searchQuery);
-      if (selectedStatus !== 'all') params.append('status_filter', selectedStatus);
-      if (selectedDepartment !== 'all') params.append('department_id', selectedDepartment);
-      if (selectedType !== 'all') params.append('type_id', selectedType);
-      if (selectedPriority !== 'all') params.append('priority', selectedPriority);
-      params.append('page', page.toString());
-      params.append('limit', limit.toString());
-      params.append('sort_by', sortConfig.key);
-      params.append('sort_order', sortConfig.direction);
+      if (searchQuery) params.append("search", searchQuery);
+      if (selectedStatus !== "all") params.append("status_filter", selectedStatus);
+      if (selectedDepartment !== "all") params.append("department_id", selectedDepartment);
+      if (selectedType !== "all") params.append("type_id", selectedType);
+      if (selectedPriority !== "all") params.append("priority", selectedPriority);
+      params.append("page", page.toString());
+      params.append("limit", limit.toString());
+      params.append("sort_by", sortConfig.key);
+      params.append("sort_order", sortConfig.direction);
 
       const response = await apiClient.get(`/gate-passes?${params}`);
       return response.data as any;
@@ -141,18 +189,18 @@ function GatePassesPage() {
 
   // Fetch gate pass types
   const { data: typesData } = useQuery({
-    queryKey: ['gate-pass-types'],
+    queryKey: ["gate-pass-types"],
     queryFn: async () => {
-      const response = await apiClient.get('/gate-passes/types');
+      const response = await apiClient.get("/gate-passes/types");
       return (response.data as any).types as any[];
     },
   });
 
   // Fetch departments
   const { data: departmentsData } = useQuery({
-    queryKey: ['departments'],
+    queryKey: ["departments"],
     queryFn: async () => {
-      const response = await apiClient.get('/departments');
+      const response = await apiClient.get("/departments");
       return response.data as any[];
     },
   });
@@ -160,7 +208,9 @@ function GatePassesPage() {
   const getStatusBadge = (status: string) => {
     const config = statusConfig[status] || statusConfig.draft;
     const Icon = config.icon;
-    const statusText = status.replace(/_/g, ' ').replace(/\b\w/g, (letter: string) => letter.toUpperCase());
+    const statusText = status
+      .replace(/_/g, " ")
+      .replace(/\b\w/g, (letter: string) => letter.toUpperCase());
     return (
       <Badge variant={config.variant} className={`${config.bg} ${config.color} border px-2 py-1`}>
         <Icon className="h-3 w-3 mr-1" />
@@ -183,25 +233,25 @@ function GatePassesPage() {
   const handleSort = (key: string) => {
     setSortConfig((prev) => ({
       key,
-      direction: prev.key === key && prev.direction === 'asc' ? 'desc' : 'asc',
+      direction: prev.key === key && prev.direction === "asc" ? "desc" : "asc",
     }));
   };
 
   const filteredData = gatePassesData?.gatePasses || [];
 
   const tableHeaders = [
-    { key: 'controlNumber', label: 'Control Number' },
-    { key: 'employee', label: 'Employee' },
-    { key: 'department', label: 'Department' },
-    { key: 'type', label: 'Type' },
-    { key: 'purpose', label: 'Purpose' },
-    { key: 'destination', label: 'Destination' },
-    { key: 'departure', label: 'Departure' },
-    { key: 'expectedReturn', label: 'Expected Return' },
-    { key: 'approver', label: 'Current Approver' },
-    { key: 'priority', label: 'Priority' },
-    { key: 'status', label: 'Status' },
-    { key: 'actions', label: 'Actions' },
+    { key: "controlNumber", label: "Control Number" },
+    { key: "employee", label: "Employee" },
+    { key: "department", label: "Department" },
+    { key: "type", label: "Type" },
+    { key: "purpose", label: "Purpose" },
+    { key: "destination", label: "Destination" },
+    { key: "departure", label: "Departure" },
+    { key: "expectedReturn", label: "Expected Return" },
+    { key: "approver", label: "Current Approver" },
+    { key: "priority", label: "Priority" },
+    { key: "status", label: "Status" },
+    { key: "actions", label: "Actions" },
   ];
 
   return (
@@ -237,8 +287,12 @@ function GatePassesPage() {
                 </p>
               </div>
               <div className="flex items-center gap-2">
-                <Button variant="outline" size="sm" onClick={() => queryClient.invalidateQueries({ queryKey: ['gate-passes'] })}>
-                  <RefreshCw className={`h-4 w-4 ${gatePassesLoading ? 'animate-spin' : ''}`} />
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => queryClient.invalidateQueries({ queryKey: ["gate-passes"] })}
+                >
+                  <RefreshCw className={`h-4 w-4 ${gatePassesLoading ? "animate-spin" : ""}`} />
                 </Button>
               </div>
             </div>
@@ -273,7 +327,7 @@ function GatePassesPage() {
                     <SelectItem value="all">All Status</SelectItem>
                     {Object.keys(statusConfig).map((status) => (
                       <SelectItem key={status} value={status}>
-                        {status.replace(/_/g, ' ').replace(/\b\w/g, (l: string) => l.toUpperCase())}
+                        {status.replace(/_/g, " ").replace(/\b\w/g, (l: string) => l.toUpperCase())}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -337,7 +391,9 @@ function GatePassesPage() {
                   </div>
                   <h3 className="text-lg font-semibold mb-2">No Gate Pass Requests Found</h3>
                   <p className="text-muted-foreground mb-4">
-                    {searchQuery ? `No results matching "${searchQuery}"` : 'No gate pass requests available'}
+                    {searchQuery
+                      ? `No results matching "${searchQuery}"`
+                      : "No gate pass requests available"}
                   </p>
                 </div>
               ) : (
@@ -354,9 +410,12 @@ function GatePassesPage() {
                             >
                               <div className="flex items-center gap-1">
                                 {header.label}
-                                {sortConfig.key === header.key && (
-                                  sortConfig.direction === 'asc' ? <ChevronUp className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />
-                                )}
+                                {sortConfig.key === header.key &&
+                                  (sortConfig.direction === "asc" ? (
+                                    <ChevronUp className="h-3 w-3" />
+                                  ) : (
+                                    <ChevronDown className="h-3 w-3" />
+                                  ))}
                               </div>
                             </TableHead>
                           ))}
@@ -380,10 +439,10 @@ function GatePassesPage() {
                             <TableCell>
                               <div className="flex items-center gap-1">
                                 <Calendar className="h-3 w-3 text-muted-foreground" />
-                                {gp.expected_return_date || '-'}
+                                {gp.expected_return_date || "-"}
                               </div>
                             </TableCell>
-                            <TableCell>{gp.current_approver?.full_name || 'N/A'}</TableCell>
+                            <TableCell>{gp.current_approver?.full_name || "N/A"}</TableCell>
                             <TableCell>{getPriorityBadge(gp.priority)}</TableCell>
                             <TableCell>{getStatusBadge(gp.status)}</TableCell>
                             <TableCell>
@@ -395,7 +454,11 @@ function GatePassesPage() {
                                     </Button>
                                   </DropdownMenuTrigger>
                                   <DropdownMenuContent align="end">
-                                    <DropdownMenuItem onClick={() => { navigator.clipboard.writeText(gp.control_number); }}>
+                                    <DropdownMenuItem
+                                      onClick={() => {
+                                        navigator.clipboard.writeText(gp.control_number);
+                                      }}
+                                    >
                                       <Copy className="h-4 w-4 mr-2" />
                                       Copy Control Number
                                     </DropdownMenuItem>
@@ -412,7 +475,8 @@ function GatePassesPage() {
                   {/* Pagination */}
                   <div className="flex items-center justify-between mt-4">
                     <div className="text-sm text-muted-foreground">
-                      Showing {((page - 1) * limit) + 1} to {Math.min(page * limit, filteredData.length)} of {filteredData.length} entries
+                      Showing {(page - 1) * limit + 1} to{" "}
+                      {Math.min(page * limit, filteredData.length)} of {filteredData.length} entries
                     </div>
                     <div className="flex items-center gap-2">
                       <Button
@@ -429,7 +493,9 @@ function GatePassesPage() {
                       <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => setPage((p) => Math.min(gatePassesData?.totalPages || 1, p + 1))}
+                        onClick={() =>
+                          setPage((p) => Math.min(gatePassesData?.totalPages || 1, p + 1))
+                        }
                         disabled={page >= (gatePassesData?.totalPages || 1)}
                       >
                         Next
