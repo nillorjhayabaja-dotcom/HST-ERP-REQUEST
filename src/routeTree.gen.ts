@@ -13,7 +13,9 @@ import { Route as ForbiddenRouteImport } from './routes/forbidden'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedSuperAdminRouteRouteImport } from './routes/_authenticated/super-admin/route'
 import { Route as AuthenticatedSecurityRouteRouteImport } from './routes/_authenticated/security/route'
+import { Route as AuthenticatedExecutiveRouteRouteImport } from './routes/_authenticated/executive/route'
 import { Route as AuthenticatedEmployeePortalRouteRouteImport } from './routes/_authenticated/employee-portal/route'
 import { Route as AuthenticatedAdminRouteRouteImport } from './routes/_authenticated/admin/route'
 import { Route as AuthenticatedSharedReportsRouteImport } from './routes/_authenticated/shared/reports'
@@ -77,10 +79,22 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedSuperAdminRouteRoute =
+  AuthenticatedSuperAdminRouteRouteImport.update({
+    id: '/super-admin',
+    path: '/super-admin',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedSecurityRouteRoute =
   AuthenticatedSecurityRouteRouteImport.update({
     id: '/security',
     path: '/security',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedExecutiveRouteRoute =
+  AuthenticatedExecutiveRouteRouteImport.update({
+    id: '/executive',
+    path: '/executive',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 const AuthenticatedEmployeePortalRouteRoute =
@@ -345,7 +359,9 @@ export interface FileRoutesByFullPath {
   '/forbidden': typeof ForbiddenRoute
   '/admin': typeof AuthenticatedAdminRouteRouteWithChildren
   '/employee-portal': typeof AuthenticatedEmployeePortalRouteRouteWithChildren
+  '/executive': typeof AuthenticatedExecutiveRouteRoute
   '/security': typeof AuthenticatedSecurityRouteRouteWithChildren
+  '/super-admin': typeof AuthenticatedSuperAdminRouteRoute
   '/admin/control-numbers': typeof AuthenticatedAdminControlNumbersRoute
   '/admin/dashboard': typeof AuthenticatedAdminDashboardRoute
   '/admin/departments': typeof AuthenticatedAdminDepartmentsRoute
@@ -394,7 +410,9 @@ export interface FileRoutesByTo {
   '/forbidden': typeof ForbiddenRoute
   '/admin': typeof AuthenticatedAdminRouteRouteWithChildren
   '/employee-portal': typeof AuthenticatedEmployeePortalRouteRouteWithChildren
+  '/executive': typeof AuthenticatedExecutiveRouteRoute
   '/security': typeof AuthenticatedSecurityRouteRouteWithChildren
+  '/super-admin': typeof AuthenticatedSuperAdminRouteRoute
   '/admin/control-numbers': typeof AuthenticatedAdminControlNumbersRoute
   '/admin/dashboard': typeof AuthenticatedAdminDashboardRoute
   '/admin/departments': typeof AuthenticatedAdminDepartmentsRoute
@@ -445,7 +463,9 @@ export interface FileRoutesById {
   '/forbidden': typeof ForbiddenRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRouteRouteWithChildren
   '/_authenticated/employee-portal': typeof AuthenticatedEmployeePortalRouteRouteWithChildren
+  '/_authenticated/executive': typeof AuthenticatedExecutiveRouteRoute
   '/_authenticated/security': typeof AuthenticatedSecurityRouteRouteWithChildren
+  '/_authenticated/super-admin': typeof AuthenticatedSuperAdminRouteRoute
   '/_authenticated/admin/control-numbers': typeof AuthenticatedAdminControlNumbersRoute
   '/_authenticated/admin/dashboard': typeof AuthenticatedAdminDashboardRoute
   '/_authenticated/admin/departments': typeof AuthenticatedAdminDepartmentsRoute
@@ -496,7 +516,9 @@ export interface FileRouteTypes {
     | '/forbidden'
     | '/admin'
     | '/employee-portal'
+    | '/executive'
     | '/security'
+    | '/super-admin'
     | '/admin/control-numbers'
     | '/admin/dashboard'
     | '/admin/departments'
@@ -545,7 +567,9 @@ export interface FileRouteTypes {
     | '/forbidden'
     | '/admin'
     | '/employee-portal'
+    | '/executive'
     | '/security'
+    | '/super-admin'
     | '/admin/control-numbers'
     | '/admin/dashboard'
     | '/admin/departments'
@@ -595,7 +619,9 @@ export interface FileRouteTypes {
     | '/forbidden'
     | '/_authenticated/admin'
     | '/_authenticated/employee-portal'
+    | '/_authenticated/executive'
     | '/_authenticated/security'
+    | '/_authenticated/super-admin'
     | '/_authenticated/admin/control-numbers'
     | '/_authenticated/admin/dashboard'
     | '/_authenticated/admin/departments'
@@ -676,11 +702,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/super-admin': {
+      id: '/_authenticated/super-admin'
+      path: '/super-admin'
+      fullPath: '/super-admin'
+      preLoaderRoute: typeof AuthenticatedSuperAdminRouteRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/security': {
       id: '/_authenticated/security'
       path: '/security'
       fullPath: '/security'
       preLoaderRoute: typeof AuthenticatedSecurityRouteRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/executive': {
+      id: '/_authenticated/executive'
+      path: '/executive'
+      fullPath: '/executive'
+      preLoaderRoute: typeof AuthenticatedExecutiveRouteRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/employee-portal': {
@@ -1095,7 +1135,9 @@ const AuthenticatedSecurityRouteRouteWithChildren =
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminRouteRoute: typeof AuthenticatedAdminRouteRouteWithChildren
   AuthenticatedEmployeePortalRouteRoute: typeof AuthenticatedEmployeePortalRouteRouteWithChildren
+  AuthenticatedExecutiveRouteRoute: typeof AuthenticatedExecutiveRouteRoute
   AuthenticatedSecurityRouteRoute: typeof AuthenticatedSecurityRouteRouteWithChildren
+  AuthenticatedSuperAdminRouteRoute: typeof AuthenticatedSuperAdminRouteRoute
   AuthenticatedEmployeeAssetsRoute: typeof AuthenticatedEmployeeAssetsRoute
   AuthenticatedEmployeeEmployeesRoute: typeof AuthenticatedEmployeeEmployeesRoute
   AuthenticatedEmployeeGatePassRoute: typeof AuthenticatedEmployeeGatePassRoute
@@ -1117,7 +1159,9 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminRouteRoute: AuthenticatedAdminRouteRouteWithChildren,
   AuthenticatedEmployeePortalRouteRoute:
     AuthenticatedEmployeePortalRouteRouteWithChildren,
+  AuthenticatedExecutiveRouteRoute: AuthenticatedExecutiveRouteRoute,
   AuthenticatedSecurityRouteRoute: AuthenticatedSecurityRouteRouteWithChildren,
+  AuthenticatedSuperAdminRouteRoute: AuthenticatedSuperAdminRouteRoute,
   AuthenticatedEmployeeAssetsRoute: AuthenticatedEmployeeAssetsRoute,
   AuthenticatedEmployeeEmployeesRoute: AuthenticatedEmployeeEmployeesRoute,
   AuthenticatedEmployeeGatePassRoute: AuthenticatedEmployeeGatePassRoute,
