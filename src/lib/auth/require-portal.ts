@@ -40,7 +40,8 @@ export async function requirePortal(portal: PortalSlug): Promise<{ roles: string
   if (typeof window !== "undefined") {
     try {
       if (window.localStorage.getItem("hst_first_login") === "true") {
-        throw redirect({ to: "/complete-profile" as const });
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        throw redirect({ to: "/complete-profile" as any });
       }
     } catch (err) {
       if (err && typeof err === "object" && "to" in err) throw err;
