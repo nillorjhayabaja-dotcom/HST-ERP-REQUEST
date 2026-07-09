@@ -16,6 +16,7 @@ import "@fontsource/inter/600.css";
 import "@fontsource/inter/700.css";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { Toaster } from "@/components/ui/sonner";
+import { RoleSwitcher } from "@/components/dev/role-switcher";
 
 function NotFoundComponent() {
   return (
