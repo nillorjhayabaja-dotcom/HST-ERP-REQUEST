@@ -26,6 +26,9 @@ import { Route as AuthenticatedExecutiveRouteRouteImport } from './routes/_authe
 import { Route as AuthenticatedEmployeePortalRouteRouteImport } from './routes/_authenticated/employee-portal/route'
 import { Route as AuthenticatedAuditorRouteRouteImport } from './routes/_authenticated/auditor/route'
 import { Route as AuthenticatedAdminRouteRouteImport } from './routes/_authenticated/admin/route'
+import { Route as AuthenticatedWarehouseDashboardRouteImport } from './routes/_authenticated/warehouse/dashboard'
+import { Route as AuthenticatedVehicleDashboardRouteImport } from './routes/_authenticated/vehicle/dashboard'
+import { Route as AuthenticatedSupervisorDashboardRouteImport } from './routes/_authenticated/supervisor/dashboard'
 import { Route as AuthenticatedSuperAdminDashboardRouteImport } from './routes/_authenticated/super-admin/dashboard'
 import { Route as AuthenticatedSharedReportsRouteImport } from './routes/_authenticated/shared/reports'
 import { Route as AuthenticatedSharedProfileRouteImport } from './routes/_authenticated/shared/profile'
@@ -34,6 +37,11 @@ import { Route as AuthenticatedSharedDashboardRouteImport } from './routes/_auth
 import { Route as AuthenticatedSharedAuditLogsRouteImport } from './routes/_authenticated/shared/audit-logs'
 import { Route as AuthenticatedSharedApprovalsRouteImport } from './routes/_authenticated/shared/approvals'
 import { Route as AuthenticatedSecurityDashboardRouteImport } from './routes/_authenticated/security/dashboard'
+import { Route as AuthenticatedPurchasingDashboardRouteImport } from './routes/_authenticated/purchasing/dashboard'
+import { Route as AuthenticatedManagerDashboardRouteImport } from './routes/_authenticated/manager/dashboard'
+import { Route as AuthenticatedHrDashboardRouteImport } from './routes/_authenticated/hr/dashboard'
+import { Route as AuthenticatedGadDashboardRouteImport } from './routes/_authenticated/gad/dashboard'
+import { Route as AuthenticatedExecutiveDashboardRouteImport } from './routes/_authenticated/executive/dashboard'
 import { Route as AuthenticatedEmployeeVisitorsRouteImport } from './routes/_authenticated/employee/visitors'
 import { Route as AuthenticatedEmployeeVehiclesRouteImport } from './routes/_authenticated/employee/vehicles'
 import { Route as AuthenticatedEmployeePurchaseRequestsRouteImport } from './routes/_authenticated/employee/purchase-requests'
@@ -56,6 +64,7 @@ import { Route as AuthenticatedEmployeePortalHelpRouteImport } from './routes/_a
 import { Route as AuthenticatedEmployeePortalGatePassesRouteImport } from './routes/_authenticated/employee-portal/gate-passes'
 import { Route as AuthenticatedEmployeePortalDashboardRouteImport } from './routes/_authenticated/employee-portal/dashboard'
 import { Route as AuthenticatedEmployeePortalAssetsRouteImport } from './routes/_authenticated/employee-portal/assets'
+import { Route as AuthenticatedAuditorDashboardRouteImport } from './routes/_authenticated/auditor/dashboard'
 import { Route as AuthenticatedAdminWorkflowsRouteImport } from './routes/_authenticated/admin/workflows'
 import { Route as AuthenticatedAdminUsersRouteImport } from './routes/_authenticated/admin/users'
 import { Route as AuthenticatedAdminSettingsRouteImport } from './routes/_authenticated/admin/settings'
@@ -163,6 +172,24 @@ const AuthenticatedAdminRouteRoute = AuthenticatedAdminRouteRouteImport.update({
   path: '/admin',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedWarehouseDashboardRoute =
+  AuthenticatedWarehouseDashboardRouteImport.update({
+    id: '/dashboard',
+    path: '/dashboard',
+    getParentRoute: () => AuthenticatedWarehouseRouteRoute,
+  } as any)
+const AuthenticatedVehicleDashboardRoute =
+  AuthenticatedVehicleDashboardRouteImport.update({
+    id: '/dashboard',
+    path: '/dashboard',
+    getParentRoute: () => AuthenticatedVehicleRouteRoute,
+  } as any)
+const AuthenticatedSupervisorDashboardRoute =
+  AuthenticatedSupervisorDashboardRouteImport.update({
+    id: '/dashboard',
+    path: '/dashboard',
+    getParentRoute: () => AuthenticatedSupervisorRouteRoute,
+  } as any)
 const AuthenticatedSuperAdminDashboardRoute =
   AuthenticatedSuperAdminDashboardRouteImport.update({
     id: '/dashboard',
@@ -210,6 +237,36 @@ const AuthenticatedSecurityDashboardRoute =
     id: '/dashboard',
     path: '/dashboard',
     getParentRoute: () => AuthenticatedSecurityRouteRoute,
+  } as any)
+const AuthenticatedPurchasingDashboardRoute =
+  AuthenticatedPurchasingDashboardRouteImport.update({
+    id: '/dashboard',
+    path: '/dashboard',
+    getParentRoute: () => AuthenticatedPurchasingRouteRoute,
+  } as any)
+const AuthenticatedManagerDashboardRoute =
+  AuthenticatedManagerDashboardRouteImport.update({
+    id: '/dashboard',
+    path: '/dashboard',
+    getParentRoute: () => AuthenticatedManagerRouteRoute,
+  } as any)
+const AuthenticatedHrDashboardRoute =
+  AuthenticatedHrDashboardRouteImport.update({
+    id: '/dashboard',
+    path: '/dashboard',
+    getParentRoute: () => AuthenticatedHrRouteRoute,
+  } as any)
+const AuthenticatedGadDashboardRoute =
+  AuthenticatedGadDashboardRouteImport.update({
+    id: '/dashboard',
+    path: '/dashboard',
+    getParentRoute: () => AuthenticatedGadRouteRoute,
+  } as any)
+const AuthenticatedExecutiveDashboardRoute =
+  AuthenticatedExecutiveDashboardRouteImport.update({
+    id: '/dashboard',
+    path: '/dashboard',
+    getParentRoute: () => AuthenticatedExecutiveRouteRoute,
   } as any)
 const AuthenticatedEmployeeVisitorsRoute =
   AuthenticatedEmployeeVisitorsRouteImport.update({
@@ -343,6 +400,12 @@ const AuthenticatedEmployeePortalAssetsRoute =
     path: '/assets',
     getParentRoute: () => AuthenticatedEmployeePortalRouteRoute,
   } as any)
+const AuthenticatedAuditorDashboardRoute =
+  AuthenticatedAuditorDashboardRouteImport.update({
+    id: '/dashboard',
+    path: '/dashboard',
+    getParentRoute: () => AuthenticatedAuditorRouteRoute,
+  } as any)
 const AuthenticatedAdminWorkflowsRoute =
   AuthenticatedAdminWorkflowsRouteImport.update({
     id: '/workflows',
@@ -419,18 +482,18 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/forbidden': typeof ForbiddenRoute
   '/admin': typeof AuthenticatedAdminRouteRouteWithChildren
-  '/auditor': typeof AuthenticatedAuditorRouteRoute
+  '/auditor': typeof AuthenticatedAuditorRouteRouteWithChildren
   '/employee-portal': typeof AuthenticatedEmployeePortalRouteRouteWithChildren
-  '/executive': typeof AuthenticatedExecutiveRouteRoute
-  '/gad': typeof AuthenticatedGadRouteRoute
-  '/hr': typeof AuthenticatedHrRouteRoute
-  '/manager': typeof AuthenticatedManagerRouteRoute
-  '/purchasing': typeof AuthenticatedPurchasingRouteRoute
+  '/executive': typeof AuthenticatedExecutiveRouteRouteWithChildren
+  '/gad': typeof AuthenticatedGadRouteRouteWithChildren
+  '/hr': typeof AuthenticatedHrRouteRouteWithChildren
+  '/manager': typeof AuthenticatedManagerRouteRouteWithChildren
+  '/purchasing': typeof AuthenticatedPurchasingRouteRouteWithChildren
   '/security': typeof AuthenticatedSecurityRouteRouteWithChildren
   '/super-admin': typeof AuthenticatedSuperAdminRouteRouteWithChildren
-  '/supervisor': typeof AuthenticatedSupervisorRouteRoute
-  '/vehicle': typeof AuthenticatedVehicleRouteRoute
-  '/warehouse': typeof AuthenticatedWarehouseRouteRoute
+  '/supervisor': typeof AuthenticatedSupervisorRouteRouteWithChildren
+  '/vehicle': typeof AuthenticatedVehicleRouteRouteWithChildren
+  '/warehouse': typeof AuthenticatedWarehouseRouteRouteWithChildren
   '/admin/control-numbers': typeof AuthenticatedAdminControlNumbersRoute
   '/admin/dashboard': typeof AuthenticatedAdminDashboardRoute
   '/admin/departments': typeof AuthenticatedAdminDepartmentsRoute
@@ -438,6 +501,7 @@ export interface FileRoutesByFullPath {
   '/admin/settings': typeof AuthenticatedAdminSettingsRoute
   '/admin/users': typeof AuthenticatedAdminUsersRoute
   '/admin/workflows': typeof AuthenticatedAdminWorkflowsRoute
+  '/auditor/dashboard': typeof AuthenticatedAuditorDashboardRoute
   '/employee-portal/assets': typeof AuthenticatedEmployeePortalAssetsRoute
   '/employee-portal/dashboard': typeof AuthenticatedEmployeePortalDashboardRoute
   '/employee-portal/gate-passes': typeof AuthenticatedEmployeePortalGatePassesRoute
@@ -460,6 +524,11 @@ export interface FileRoutesByFullPath {
   '/employee/purchase-requests': typeof AuthenticatedEmployeePurchaseRequestsRoute
   '/employee/vehicles': typeof AuthenticatedEmployeeVehiclesRoute
   '/employee/visitors': typeof AuthenticatedEmployeeVisitorsRoute
+  '/executive/dashboard': typeof AuthenticatedExecutiveDashboardRoute
+  '/gad/dashboard': typeof AuthenticatedGadDashboardRoute
+  '/hr/dashboard': typeof AuthenticatedHrDashboardRoute
+  '/manager/dashboard': typeof AuthenticatedManagerDashboardRoute
+  '/purchasing/dashboard': typeof AuthenticatedPurchasingDashboardRoute
   '/security/dashboard': typeof AuthenticatedSecurityDashboardRoute
   '/shared/approvals': typeof AuthenticatedSharedApprovalsRoute
   '/shared/audit-logs': typeof AuthenticatedSharedAuditLogsRoute
@@ -468,6 +537,9 @@ export interface FileRoutesByFullPath {
   '/shared/profile': typeof AuthenticatedSharedProfileRoute
   '/shared/reports': typeof AuthenticatedSharedReportsRoute
   '/super-admin/dashboard': typeof AuthenticatedSuperAdminDashboardRoute
+  '/supervisor/dashboard': typeof AuthenticatedSupervisorDashboardRoute
+  '/vehicle/dashboard': typeof AuthenticatedVehicleDashboardRoute
+  '/warehouse/dashboard': typeof AuthenticatedWarehouseDashboardRoute
   '/security/gate-passes/release': typeof AuthenticatedSecurityGatePassesReleaseRoute
   '/security/gate-passes/scanner': typeof AuthenticatedSecurityGatePassesScannerRoute
   '/security/gate-passes/today': typeof AuthenticatedSecurityGatePassesTodayRoute
@@ -479,18 +551,18 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/forbidden': typeof ForbiddenRoute
   '/admin': typeof AuthenticatedAdminRouteRouteWithChildren
-  '/auditor': typeof AuthenticatedAuditorRouteRoute
+  '/auditor': typeof AuthenticatedAuditorRouteRouteWithChildren
   '/employee-portal': typeof AuthenticatedEmployeePortalRouteRouteWithChildren
-  '/executive': typeof AuthenticatedExecutiveRouteRoute
-  '/gad': typeof AuthenticatedGadRouteRoute
-  '/hr': typeof AuthenticatedHrRouteRoute
-  '/manager': typeof AuthenticatedManagerRouteRoute
-  '/purchasing': typeof AuthenticatedPurchasingRouteRoute
+  '/executive': typeof AuthenticatedExecutiveRouteRouteWithChildren
+  '/gad': typeof AuthenticatedGadRouteRouteWithChildren
+  '/hr': typeof AuthenticatedHrRouteRouteWithChildren
+  '/manager': typeof AuthenticatedManagerRouteRouteWithChildren
+  '/purchasing': typeof AuthenticatedPurchasingRouteRouteWithChildren
   '/security': typeof AuthenticatedSecurityRouteRouteWithChildren
   '/super-admin': typeof AuthenticatedSuperAdminRouteRouteWithChildren
-  '/supervisor': typeof AuthenticatedSupervisorRouteRoute
-  '/vehicle': typeof AuthenticatedVehicleRouteRoute
-  '/warehouse': typeof AuthenticatedWarehouseRouteRoute
+  '/supervisor': typeof AuthenticatedSupervisorRouteRouteWithChildren
+  '/vehicle': typeof AuthenticatedVehicleRouteRouteWithChildren
+  '/warehouse': typeof AuthenticatedWarehouseRouteRouteWithChildren
   '/admin/control-numbers': typeof AuthenticatedAdminControlNumbersRoute
   '/admin/dashboard': typeof AuthenticatedAdminDashboardRoute
   '/admin/departments': typeof AuthenticatedAdminDepartmentsRoute
@@ -498,6 +570,7 @@ export interface FileRoutesByTo {
   '/admin/settings': typeof AuthenticatedAdminSettingsRoute
   '/admin/users': typeof AuthenticatedAdminUsersRoute
   '/admin/workflows': typeof AuthenticatedAdminWorkflowsRoute
+  '/auditor/dashboard': typeof AuthenticatedAuditorDashboardRoute
   '/employee-portal/assets': typeof AuthenticatedEmployeePortalAssetsRoute
   '/employee-portal/dashboard': typeof AuthenticatedEmployeePortalDashboardRoute
   '/employee-portal/gate-passes': typeof AuthenticatedEmployeePortalGatePassesRoute
@@ -520,6 +593,11 @@ export interface FileRoutesByTo {
   '/employee/purchase-requests': typeof AuthenticatedEmployeePurchaseRequestsRoute
   '/employee/vehicles': typeof AuthenticatedEmployeeVehiclesRoute
   '/employee/visitors': typeof AuthenticatedEmployeeVisitorsRoute
+  '/executive/dashboard': typeof AuthenticatedExecutiveDashboardRoute
+  '/gad/dashboard': typeof AuthenticatedGadDashboardRoute
+  '/hr/dashboard': typeof AuthenticatedHrDashboardRoute
+  '/manager/dashboard': typeof AuthenticatedManagerDashboardRoute
+  '/purchasing/dashboard': typeof AuthenticatedPurchasingDashboardRoute
   '/security/dashboard': typeof AuthenticatedSecurityDashboardRoute
   '/shared/approvals': typeof AuthenticatedSharedApprovalsRoute
   '/shared/audit-logs': typeof AuthenticatedSharedAuditLogsRoute
@@ -528,6 +606,9 @@ export interface FileRoutesByTo {
   '/shared/profile': typeof AuthenticatedSharedProfileRoute
   '/shared/reports': typeof AuthenticatedSharedReportsRoute
   '/super-admin/dashboard': typeof AuthenticatedSuperAdminDashboardRoute
+  '/supervisor/dashboard': typeof AuthenticatedSupervisorDashboardRoute
+  '/vehicle/dashboard': typeof AuthenticatedVehicleDashboardRoute
+  '/warehouse/dashboard': typeof AuthenticatedWarehouseDashboardRoute
   '/security/gate-passes/release': typeof AuthenticatedSecurityGatePassesReleaseRoute
   '/security/gate-passes/scanner': typeof AuthenticatedSecurityGatePassesScannerRoute
   '/security/gate-passes/today': typeof AuthenticatedSecurityGatePassesTodayRoute
@@ -541,18 +622,18 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/forbidden': typeof ForbiddenRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRouteRouteWithChildren
-  '/_authenticated/auditor': typeof AuthenticatedAuditorRouteRoute
+  '/_authenticated/auditor': typeof AuthenticatedAuditorRouteRouteWithChildren
   '/_authenticated/employee-portal': typeof AuthenticatedEmployeePortalRouteRouteWithChildren
-  '/_authenticated/executive': typeof AuthenticatedExecutiveRouteRoute
-  '/_authenticated/gad': typeof AuthenticatedGadRouteRoute
-  '/_authenticated/hr': typeof AuthenticatedHrRouteRoute
-  '/_authenticated/manager': typeof AuthenticatedManagerRouteRoute
-  '/_authenticated/purchasing': typeof AuthenticatedPurchasingRouteRoute
+  '/_authenticated/executive': typeof AuthenticatedExecutiveRouteRouteWithChildren
+  '/_authenticated/gad': typeof AuthenticatedGadRouteRouteWithChildren
+  '/_authenticated/hr': typeof AuthenticatedHrRouteRouteWithChildren
+  '/_authenticated/manager': typeof AuthenticatedManagerRouteRouteWithChildren
+  '/_authenticated/purchasing': typeof AuthenticatedPurchasingRouteRouteWithChildren
   '/_authenticated/security': typeof AuthenticatedSecurityRouteRouteWithChildren
   '/_authenticated/super-admin': typeof AuthenticatedSuperAdminRouteRouteWithChildren
-  '/_authenticated/supervisor': typeof AuthenticatedSupervisorRouteRoute
-  '/_authenticated/vehicle': typeof AuthenticatedVehicleRouteRoute
-  '/_authenticated/warehouse': typeof AuthenticatedWarehouseRouteRoute
+  '/_authenticated/supervisor': typeof AuthenticatedSupervisorRouteRouteWithChildren
+  '/_authenticated/vehicle': typeof AuthenticatedVehicleRouteRouteWithChildren
+  '/_authenticated/warehouse': typeof AuthenticatedWarehouseRouteRouteWithChildren
   '/_authenticated/admin/control-numbers': typeof AuthenticatedAdminControlNumbersRoute
   '/_authenticated/admin/dashboard': typeof AuthenticatedAdminDashboardRoute
   '/_authenticated/admin/departments': typeof AuthenticatedAdminDepartmentsRoute
@@ -560,6 +641,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/settings': typeof AuthenticatedAdminSettingsRoute
   '/_authenticated/admin/users': typeof AuthenticatedAdminUsersRoute
   '/_authenticated/admin/workflows': typeof AuthenticatedAdminWorkflowsRoute
+  '/_authenticated/auditor/dashboard': typeof AuthenticatedAuditorDashboardRoute
   '/_authenticated/employee-portal/assets': typeof AuthenticatedEmployeePortalAssetsRoute
   '/_authenticated/employee-portal/dashboard': typeof AuthenticatedEmployeePortalDashboardRoute
   '/_authenticated/employee-portal/gate-passes': typeof AuthenticatedEmployeePortalGatePassesRoute
@@ -582,6 +664,11 @@ export interface FileRoutesById {
   '/_authenticated/employee/purchase-requests': typeof AuthenticatedEmployeePurchaseRequestsRoute
   '/_authenticated/employee/vehicles': typeof AuthenticatedEmployeeVehiclesRoute
   '/_authenticated/employee/visitors': typeof AuthenticatedEmployeeVisitorsRoute
+  '/_authenticated/executive/dashboard': typeof AuthenticatedExecutiveDashboardRoute
+  '/_authenticated/gad/dashboard': typeof AuthenticatedGadDashboardRoute
+  '/_authenticated/hr/dashboard': typeof AuthenticatedHrDashboardRoute
+  '/_authenticated/manager/dashboard': typeof AuthenticatedManagerDashboardRoute
+  '/_authenticated/purchasing/dashboard': typeof AuthenticatedPurchasingDashboardRoute
   '/_authenticated/security/dashboard': typeof AuthenticatedSecurityDashboardRoute
   '/_authenticated/shared/approvals': typeof AuthenticatedSharedApprovalsRoute
   '/_authenticated/shared/audit-logs': typeof AuthenticatedSharedAuditLogsRoute
@@ -590,6 +677,9 @@ export interface FileRoutesById {
   '/_authenticated/shared/profile': typeof AuthenticatedSharedProfileRoute
   '/_authenticated/shared/reports': typeof AuthenticatedSharedReportsRoute
   '/_authenticated/super-admin/dashboard': typeof AuthenticatedSuperAdminDashboardRoute
+  '/_authenticated/supervisor/dashboard': typeof AuthenticatedSupervisorDashboardRoute
+  '/_authenticated/vehicle/dashboard': typeof AuthenticatedVehicleDashboardRoute
+  '/_authenticated/warehouse/dashboard': typeof AuthenticatedWarehouseDashboardRoute
   '/_authenticated/security/gate-passes/release': typeof AuthenticatedSecurityGatePassesReleaseRoute
   '/_authenticated/security/gate-passes/scanner': typeof AuthenticatedSecurityGatePassesScannerRoute
   '/_authenticated/security/gate-passes/today': typeof AuthenticatedSecurityGatePassesTodayRoute
@@ -622,6 +712,7 @@ export interface FileRouteTypes {
     | '/admin/settings'
     | '/admin/users'
     | '/admin/workflows'
+    | '/auditor/dashboard'
     | '/employee-portal/assets'
     | '/employee-portal/dashboard'
     | '/employee-portal/gate-passes'
@@ -644,6 +735,11 @@ export interface FileRouteTypes {
     | '/employee/purchase-requests'
     | '/employee/vehicles'
     | '/employee/visitors'
+    | '/executive/dashboard'
+    | '/gad/dashboard'
+    | '/hr/dashboard'
+    | '/manager/dashboard'
+    | '/purchasing/dashboard'
     | '/security/dashboard'
     | '/shared/approvals'
     | '/shared/audit-logs'
@@ -652,6 +748,9 @@ export interface FileRouteTypes {
     | '/shared/profile'
     | '/shared/reports'
     | '/super-admin/dashboard'
+    | '/supervisor/dashboard'
+    | '/vehicle/dashboard'
+    | '/warehouse/dashboard'
     | '/security/gate-passes/release'
     | '/security/gate-passes/scanner'
     | '/security/gate-passes/today'
@@ -682,6 +781,7 @@ export interface FileRouteTypes {
     | '/admin/settings'
     | '/admin/users'
     | '/admin/workflows'
+    | '/auditor/dashboard'
     | '/employee-portal/assets'
     | '/employee-portal/dashboard'
     | '/employee-portal/gate-passes'
@@ -704,6 +804,11 @@ export interface FileRouteTypes {
     | '/employee/purchase-requests'
     | '/employee/vehicles'
     | '/employee/visitors'
+    | '/executive/dashboard'
+    | '/gad/dashboard'
+    | '/hr/dashboard'
+    | '/manager/dashboard'
+    | '/purchasing/dashboard'
     | '/security/dashboard'
     | '/shared/approvals'
     | '/shared/audit-logs'
@@ -712,6 +817,9 @@ export interface FileRouteTypes {
     | '/shared/profile'
     | '/shared/reports'
     | '/super-admin/dashboard'
+    | '/supervisor/dashboard'
+    | '/vehicle/dashboard'
+    | '/warehouse/dashboard'
     | '/security/gate-passes/release'
     | '/security/gate-passes/scanner'
     | '/security/gate-passes/today'
@@ -743,6 +851,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/settings'
     | '/_authenticated/admin/users'
     | '/_authenticated/admin/workflows'
+    | '/_authenticated/auditor/dashboard'
     | '/_authenticated/employee-portal/assets'
     | '/_authenticated/employee-portal/dashboard'
     | '/_authenticated/employee-portal/gate-passes'
@@ -765,6 +874,11 @@ export interface FileRouteTypes {
     | '/_authenticated/employee/purchase-requests'
     | '/_authenticated/employee/vehicles'
     | '/_authenticated/employee/visitors'
+    | '/_authenticated/executive/dashboard'
+    | '/_authenticated/gad/dashboard'
+    | '/_authenticated/hr/dashboard'
+    | '/_authenticated/manager/dashboard'
+    | '/_authenticated/purchasing/dashboard'
     | '/_authenticated/security/dashboard'
     | '/_authenticated/shared/approvals'
     | '/_authenticated/shared/audit-logs'
@@ -773,6 +887,9 @@ export interface FileRouteTypes {
     | '/_authenticated/shared/profile'
     | '/_authenticated/shared/reports'
     | '/_authenticated/super-admin/dashboard'
+    | '/_authenticated/supervisor/dashboard'
+    | '/_authenticated/vehicle/dashboard'
+    | '/_authenticated/warehouse/dashboard'
     | '/_authenticated/security/gate-passes/release'
     | '/_authenticated/security/gate-passes/scanner'
     | '/_authenticated/security/gate-passes/today'
@@ -908,6 +1025,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminRouteRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/warehouse/dashboard': {
+      id: '/_authenticated/warehouse/dashboard'
+      path: '/dashboard'
+      fullPath: '/warehouse/dashboard'
+      preLoaderRoute: typeof AuthenticatedWarehouseDashboardRouteImport
+      parentRoute: typeof AuthenticatedWarehouseRouteRoute
+    }
+    '/_authenticated/vehicle/dashboard': {
+      id: '/_authenticated/vehicle/dashboard'
+      path: '/dashboard'
+      fullPath: '/vehicle/dashboard'
+      preLoaderRoute: typeof AuthenticatedVehicleDashboardRouteImport
+      parentRoute: typeof AuthenticatedVehicleRouteRoute
+    }
+    '/_authenticated/supervisor/dashboard': {
+      id: '/_authenticated/supervisor/dashboard'
+      path: '/dashboard'
+      fullPath: '/supervisor/dashboard'
+      preLoaderRoute: typeof AuthenticatedSupervisorDashboardRouteImport
+      parentRoute: typeof AuthenticatedSupervisorRouteRoute
+    }
     '/_authenticated/super-admin/dashboard': {
       id: '/_authenticated/super-admin/dashboard'
       path: '/dashboard'
@@ -963,6 +1101,41 @@ declare module '@tanstack/react-router' {
       fullPath: '/security/dashboard'
       preLoaderRoute: typeof AuthenticatedSecurityDashboardRouteImport
       parentRoute: typeof AuthenticatedSecurityRouteRoute
+    }
+    '/_authenticated/purchasing/dashboard': {
+      id: '/_authenticated/purchasing/dashboard'
+      path: '/dashboard'
+      fullPath: '/purchasing/dashboard'
+      preLoaderRoute: typeof AuthenticatedPurchasingDashboardRouteImport
+      parentRoute: typeof AuthenticatedPurchasingRouteRoute
+    }
+    '/_authenticated/manager/dashboard': {
+      id: '/_authenticated/manager/dashboard'
+      path: '/dashboard'
+      fullPath: '/manager/dashboard'
+      preLoaderRoute: typeof AuthenticatedManagerDashboardRouteImport
+      parentRoute: typeof AuthenticatedManagerRouteRoute
+    }
+    '/_authenticated/hr/dashboard': {
+      id: '/_authenticated/hr/dashboard'
+      path: '/dashboard'
+      fullPath: '/hr/dashboard'
+      preLoaderRoute: typeof AuthenticatedHrDashboardRouteImport
+      parentRoute: typeof AuthenticatedHrRouteRoute
+    }
+    '/_authenticated/gad/dashboard': {
+      id: '/_authenticated/gad/dashboard'
+      path: '/dashboard'
+      fullPath: '/gad/dashboard'
+      preLoaderRoute: typeof AuthenticatedGadDashboardRouteImport
+      parentRoute: typeof AuthenticatedGadRouteRoute
+    }
+    '/_authenticated/executive/dashboard': {
+      id: '/_authenticated/executive/dashboard'
+      path: '/dashboard'
+      fullPath: '/executive/dashboard'
+      preLoaderRoute: typeof AuthenticatedExecutiveDashboardRouteImport
+      parentRoute: typeof AuthenticatedExecutiveRouteRoute
     }
     '/_authenticated/employee/visitors': {
       id: '/_authenticated/employee/visitors'
@@ -1118,6 +1291,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedEmployeePortalAssetsRouteImport
       parentRoute: typeof AuthenticatedEmployeePortalRouteRoute
     }
+    '/_authenticated/auditor/dashboard': {
+      id: '/_authenticated/auditor/dashboard'
+      path: '/dashboard'
+      fullPath: '/auditor/dashboard'
+      preLoaderRoute: typeof AuthenticatedAuditorDashboardRouteImport
+      parentRoute: typeof AuthenticatedAuditorRouteRoute
+    }
     '/_authenticated/admin/workflows': {
       id: '/_authenticated/admin/workflows'
       path: '/workflows'
@@ -1232,6 +1412,20 @@ const AuthenticatedAdminRouteRouteWithChildren =
     AuthenticatedAdminRouteRouteChildren,
   )
 
+interface AuthenticatedAuditorRouteRouteChildren {
+  AuthenticatedAuditorDashboardRoute: typeof AuthenticatedAuditorDashboardRoute
+}
+
+const AuthenticatedAuditorRouteRouteChildren: AuthenticatedAuditorRouteRouteChildren =
+  {
+    AuthenticatedAuditorDashboardRoute: AuthenticatedAuditorDashboardRoute,
+  }
+
+const AuthenticatedAuditorRouteRouteWithChildren =
+  AuthenticatedAuditorRouteRoute._addFileChildren(
+    AuthenticatedAuditorRouteRouteChildren,
+  )
+
 interface AuthenticatedEmployeePortalRouteRouteChildren {
   AuthenticatedEmployeePortalAssetsRoute: typeof AuthenticatedEmployeePortalAssetsRoute
   AuthenticatedEmployeePortalDashboardRoute: typeof AuthenticatedEmployeePortalDashboardRoute
@@ -1281,6 +1475,73 @@ const AuthenticatedEmployeePortalRouteRouteWithChildren =
     AuthenticatedEmployeePortalRouteRouteChildren,
   )
 
+interface AuthenticatedExecutiveRouteRouteChildren {
+  AuthenticatedExecutiveDashboardRoute: typeof AuthenticatedExecutiveDashboardRoute
+}
+
+const AuthenticatedExecutiveRouteRouteChildren: AuthenticatedExecutiveRouteRouteChildren =
+  {
+    AuthenticatedExecutiveDashboardRoute: AuthenticatedExecutiveDashboardRoute,
+  }
+
+const AuthenticatedExecutiveRouteRouteWithChildren =
+  AuthenticatedExecutiveRouteRoute._addFileChildren(
+    AuthenticatedExecutiveRouteRouteChildren,
+  )
+
+interface AuthenticatedGadRouteRouteChildren {
+  AuthenticatedGadDashboardRoute: typeof AuthenticatedGadDashboardRoute
+}
+
+const AuthenticatedGadRouteRouteChildren: AuthenticatedGadRouteRouteChildren = {
+  AuthenticatedGadDashboardRoute: AuthenticatedGadDashboardRoute,
+}
+
+const AuthenticatedGadRouteRouteWithChildren =
+  AuthenticatedGadRouteRoute._addFileChildren(
+    AuthenticatedGadRouteRouteChildren,
+  )
+
+interface AuthenticatedHrRouteRouteChildren {
+  AuthenticatedHrDashboardRoute: typeof AuthenticatedHrDashboardRoute
+}
+
+const AuthenticatedHrRouteRouteChildren: AuthenticatedHrRouteRouteChildren = {
+  AuthenticatedHrDashboardRoute: AuthenticatedHrDashboardRoute,
+}
+
+const AuthenticatedHrRouteRouteWithChildren =
+  AuthenticatedHrRouteRoute._addFileChildren(AuthenticatedHrRouteRouteChildren)
+
+interface AuthenticatedManagerRouteRouteChildren {
+  AuthenticatedManagerDashboardRoute: typeof AuthenticatedManagerDashboardRoute
+}
+
+const AuthenticatedManagerRouteRouteChildren: AuthenticatedManagerRouteRouteChildren =
+  {
+    AuthenticatedManagerDashboardRoute: AuthenticatedManagerDashboardRoute,
+  }
+
+const AuthenticatedManagerRouteRouteWithChildren =
+  AuthenticatedManagerRouteRoute._addFileChildren(
+    AuthenticatedManagerRouteRouteChildren,
+  )
+
+interface AuthenticatedPurchasingRouteRouteChildren {
+  AuthenticatedPurchasingDashboardRoute: typeof AuthenticatedPurchasingDashboardRoute
+}
+
+const AuthenticatedPurchasingRouteRouteChildren: AuthenticatedPurchasingRouteRouteChildren =
+  {
+    AuthenticatedPurchasingDashboardRoute:
+      AuthenticatedPurchasingDashboardRoute,
+  }
+
+const AuthenticatedPurchasingRouteRouteWithChildren =
+  AuthenticatedPurchasingRouteRoute._addFileChildren(
+    AuthenticatedPurchasingRouteRouteChildren,
+  )
+
 interface AuthenticatedSecurityRouteRouteChildren {
   AuthenticatedSecurityDashboardRoute: typeof AuthenticatedSecurityDashboardRoute
   AuthenticatedSecurityGatePassesReleaseRoute: typeof AuthenticatedSecurityGatePassesReleaseRoute
@@ -1325,20 +1586,63 @@ const AuthenticatedSuperAdminRouteRouteWithChildren =
     AuthenticatedSuperAdminRouteRouteChildren,
   )
 
+interface AuthenticatedSupervisorRouteRouteChildren {
+  AuthenticatedSupervisorDashboardRoute: typeof AuthenticatedSupervisorDashboardRoute
+}
+
+const AuthenticatedSupervisorRouteRouteChildren: AuthenticatedSupervisorRouteRouteChildren =
+  {
+    AuthenticatedSupervisorDashboardRoute:
+      AuthenticatedSupervisorDashboardRoute,
+  }
+
+const AuthenticatedSupervisorRouteRouteWithChildren =
+  AuthenticatedSupervisorRouteRoute._addFileChildren(
+    AuthenticatedSupervisorRouteRouteChildren,
+  )
+
+interface AuthenticatedVehicleRouteRouteChildren {
+  AuthenticatedVehicleDashboardRoute: typeof AuthenticatedVehicleDashboardRoute
+}
+
+const AuthenticatedVehicleRouteRouteChildren: AuthenticatedVehicleRouteRouteChildren =
+  {
+    AuthenticatedVehicleDashboardRoute: AuthenticatedVehicleDashboardRoute,
+  }
+
+const AuthenticatedVehicleRouteRouteWithChildren =
+  AuthenticatedVehicleRouteRoute._addFileChildren(
+    AuthenticatedVehicleRouteRouteChildren,
+  )
+
+interface AuthenticatedWarehouseRouteRouteChildren {
+  AuthenticatedWarehouseDashboardRoute: typeof AuthenticatedWarehouseDashboardRoute
+}
+
+const AuthenticatedWarehouseRouteRouteChildren: AuthenticatedWarehouseRouteRouteChildren =
+  {
+    AuthenticatedWarehouseDashboardRoute: AuthenticatedWarehouseDashboardRoute,
+  }
+
+const AuthenticatedWarehouseRouteRouteWithChildren =
+  AuthenticatedWarehouseRouteRoute._addFileChildren(
+    AuthenticatedWarehouseRouteRouteChildren,
+  )
+
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminRouteRoute: typeof AuthenticatedAdminRouteRouteWithChildren
-  AuthenticatedAuditorRouteRoute: typeof AuthenticatedAuditorRouteRoute
+  AuthenticatedAuditorRouteRoute: typeof AuthenticatedAuditorRouteRouteWithChildren
   AuthenticatedEmployeePortalRouteRoute: typeof AuthenticatedEmployeePortalRouteRouteWithChildren
-  AuthenticatedExecutiveRouteRoute: typeof AuthenticatedExecutiveRouteRoute
-  AuthenticatedGadRouteRoute: typeof AuthenticatedGadRouteRoute
-  AuthenticatedHrRouteRoute: typeof AuthenticatedHrRouteRoute
-  AuthenticatedManagerRouteRoute: typeof AuthenticatedManagerRouteRoute
-  AuthenticatedPurchasingRouteRoute: typeof AuthenticatedPurchasingRouteRoute
+  AuthenticatedExecutiveRouteRoute: typeof AuthenticatedExecutiveRouteRouteWithChildren
+  AuthenticatedGadRouteRoute: typeof AuthenticatedGadRouteRouteWithChildren
+  AuthenticatedHrRouteRoute: typeof AuthenticatedHrRouteRouteWithChildren
+  AuthenticatedManagerRouteRoute: typeof AuthenticatedManagerRouteRouteWithChildren
+  AuthenticatedPurchasingRouteRoute: typeof AuthenticatedPurchasingRouteRouteWithChildren
   AuthenticatedSecurityRouteRoute: typeof AuthenticatedSecurityRouteRouteWithChildren
   AuthenticatedSuperAdminRouteRoute: typeof AuthenticatedSuperAdminRouteRouteWithChildren
-  AuthenticatedSupervisorRouteRoute: typeof AuthenticatedSupervisorRouteRoute
-  AuthenticatedVehicleRouteRoute: typeof AuthenticatedVehicleRouteRoute
-  AuthenticatedWarehouseRouteRoute: typeof AuthenticatedWarehouseRouteRoute
+  AuthenticatedSupervisorRouteRoute: typeof AuthenticatedSupervisorRouteRouteWithChildren
+  AuthenticatedVehicleRouteRoute: typeof AuthenticatedVehicleRouteRouteWithChildren
+  AuthenticatedWarehouseRouteRoute: typeof AuthenticatedWarehouseRouteRouteWithChildren
   AuthenticatedEmployeeAssetsRoute: typeof AuthenticatedEmployeeAssetsRoute
   AuthenticatedEmployeeEmployeesRoute: typeof AuthenticatedEmployeeEmployeesRoute
   AuthenticatedEmployeeGatePassRoute: typeof AuthenticatedEmployeeGatePassRoute
@@ -1358,20 +1662,24 @@ interface AuthenticatedRouteRouteChildren {
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminRouteRoute: AuthenticatedAdminRouteRouteWithChildren,
-  AuthenticatedAuditorRouteRoute: AuthenticatedAuditorRouteRoute,
+  AuthenticatedAuditorRouteRoute: AuthenticatedAuditorRouteRouteWithChildren,
   AuthenticatedEmployeePortalRouteRoute:
     AuthenticatedEmployeePortalRouteRouteWithChildren,
-  AuthenticatedExecutiveRouteRoute: AuthenticatedExecutiveRouteRoute,
-  AuthenticatedGadRouteRoute: AuthenticatedGadRouteRoute,
-  AuthenticatedHrRouteRoute: AuthenticatedHrRouteRoute,
-  AuthenticatedManagerRouteRoute: AuthenticatedManagerRouteRoute,
-  AuthenticatedPurchasingRouteRoute: AuthenticatedPurchasingRouteRoute,
+  AuthenticatedExecutiveRouteRoute:
+    AuthenticatedExecutiveRouteRouteWithChildren,
+  AuthenticatedGadRouteRoute: AuthenticatedGadRouteRouteWithChildren,
+  AuthenticatedHrRouteRoute: AuthenticatedHrRouteRouteWithChildren,
+  AuthenticatedManagerRouteRoute: AuthenticatedManagerRouteRouteWithChildren,
+  AuthenticatedPurchasingRouteRoute:
+    AuthenticatedPurchasingRouteRouteWithChildren,
   AuthenticatedSecurityRouteRoute: AuthenticatedSecurityRouteRouteWithChildren,
   AuthenticatedSuperAdminRouteRoute:
     AuthenticatedSuperAdminRouteRouteWithChildren,
-  AuthenticatedSupervisorRouteRoute: AuthenticatedSupervisorRouteRoute,
-  AuthenticatedVehicleRouteRoute: AuthenticatedVehicleRouteRoute,
-  AuthenticatedWarehouseRouteRoute: AuthenticatedWarehouseRouteRoute,
+  AuthenticatedSupervisorRouteRoute:
+    AuthenticatedSupervisorRouteRouteWithChildren,
+  AuthenticatedVehicleRouteRoute: AuthenticatedVehicleRouteRouteWithChildren,
+  AuthenticatedWarehouseRouteRoute:
+    AuthenticatedWarehouseRouteRouteWithChildren,
   AuthenticatedEmployeeAssetsRoute: AuthenticatedEmployeeAssetsRoute,
   AuthenticatedEmployeeEmployeesRoute: AuthenticatedEmployeeEmployeesRoute,
   AuthenticatedEmployeeGatePassRoute: AuthenticatedEmployeeGatePassRoute,
